@@ -62,7 +62,7 @@ class CommandHistoryTest {
 	// canUnExecute()
 
 	@Test
-	public void testCanNotUnExecuteWithoutExecute() {
+	public void testCanUnExecuteWithoutExecute() {
 		assertFalse(commandHistory.canUnExecute());
 	}
 
@@ -161,4 +161,47 @@ class CommandHistoryTest {
 		verify(command2, never()).unExecute();
 	}
 
+	// canReExecute()
+
+	@Test
+	public void testCanReExecuteWithoutExecuteAndUnExecute() {
+		assertFalse(commandHistory.canReExecute());
+	}
+
+	@Test
+	public void testCanReExecuteWithoutAndUnExecute() {
+		commandHistory.execute(command0);
+
+		reset(command0);
+
+		assertFalse(commandHistory.canReExecute());
+
+		verify(command0, never()).execute();
+		verify(command0, never()).unExecute();
+	}
+
+	@Test
+	public void testCanReExecute() {
+		commandHistory.execute(command0);
+		commandHistory.unExecute();
+
+		reset(command0);
+
+		assertTrue(commandHistory.canReExecute());
+
+		verify(command0, never()).execute();
+		verify(command0, never()).unExecute();
+	}
+
+	@Test
+	public void testCanReExecuteAfterMultipleUnExecutes() {
+		commandHistory.execute(command0);
+		commandHistory.execute(command1);
+		commandHistory.execute(command2);
+		commandHistory.unExecute();
+		commandHistory.unExecute();
+		commandHistory.unExecute();
+
+		assertTrue(commandHistory.canReExecute());
+	}
 }

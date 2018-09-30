@@ -28,6 +28,10 @@ public class CommandHistory {
 		index--;
 	}
 
+	public boolean canReExecute() {
+		return index < getLastIndex();
+	}
+
 	private int getLastIndex() {
 		return history.size() - 1;
 	}
