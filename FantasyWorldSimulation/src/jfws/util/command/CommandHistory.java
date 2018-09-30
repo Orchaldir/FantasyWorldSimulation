@@ -6,13 +6,29 @@ import java.util.List;
 public class CommandHistory {
 
 	private final List<ICommand> history = new ArrayList<>();
+	private int index = getLastIndex();
 
 	public void execute(ICommand command) {
 		command.execute();
 		history.add(command);
+		index = getLastIndex();
 	}
 
 	public boolean canUnExecute() {
-		return !history.isEmpty();
+		return index >= 0;
+	}
+
+	public void unExecute() {
+		if (!canUnExecute()) {
+			return;
+		}
+
+		ICommand command = history.get(index);
+		command.unExecute();
+		index--;
+	}
+
+	private int getLastIndex() {
+		return history.size() - 1;
 	}
 }

@@ -6,13 +6,14 @@ import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class CommandHistoryTest {
 
 	private ICommand command0, command1, command2;
 	private CommandHistory commandHistory;
+
+	// execute()
 
 	@BeforeEach
 	public void setup() {
@@ -69,7 +70,12 @@ class CommandHistoryTest {
 	public void testCanUnExecuteAfterExecute() {
 		commandHistory.execute(command0);
 
+		reset(command0);
+
 		assertTrue(commandHistory.canUnExecute());
+
+		verify(command0, never()).execute();
+		verify(command0, never()).unExecute();
 	}
 
 	@Test
@@ -79,6 +85,80 @@ class CommandHistoryTest {
 		commandHistory.execute(command2);
 
 		assertTrue(commandHistory.canUnExecute());
+	}
+
+	// unExecute()
+
+	@Test
+	public void testUnExecuteWithoutExecutes() {
+		commandHistory.unExecute();
+	}
+
+	@Test
+	public void testUnExecute() {
+		commandHistory.execute(command0);
+
+		reset(command0);
+
+		commandHistory.unExecute();
+
+		verify(command0, never()).execute();
+		verify(command0).unExecute();
+	}
+
+	@Test
+	public void testUnExecuteFirstCommandTwice() {
+		commandHistory.execute(command0);
+		commandHistory.unExecute();
+
+		reset(command0);
+
+		verify(command0, never()).execute();
+		verify(command0, never()).unExecute();
+	}
+
+	@Test
+	public void testUnExecuteWithMultipleExecutes() {
+		commandHistory.execute(command0);
+		commandHistory.execute(command1);
+		commandHistory.execute(command2);
+
+		reset(command0);
+		reset(command1);
+		reset(command2);
+
+		commandHistory.unExecute();
+
+		verify(command0, never()).execute();
+		verify(command1, never()).execute();
+		verify(command2, never()).execute();
+
+		verify(command0, never()).unExecute();
+		verify(command1, never()).unExecute();
+		verify(command2).unExecute();
+	}
+
+	@Test
+	public void testUnExecuteTwiceWithMultipleExecutes() {
+		commandHistory.execute(command0);
+		commandHistory.execute(command1);
+		commandHistory.execute(command2);
+
+		commandHistory.unExecute();
+
+		reset(command0);
+		reset(command1);
+		reset(command2);
+
+		commandHistory.unExecute();
+
+		verify(command0, never()).execute();
+		verify(command1, never()).execute();
+		verify(command2, never()).execute();
+
+		verify(command0, never()).unExecute();
+		verify(command1).unExecute();
+		verify(command2, never()).unExecute();
 	}
 
 }
