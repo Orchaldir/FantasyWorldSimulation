@@ -4,14 +4,27 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 class CommandHistoryTest {
 
+	public class CommandHistoryForTesting extends CommandHistory {
+
+		public List<ICommand> getCommands() {
+			return Collections.unmodifiableList(history);
+		}
+	}
+
 	private ICommand command0, command1, command2;
-	private CommandHistory commandHistory;
+	private CommandHistoryForTesting commandHistory;
 
 	@BeforeEach
 	public void setup() {
@@ -19,7 +32,7 @@ class CommandHistoryTest {
 		command1 = Mockito.mock(ICommand.class);
 		command2 = Mockito.mock(ICommand.class);
 
-		commandHistory = new CommandHistory();
+		commandHistory = new CommandHistoryForTesting();
 	}
 
 	// execute()
@@ -30,6 +43,8 @@ class CommandHistoryTest {
 
 		verify(command0).execute();
 		verify(command0, never()).unExecute();
+
+		assertThat(commandHistory.getCommands(), contains(command0));
 	}
 
 	@Test
@@ -42,6 +57,8 @@ class CommandHistoryTest {
 
 		verify(command0, never()).unExecute();
 		verify(command1, never()).unExecute();
+
+		assertThat(commandHistory.getCommands(), contains(command0, command1));
 	}
 
 	@Test
@@ -276,6 +293,8 @@ class CommandHistoryTest {
 		verify(command0, never()).unExecute();
 		verify(command1, never()).unExecute();
 		verify(command2, never()).unExecute();
+
+		assertThat(commandHistory.getCommands(), contains(command0, command1, command2));
 	}
 
 	@Test
@@ -304,5 +323,7 @@ class CommandHistoryTest {
 
 		assertTrue(commandHistory.canUnExecute());
 		assertFalse(commandHistory.canReExecute());
+
+		assertThat(commandHistory.getCommands(), contains(command0, command2));
 	}
 }

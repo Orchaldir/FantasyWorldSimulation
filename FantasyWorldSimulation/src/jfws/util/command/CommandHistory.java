@@ -5,10 +5,16 @@ import java.util.List;
 
 public class CommandHistory {
 
-	private final List<ICommand> history = new ArrayList<>();
+	protected final List<ICommand> history = new ArrayList<>();
 	private int index = getLastIndex();
 
 	public void execute(ICommand command) {
+		int lastIndex = getLastIndex();
+
+		for(int i = index; i < lastIndex; i++) {
+			history.remove(getLastIndex());
+		}
+
 		command.execute();
 		history.add(command);
 		index = getLastIndex();
