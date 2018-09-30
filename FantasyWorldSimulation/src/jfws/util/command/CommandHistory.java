@@ -32,6 +32,16 @@ public class CommandHistory {
 		return index < getLastIndex();
 	}
 
+	public void reExecute() {
+		if(!canReExecute()) {
+			return;
+		}
+
+		ICommand command = history.get(index+1);
+		command.execute();
+		index++;
+	}
+
 	private int getLastIndex() {
 		return history.size() - 1;
 	}
