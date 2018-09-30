@@ -1,4 +1,4 @@
-# Adr 000x - Title
+# ADR 000x - Title
 
 **Status:** [accepted | superseeded by [ADR-0005](0005-example.md) | deprecated ]
 
@@ -14,3 +14,7 @@
 
 * Consequence A
 * Consequence B
+
+## Links
+
+* ...
