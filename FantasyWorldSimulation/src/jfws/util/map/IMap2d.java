@@ -9,4 +9,8 @@ public interface IMap2d {
 	int getSize();
 
 	int getIndex(int x, int y);
+
+	int getX(int index);
+
+	int getY(int index);
 }

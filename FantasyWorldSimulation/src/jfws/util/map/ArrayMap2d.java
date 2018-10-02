@@ -19,4 +19,14 @@ public class ArrayMap2d implements IMap2d {
 	public int getIndex(int x, int y) {
 		return y * width + x;
 	}
+
+	@Override
+	public int getX(int index) {
+		return index % width;
+	}
+
+	@Override
+	public int getY(int index) {
+		return index / width;
+	}
 }
