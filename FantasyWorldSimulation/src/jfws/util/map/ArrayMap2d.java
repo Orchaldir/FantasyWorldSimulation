@@ -29,4 +29,24 @@ public class ArrayMap2d implements IMap2d {
 	public int getY(int index) {
 		return index / width;
 	}
+
+	@Override
+	public boolean isInsideForX(int x) {
+		return x >= 0 && x < width;
+	}
+
+	@Override
+	public boolean isInsideForY(int y) {
+		return y >= 0 && y < height;
+	}
+
+	@Override
+	public boolean isInside(int x, int y) {
+		return isInsideForX(x) && isInsideForY(y);
+	}
+
+	@Override
+	public boolean isInside(int index) {
+		return index >=0 && index < size;
+	}
 }
