@@ -18,7 +18,18 @@ class ArrayMap2dTest {
 	private static final int X2 = 0, Y2 = 3, INDEX2 = 12;
 	private static final int X3 = 2, Y3 = 1, INDEX3 = 6;
 
-	private static final IMap2d<Integer> MAP = new ArrayMap2d(WIDTH, HEIGHT);
+	private static final IMap2d<Integer> MAP;
+
+	static
+	{
+		Integer[] array = new Integer[SIZE];
+
+		for(int i = 0; i < SIZE; i++) {
+			array[i] = i;
+		}
+
+		MAP = new ArrayMap2d<>(WIDTH, HEIGHT, array);
+	}
 
 	@Test
 	void testGetWidth() {
@@ -161,6 +172,17 @@ class ArrayMap2dTest {
 	}
 
 	// getCell
+
+	@Test()
+	void testGetCell() throws OutsideMapException {
+		int i = 0;
+
+		for(int y = 0; y < HEIGHT; y++) {
+			for(int x = 0; x < WIDTH; x++) {
+				assertThat(MAP.getCell(x, y), is(equalTo(i++)));
+			}
+		}
+	}
 
 	@Test()
 	void testGetCellOutside(){

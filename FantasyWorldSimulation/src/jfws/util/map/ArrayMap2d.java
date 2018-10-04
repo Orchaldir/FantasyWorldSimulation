@@ -8,11 +8,13 @@ public class ArrayMap2d<T> implements IMap2d<T> {
 	private final int width;
 	private final int height;
 	private final int size;
+	private final T[] cells;
 
-	public ArrayMap2d(int width, int height) {
+	public ArrayMap2d(int width, int height, T[] cells) {
 		this.width = width;
 		this.height = height;
 		this.size = width * height;
+		this.cells = cells;
 	}
 
 	@Override
@@ -52,6 +54,10 @@ public class ArrayMap2d<T> implements IMap2d<T> {
 
 	@Override
 	public T getCell(int x, int y) throws OutsideMapException {
+		if(isInside(x, y)) {
+			return cells[getIndex(x, y)];
+		}
+
 		throw new OutsideMapException(this, x, y);
 	}
 }
