@@ -1,6 +1,6 @@
 package jfws.util.map;
 
-public interface IMap2d {
+public interface IMap2d<T> {
 
 	int getWidth();
 	int getHeight();
@@ -14,4 +14,6 @@ public interface IMap2d {
 	boolean isInsideForY(int y);
 	boolean isInside(int x, int y);
 	boolean isInside(int index);
+
+	T getCell(int x, int y) throws OutsideMapException;
 }

@@ -3,7 +3,7 @@ package jfws.util.map;
 import lombok.Getter;
 
 @Getter
-public class ArrayMap2d implements IMap2d {
+public class ArrayMap2d<T> implements IMap2d<T> {
 
 	private final int width;
 	private final int height;
@@ -48,5 +48,10 @@ public class ArrayMap2d implements IMap2d {
 	@Override
 	public boolean isInside(int index) {
 		return index >=0 && index < size;
+	}
+
+	@Override
+	public T getCell(int x, int y) throws OutsideMapException {
+		throw new OutsideMapException(this, x, y);
 	}
 }

@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayMap2dTest {
 
@@ -19,7 +18,7 @@ class ArrayMap2dTest {
 	private static final int X2 = 0, Y2 = 3, INDEX2 = 12;
 	private static final int X3 = 2, Y3 = 1, INDEX3 = 6;
 
-	private static final IMap2d MAP = new ArrayMap2d(WIDTH, HEIGHT);
+	private static final IMap2d<Integer> MAP = new ArrayMap2d(WIDTH, HEIGHT);
 
 	@Test
 	void testGetWidth() {
@@ -161,4 +160,14 @@ class ArrayMap2dTest {
 		assertFalse(MAP.isInside(SIZE));
 	}
 
+	// getCell
+
+	@Test()
+	void testGetCellOutside(){
+		OutsideMapException exception = assertThrows(OutsideMapException.class, () -> MAP.getCell(-1, -2));
+
+		assertThat(exception.getMap(), is(equalTo(MAP)));
+		assertThat(exception.getX(), is(equalTo(-1)));
+		assertThat(exception.getY(), is(equalTo(-2)));
+	}
 }
