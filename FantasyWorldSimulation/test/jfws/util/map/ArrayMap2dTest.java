@@ -7,29 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayMap2dTest {
-
-	private static final int WIDTH = 4;
-	private static final int HEIGHT = 5;
-	private static final int SIZE = WIDTH * HEIGHT;
-
-	private static final int X0 = 0, Y0 = 0, INDEX0 = 0;
-	private static final int X1 = 2, Y1 = 0, INDEX1 = 2;
-	private static final int X2 = 0, Y2 = 3, INDEX2 = 12;
-	private static final int X3 = 2, Y3 = 1, INDEX3 = 6;
-
-	private static final IMap2d<Integer> MAP;
-
-	static
-	{
-		Integer[] array = new Integer[SIZE];
-
-		for(int i = 0; i < SIZE; i++) {
-			array[i] = i;
-		}
-
-		MAP = new ArrayMap2d<>(WIDTH, HEIGHT, array);
-	}
+class ArrayMap2dTest extends SharedTestData {
 
 	@Test
 	void testGetWidth() {
@@ -171,7 +149,7 @@ class ArrayMap2dTest {
 		assertFalse(MAP.isInside(SIZE));
 	}
 
-	// getCell
+	// getCell()
 
 	@Test()
 	void testGetCell() throws OutsideMapException {
