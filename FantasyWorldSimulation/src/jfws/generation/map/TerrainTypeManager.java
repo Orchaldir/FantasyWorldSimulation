@@ -7,10 +7,6 @@ public class TerrainTypeManager {
 
 	private Map<String, TerrainType> terrainTypeMap = new HashMap<>();
 
-	public TerrainTypeManager() {
-		add(TerrainType.DEFAULT_TYPE);
-	}
-
 	public void add(TerrainType terrainType) {
 		terrainTypeMap.put(terrainType.getName(), terrainType);
 	}
