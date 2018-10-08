@@ -12,6 +12,7 @@
     * equals()
     * hashCode()
     * builders
+    * loggers with **@Slf4j**
 * Requires ide support.
 
 ## Links
