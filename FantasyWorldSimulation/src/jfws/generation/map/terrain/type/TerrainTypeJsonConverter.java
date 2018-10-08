@@ -1,11 +1,12 @@
 package jfws.generation.map.terrain.type;
 
 import com.google.gson.*;
-import com.google.gson.stream.MalformedJsonException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.util.Optional;
 
+@Slf4j
 public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
@@ -39,6 +40,8 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 
 	@Override
 	public Optional<TerrainType> load(String text) {
+		log.debug("load(): text: {}", text);
+
 		try {
 			JsonElement element = parser.parse(text);
 
@@ -46,18 +49,18 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 				JsonObject jsonObject = element.getAsJsonObject();
 
 				String name = jsonObject.get(NAME).getAsString();
-				Color color = readColor(jsonObject);
+				Color color = readColor(jsonObject, name);
 
 				return Optional.of(new TerrainTypeImpl(name, color));
 			}
 		} catch(JsonParseException e) {
-
+			log.warn("load(): JsonParseException: {}", e.getMessage());
 		}
 
 		return Optional.empty();
 	}
 
-	private Color readColor(JsonObject jsonObject) {
+	private Color readColor(JsonObject jsonObject, String name) {
 		JsonElement colorElement = jsonObject.get(COLOR);
 
 		if (hasColor(colorElement)) {
@@ -69,6 +72,8 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 
 			return new Color(red, green, blue);
 		}
+
+		log.warn("readColor(): TerrainType {} has no color!", name);
 
 		return NullTerrainType.DEFAULT_COLOR;
 	}

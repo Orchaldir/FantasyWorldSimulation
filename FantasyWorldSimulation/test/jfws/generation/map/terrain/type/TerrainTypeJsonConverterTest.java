@@ -3,6 +3,7 @@ package jfws.generation.map.terrain.type;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,11 +19,7 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		converter = new TerrainTypeJsonConverter();
 	}
 
-	@Test
-	void test() {
-		String json = converter.write(TERRAIN_TYPE_A);
-		Optional<TerrainType> optionalType = converter.load(json);
-
+	private void testTerrainType(Optional<TerrainType> optionalType, String name, Color color) {
 		assertTrue(optionalType.isPresent());
 
 		TerrainType type = optionalType.get();
@@ -30,10 +27,20 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		assertThat(type, is(notNullValue()));
 		assertThat(type, is(not(TERRAIN_TYPE_A)));
 
-		assertThat(type.getName(), is(equalTo(NAME_A)));
+		assertThat(type.getName(), is(equalTo(name)));
 
 		assertThat(type.getColor(), is(notNullValue()));
-		assertThat(type.getColor(), is(equalTo(TERRAIN_TYPE_A.getColor())));
+		assertThat(type.getColor(), is(equalTo(color)));
+	}
+
+	@Test
+	void test() {
+		String json = converter.write(TERRAIN_TYPE_A);
+		Optional<TerrainType> optionalType = converter.load(json);
+
+		testTerrainType(optionalType, NAME_A, TERRAIN_TYPE_A.getColor());
+
+		assertThat(optionalType.get(), is(not(TERRAIN_TYPE_A)));
 	}
 
 	// load()
@@ -50,6 +57,13 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		Optional<TerrainType> optionalType = converter.load("not json!");
 
 		assertFalse(optionalType.isPresent());
+	}
+
+	@Test
+	void testLoadWithoutColor() {
+		Optional<TerrainType> optionalType = converter.load("{\"name\":\"B\"}");
+
+		testTerrainType(optionalType, NAME_B, NullTerrainType.DEFAULT_COLOR);
 	}
 
 	@Test
