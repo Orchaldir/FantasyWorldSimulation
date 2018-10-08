@@ -26,5 +26,6 @@
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="org.slf4j:slf4j-simple:1.7.25" level="project" />
+    <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.io:2.4" level="project" />
   </component>
 </module>

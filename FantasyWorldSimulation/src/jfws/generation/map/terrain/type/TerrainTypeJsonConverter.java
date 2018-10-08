@@ -94,7 +94,7 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 		if (element.isJsonObject()) {
 			JsonObject jsonObject = element.getAsJsonObject();
 
-			if(jsonObject.has(NAME)) {
+			if(hasRequiredFields(jsonObject)) {
 				String name = jsonObject.get(NAME).getAsString();
 				Color color = loadColor(jsonObject, name);
 
@@ -109,6 +109,10 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 		}
 
 		return Optional.empty();
+	}
+
+	private boolean hasRequiredFields(JsonObject jsonObject) {
+		return jsonObject.has(NAME);
 	}
 
 	private Color loadColor(JsonObject jsonObject, String name) {
