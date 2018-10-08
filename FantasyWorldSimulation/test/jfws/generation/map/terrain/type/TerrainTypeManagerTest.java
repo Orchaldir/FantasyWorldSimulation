@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -75,7 +76,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 		File file = new File("test.json");
 
 		when(fileUtils.readWholeFile(file)).thenReturn(MOCKED_JSON);
-		when(converter.load(MOCKED_JSON)).thenReturn(Arrays.asList(TERRAIN_TYPE_A, TERRAIN_TYPE_B, TERRAIN_TYPE_C));
+		when(converter.load(MOCKED_JSON)).thenReturn(ALL_TYPES);
 
 		manager.load(file);
 
@@ -90,7 +91,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testLoadInvalidFile() throws IOException {
+	void testLoadWithIOException() throws IOException {
 		File file = new File("test.json");
 
 		when(fileUtils.readWholeFile(file)).thenThrow(new IOException("Test"));
@@ -101,5 +102,40 @@ class TerrainTypeManagerTest extends SharedTestData {
 
 		verify(fileUtils).readWholeFile(file);
 		verify(converter, never()).load(MOCKED_JSON);
+	}
+
+	// save()
+
+	@Test
+	void testSave() throws IOException {
+		File file = new File("test.json");
+
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+		manager.add(TERRAIN_TYPE_C);
+
+		when(converter.save(anyCollection())).thenReturn(MOCKED_JSON);
+
+		manager.save(file);
+
+		verify(converter).save(anyCollection());
+		verify(fileUtils).writeWholeFile(file, MOCKED_JSON);
+	}
+
+	@Test
+	void testSaveWithIOException() throws IOException {
+		File file = new File("test.json");
+
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+		manager.add(TERRAIN_TYPE_C);
+
+		when(converter.save(anyCollection())).thenReturn(MOCKED_JSON);
+		doThrow(new IOException("testSaveWithIOException()")).when(fileUtils).writeWholeFile(file, MOCKED_JSON);
+
+		assertThrows(IOException.class, () -> manager.save(file));
+
+		verify(converter).save(anyCollection());
+		verify(fileUtils).writeWholeFile(file, MOCKED_JSON);
 	}
 }

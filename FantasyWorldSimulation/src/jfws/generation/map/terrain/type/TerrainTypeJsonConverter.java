@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 	private final static String BLUE = "blue";
 
 	@Override
-	public String save(List<TerrainType> types) {
+	public String save(Collection<TerrainType> types) {
 		JsonArray jsonArray = new JsonArray();
 
 		for(TerrainType type : types) {

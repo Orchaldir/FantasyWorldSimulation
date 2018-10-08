@@ -31,13 +31,24 @@ public class TerrainTypeManager {
 
 	public void load(File file) {
 		try {
-			String json = fileUtils.readWholeFile(file);
+			String text = fileUtils.readWholeFile(file);
 
-			for(TerrainType terrainType : converter.load(json)) {
+			for(TerrainType terrainType : converter.load(text)) {
 				add(terrainType);
 			}
 		} catch (IOException e) {
 			log.warn("load(): IOException: {}", e.getMessage());
+		}
+	}
+
+	public void save(File file) throws IOException {
+		try {
+			String text = converter.save(terrainTypeMap.values());
+
+			fileUtils.writeWholeFile(file, text);
+		} catch (IOException e) {
+			log.warn("save(): IOException: {}", e.getMessage());
+			throw e;
 		}
 	}
 }
