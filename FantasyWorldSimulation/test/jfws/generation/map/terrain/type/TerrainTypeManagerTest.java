@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TerrainTypeManagerTest extends SharedTestData {
 
@@ -30,10 +30,24 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testGetUnknownTerrainTypes() {
-		assertThat(manager.getOrDefault(NAME_A), is(equalTo(TerrainType.DEFAULT_TYPE)));
-		assertThat(manager.getOrDefault(NAME_B), is(equalTo(TerrainType.DEFAULT_TYPE)));
-		assertThat(manager.getOrDefault(NAME_C), is(equalTo(TerrainType.DEFAULT_TYPE)));
+	void testGetUnknownTerrainType() {
+		TerrainType type = manager.getOrDefault(NAME_A);
+
+		assertThat(type, is(notNullValue()));
+		assertThat(type, is(instanceOf(NullTerrainType.class)));
+		assertThat(type.getName(), is(equalTo(NAME_A)));
+		assertThat(type.getColor(), is(notNullValue()));
+		assertThat(type.getColor(), is(equalTo(NullTerrainType.DEFAULT_COLOR)));
+		assertTrue(type.isDefault());
+	}
+
+	@Test
+	void testGetUnknownTerrainTypeTwice() {
+		TerrainType type0 = manager.getOrDefault(NAME_A);
+		TerrainType type1 = manager.getOrDefault(NAME_A);
+
+		assertThat(type0, is(notNullValue()));
+		assertThat(type0, is(sameInstance(type1)));
 	}
 
 }

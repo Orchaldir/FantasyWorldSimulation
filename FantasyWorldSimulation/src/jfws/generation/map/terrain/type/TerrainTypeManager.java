@@ -12,6 +12,6 @@ public class TerrainTypeManager {
 	}
 
 	public TerrainType getOrDefault(String name) {
-		return terrainTypeMap.getOrDefault(name, TerrainType.DEFAULT_TYPE);
+		return terrainTypeMap.computeIfAbsent(name, NullTerrainType::new);
 	}
 }

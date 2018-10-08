@@ -45,7 +45,7 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 			String name = jsonObject.get(NAME).getAsString();
 			Color color = readColor(jsonObject);
 
-			return new TerrainType(name, color);
+			return new TerrainTypeImpl(name, color);
 		}
 
 		return null;
@@ -64,7 +64,7 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 			return new Color(red, green, blue);
 		}
 
-		return TerrainType.DEFAULT_COLOR;
+		return null;
 	}
 
 	private int readColorValue(JsonObject jsonObject, String name) {
