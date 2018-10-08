@@ -1,4 +1,6 @@
-package jfws.generation.map;
+package jfws.generation.map.terrain.type;
+
+import jfws.generation.map.terrain.type.TerrainType;
 
 import java.awt.*;
 

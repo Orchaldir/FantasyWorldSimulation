@@ -1,4 +1,4 @@
-package jfws.generation.map;
+package jfws.generation.map.terrain.type;
 
 public interface TerrainTypeConverter {
 

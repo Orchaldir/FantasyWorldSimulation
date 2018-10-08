@@ -1,11 +1,10 @@
-package jfws.generation.map;
+package jfws.generation.map.terrain.type;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class TerrainTypeJsonConverterTest extends SharedTestData {
 
