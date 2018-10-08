@@ -1,8 +1,10 @@
 package jfws.generation.map.terrain.type;
 
 import com.google.gson.*;
+import com.google.gson.stream.MalformedJsonException;
 
 import java.awt.*;
+import java.util.Optional;
 
 public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 
@@ -36,25 +38,29 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 	}
 
 	@Override
-	public TerrainType load(String text) {
-		JsonElement element = parser.parse(text);
+	public Optional<TerrainType> load(String text) {
+		try {
+			JsonElement element = parser.parse(text);
 
-		if (element.isJsonObject()) {
-			JsonObject jsonObject = element.getAsJsonObject();
+			if (element.isJsonObject()) {
+				JsonObject jsonObject = element.getAsJsonObject();
 
-			String name = jsonObject.get(NAME).getAsString();
-			Color color = readColor(jsonObject);
+				String name = jsonObject.get(NAME).getAsString();
+				Color color = readColor(jsonObject);
 
-			return new TerrainTypeImpl(name, color);
+				return Optional.of(new TerrainTypeImpl(name, color));
+			}
+		} catch(JsonParseException e) {
+
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
 	private Color readColor(JsonObject jsonObject) {
 		JsonElement colorElement = jsonObject.get(COLOR);
 
-		if (colorElement != null && colorElement.isJsonObject()) {
+		if (hasColor(colorElement)) {
 			JsonObject colorObject = colorElement.getAsJsonObject();
 
 			int red = readColorValue(colorObject, RED);
@@ -64,7 +70,11 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 			return new Color(red, green, blue);
 		}
 
-		return null;
+		return NullTerrainType.DEFAULT_COLOR;
+	}
+
+	private boolean hasColor(JsonElement colorElement) {
+		return colorElement != null && colorElement.isJsonObject();
 	}
 
 	private int readColorValue(JsonObject jsonObject, String name) {

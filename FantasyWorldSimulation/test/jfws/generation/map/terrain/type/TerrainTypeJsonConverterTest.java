@@ -3,8 +3,11 @@ package jfws.generation.map.terrain.type;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TerrainTypeJsonConverterTest extends SharedTestData {
 
@@ -18,7 +21,11 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 	@Test
 	void test() {
 		String json = converter.write(TERRAIN_TYPE_A);
-		TerrainType type = converter.load(json);
+		Optional<TerrainType> optionalType = converter.load(json);
+
+		assertTrue(optionalType.isPresent());
+
+		TerrainType type = optionalType.get();
 
 		assertThat(type, is(notNullValue()));
 		assertThat(type, is(not(TERRAIN_TYPE_A)));
@@ -27,6 +34,27 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 
 		assertThat(type.getColor(), is(notNullValue()));
 		assertThat(type.getColor(), is(equalTo(TERRAIN_TYPE_A.getColor())));
+	}
+
+	// load()
+
+	@Test
+	void testLoadEmptyString() {
+		Optional<TerrainType> optionalType = converter.load("");
+
+		assertFalse(optionalType.isPresent());
+	}
+
+	@Test
+	void testLoadWrongFormat() {
+		Optional<TerrainType> optionalType = converter.load("not json!");
+
+		assertFalse(optionalType.isPresent());
+	}
+
+	@Test
+	void testLoadNull() {
+		assertThrows(NullPointerException.class, () -> converter.load(null));
 	}
 
 }
