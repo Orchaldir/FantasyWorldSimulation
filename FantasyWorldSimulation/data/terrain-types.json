@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Plain",
+    "color": {
+      "red": 0,
+      "green": 255,
+      "blue": 0
+    }
+  },
+  {
+    "name": "Mountain",
+    "color": {
+      "red": 128,
+      "green": 128,
+      "blue": 128
+    }
+  },
+  {
+    "name": "Ocean",
+    "color": {
+      "red": 0,
+      "green": 0,
+      "blue": 255
+    }
+  }
+]

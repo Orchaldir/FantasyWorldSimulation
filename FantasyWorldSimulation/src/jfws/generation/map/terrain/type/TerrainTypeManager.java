@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -25,6 +27,10 @@ public class TerrainTypeManager {
 		return terrainTypeMap.computeIfAbsent(name, NullTerrainType::new);
 	}
 
+	public List<String> getNames() {
+		return new ArrayList<>(terrainTypeMap.keySet());
+	}
+
 	public int size() {
 		return terrainTypeMap.size();
 	}
@@ -32,8 +38,11 @@ public class TerrainTypeManager {
 	public void load(File file) {
 		try {
 			String text = fileUtils.readWholeFile(file);
+			List<TerrainType> terrainTypes = converter.load(text);
 
-			for(TerrainType terrainType : converter.load(text)) {
+			log.info("load(): file={} N={}", file.getPath(), terrainTypes.size());
+
+			for(TerrainType terrainType : terrainTypes) {
 				add(terrainType);
 			}
 		} catch (IOException e) {
@@ -43,6 +52,8 @@ public class TerrainTypeManager {
 
 	public void save(File file) throws IOException {
 		try {
+			log.info("save(): file={}", file.getPath());
+
 			String text = converter.save(terrainTypeMap.values());
 
 			fileUtils.writeWholeFile(file, text);

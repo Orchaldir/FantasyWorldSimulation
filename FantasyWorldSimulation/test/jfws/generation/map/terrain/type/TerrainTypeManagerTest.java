@@ -69,6 +69,21 @@ class TerrainTypeManagerTest extends SharedTestData {
 		assertThat(type0, is(sameInstance(type1)));
 	}
 
+	// getNames()
+
+	@Test
+	void testGetNamesEmpty() {
+		assertTrue(manager.getNames().isEmpty());
+	}
+
+	@Test
+	void testGetNames() {
+		manager.add(TERRAIN_TYPE_B);
+		manager.add(TERRAIN_TYPE_C);
+
+		assertThat(manager.getNames(), containsInAnyOrder(NAME_B, NAME_C));
+	}
+
 	// load()
 
 	@Test
