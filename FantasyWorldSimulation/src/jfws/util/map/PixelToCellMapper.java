@@ -5,19 +5,19 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PixelToCellMapper<T> {
 
-	private final IMap2d<T> map;
+	private final Map2d<T> map;
 	private final int originX, originY;
 	private final int resolutionX, resolutionY;
 
-	public PixelToCellMapper(IMap2d<T> map, int originX, int originY, int resolution) {
+	public PixelToCellMapper(Map2d<T> map, int originX, int originY, int resolution) {
 		this(map, originX, originY, resolution, resolution);
 	}
 
-	public PixelToCellMapper(IMap2d<T> map, int resolutionX, int resolutionY) {
+	public PixelToCellMapper(Map2d<T> map, int resolutionX, int resolutionY) {
 		this(map, 0, 0, resolutionX, resolutionY);
 	}
 
-	public PixelToCellMapper(IMap2d<T> map, int resolution) {
+	public PixelToCellMapper(Map2d<T> map, int resolution) {
 		this(map, 0, 0, resolution, resolution);
 	}
 

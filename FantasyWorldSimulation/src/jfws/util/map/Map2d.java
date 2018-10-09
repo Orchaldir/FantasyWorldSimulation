@@ -1,6 +1,6 @@
 package jfws.util.map;
 
-public interface IMap2d<T> {
+public interface Map2d<T> {
 
 	int getWidth();
 	int getHeight();

@@ -3,7 +3,7 @@ package jfws.util.map;
 import lombok.Getter;
 
 @Getter
-public class ArrayMap2d<T> implements IMap2d<T> {
+public class ArrayMap2d<T> implements Map2d<T> {
 
 	private final int width;
 	private final int height;

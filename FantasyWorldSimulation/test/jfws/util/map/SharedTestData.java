@@ -11,7 +11,7 @@ public class SharedTestData {
 	public static final int X2 = 0, Y2 = 3, INDEX2 = 12;
 	public static final int X3 = 2, Y3 = 1, INDEX3 = 6;
 
-	public static final IMap2d<Integer> MAP;
+	public static final Map2d<Integer> MAP;
 
 	static
 	{
