@@ -53,11 +53,20 @@ public class ArrayMap2d<T> implements Map2d<T> {
 	}
 
 	@Override
+	public T getCell(int index) throws OutsideMapException {
+		if(isInside(index)) {
+			return cells[index];
+		}
+
+		throw new OutsideMapException(this, getX(index), getY(index), index, true);
+	}
+
+	@Override
 	public T getCell(int x, int y) throws OutsideMapException {
 		if(isInside(x, y)) {
 			return cells[getIndex(x, y)];
 		}
 
-		throw new OutsideMapException(this, x, y);
+		throw new OutsideMapException(this, x, y, getIndex(x, y), false);
 	}
 }

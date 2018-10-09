@@ -157,7 +157,9 @@ class ArrayMap2dTest extends SharedTestData {
 
 		for(int y = 0; y < HEIGHT; y++) {
 			for(int x = 0; x < WIDTH; x++) {
-				assertThat(MAP.getCell(x, y), is(equalTo(i++)));
+				assertThat(MAP.getCell(x, y), is(equalTo(i)));
+				assertThat(MAP.getCell(i), is(equalTo(i)));
+				i++;
 			}
 		}
 	}
@@ -169,5 +171,18 @@ class ArrayMap2dTest extends SharedTestData {
 		assertThat(exception.getMap(), is(equalTo(MAP)));
 		assertThat(exception.getX(), is(equalTo(-1)));
 		assertThat(exception.getY(), is(equalTo(-2)));
+		assertThat(exception.getIndex(), is(equalTo(-9)));
+		assertFalse(exception.isUsedIndex());
+	}
+
+	@Test()
+	void testGetCellOutsideWithIndex(){
+		OutsideMapException exception = assertThrows(OutsideMapException.class, () -> MAP.getCell(-1));
+
+		assertThat(exception.getMap(), is(equalTo(MAP)));
+		assertThat(exception.getX(), is(equalTo(-1)));
+		assertThat(exception.getY(), is(equalTo(0)));
+		assertThat(exception.getIndex(), is(equalTo(-1)));
+		assertTrue(exception.isUsedIndex());
 	}
 }

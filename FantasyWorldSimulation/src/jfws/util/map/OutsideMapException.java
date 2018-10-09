@@ -9,5 +9,6 @@ import lombok.Getter;
 public class OutsideMapException extends Exception {
 
 	private final Map2d map;
-	private final int x, y;
+	private final int x, y, index;
+	private boolean usedIndex;
 }
