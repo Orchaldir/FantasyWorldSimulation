@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
@@ -23,6 +24,9 @@
               </items>
             </ToolBar>
          </top>
+         <center>
+            <Canvas fx:id="sketchMapCanvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </children>
 </GridPane>
