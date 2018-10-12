@@ -1,4 +1,4 @@
-package jfws.generation.map.terrain.type;
+package jfws.generation.region.terrain;
 
 import jfws.util.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

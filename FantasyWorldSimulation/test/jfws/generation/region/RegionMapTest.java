@@ -1,34 +1,34 @@
-package jfws.generation.map.sketch;
+package jfws.generation.region;
 
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static jfws.generation.map.terrain.type.SharedTestData.*;
+import static jfws.generation.region.terrain.SharedTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-class SketchMapTest {
+class RegionMapTest {
 
 	public static final int WIDTH = 4;
 	public static final int HEIGHT = 5;
 	public static final int SIZE = WIDTH * HEIGHT;
 
-	private SketchMap sketchMap;
+	private RegionMap regionMap;
 
 	@BeforeEach
 	void setup() {
-		sketchMap = SketchMap.create(WIDTH, HEIGHT, TERRAIN_TYPE_A);
+		regionMap = RegionMap.create(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 	}
 
 	@Test
 	void testCreate() throws OutsideMapException {
-		assertThat(sketchMap, is(notNullValue()));
-		assertThat(sketchMap.getWidth(), is(equalTo(WIDTH)));
-		assertThat(sketchMap.getHeight(), is(equalTo(HEIGHT)));
+		assertThat(regionMap, is(notNullValue()));
+		assertThat(regionMap.getWidth(), is(equalTo(WIDTH)));
+		assertThat(regionMap.getHeight(), is(equalTo(HEIGHT)));
 
 		for(int i = 0; i < SIZE; i++) {
-			assertThat(sketchMap.getCell(i), is(sameInstance(TERRAIN_TYPE_A)));
+			assertThat(regionMap.getCell(i), is(sameInstance(TERRAIN_TYPE_A)));
 		}
 	}
 }

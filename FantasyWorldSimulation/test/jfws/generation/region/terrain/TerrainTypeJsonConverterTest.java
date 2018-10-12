@@ -1,4 +1,4 @@
-package jfws.generation.map.terrain.type;
+package jfws.generation.region.terrain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

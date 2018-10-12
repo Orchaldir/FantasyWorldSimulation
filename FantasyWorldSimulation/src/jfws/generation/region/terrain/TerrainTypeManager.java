@@ -1,4 +1,4 @@
-package jfws.generation.map.terrain.type;
+package jfws.generation.region.terrain;
 
 import jfws.util.io.FileUtils;
 import lombok.AllArgsConstructor;

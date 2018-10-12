@@ -6,11 +6,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
-import jfws.generation.map.sketch.SketchMap;
-import jfws.generation.map.terrain.type.TerrainType;
-import jfws.generation.map.terrain.type.TerrainTypeConverter;
-import jfws.generation.map.terrain.type.TerrainTypeJsonConverter;
-import jfws.generation.map.terrain.type.TerrainTypeManager;
+import jfws.generation.region.RegionMap;
+import jfws.generation.region.terrain.TerrainType;
+import jfws.generation.region.terrain.TerrainTypeConverter;
+import jfws.generation.region.terrain.TerrainTypeJsonConverter;
+import jfws.generation.region.terrain.TerrainTypeManager;
 import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class MapEditorController {
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
 	private final TerrainType defaultTerrainType;
 	private TerrainType selectedTerrainType;
-	private SketchMap sketchMap;
+	private RegionMap regionMap;
 
 	public MapEditorController() {
 		log.info("MapEditorController()");
@@ -40,7 +40,7 @@ public class MapEditorController {
 		defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
 		selectedTerrainType = defaultTerrainType;
 
-		sketchMap = SketchMap.create(20, 10, defaultTerrainType);
+		regionMap = RegionMap.create(20, 10, defaultTerrainType);
 	}
 
 	@FXML

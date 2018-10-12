@@ -1,4 +1,4 @@
-package jfws.generation.map.terrain.type;
+package jfws.generation.region.terrain;
 
 import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;

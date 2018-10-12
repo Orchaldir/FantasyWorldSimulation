@@ -1,4 +1,4 @@
-package jfws.generation.map.terrain.type;
+package jfws.generation.region.terrain;
 
 import java.awt.Color;
 import java.util.Arrays;
