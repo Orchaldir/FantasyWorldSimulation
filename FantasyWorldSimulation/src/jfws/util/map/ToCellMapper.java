@@ -3,22 +3,22 @@ package jfws.util.map;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class PixelToCellMapper<T> {
+public class ToCellMapper<T> {
 
 	private final Map2d<T> map;
-	private final int originX, originY;
-	private final int resolutionX, resolutionY;
+	private final double originX, originY;
+	private final double resolutionX, resolutionY;
 
-	public PixelToCellMapper(Map2d<T> map, int originX, int originY, int resolution) {
+	public ToCellMapper(Map2d<T> map, double originX, double originY, double resolution) {
 		this(map, originX, originY, resolution, resolution);
 	}
 
-	public PixelToCellMapper(Map2d<T> map, int resolutionX, int resolutionY) {
+	public ToCellMapper(Map2d<T> map, double resolutionX, double resolutionY) {
 		this(map, 0, 0, resolutionX, resolutionY);
 	}
 
-	public PixelToCellMapper(Map2d<T> map, int resolution) {
-		this(map, 0, 0, resolution, resolution);
+	public ToCellMapper(Map2d<T> map, double resolution) {
+		this(map, resolution, resolution);
 	}
 
 	public int getCellX(int x) {
@@ -31,5 +31,13 @@ public class PixelToCellMapper<T> {
 
 	public T getCell(int x, int y) throws OutsideMapException {
 		return map.getCell(getCellX(x), getCellY(y));
+	}
+
+	public double getWidth() {
+		return map.getWidth() * resolutionX;
+	}
+
+	public double getHeight() {
+		return map.getHeight() * resolutionY;
 	}
 }

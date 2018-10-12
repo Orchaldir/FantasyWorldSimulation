@@ -3,11 +3,12 @@ package jfws.util.map;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class PixelToCellMapperTest extends SharedTestData {
+class ToCellMapperTest extends SharedTestData {
+
+	public static final double ERROR = 0.001;
 
 	public static final int ORIGIN_X = 3;
 	public static final int ORIGIN_Y = 4;
@@ -25,7 +26,7 @@ class PixelToCellMapperTest extends SharedTestData {
 	public static final int CELL_Y_1 = ORIGIN_Y + 3 * RESOLUTION_Y / 2;
 	public static final int CELL_Y_2 = ORIGIN_Y + 5 * RESOLUTION_Y / 2;
 
-	private static final PixelToCellMapper<Integer> MAPPER = new PixelToCellMapper<>(MAP, ORIGIN_X, ORIGIN_Y, RESOLUTION_X, RESOLUTION_Y);
+	private static final ToCellMapper<Integer> MAPPER = new ToCellMapper<>(MAP, ORIGIN_X, ORIGIN_Y, RESOLUTION_X, RESOLUTION_Y);
 
 	// getCellX()
 
@@ -98,6 +99,20 @@ class PixelToCellMapperTest extends SharedTestData {
 		assertThat(exception.getMap(), is(equalTo(MAP)));
 		assertThat(exception.getX(), is(equalTo(-1)));
 		assertThat(exception.getY(), is(equalTo(-1)));
+	}
+
+	// getWidth()
+
+	@Test()
+	void testGetWidth(){
+		assertThat(MAPPER.getWidth(), is(closeTo(WIDTH * RESOLUTION_X, ERROR)));
+	}
+
+	// getHeight()
+
+	@Test()
+	void testGetHeight(){
+		assertThat(MAPPER.getHeight(), is(closeTo(HEIGHT * RESOLUTION_Y, ERROR)));
 	}
 
 }
