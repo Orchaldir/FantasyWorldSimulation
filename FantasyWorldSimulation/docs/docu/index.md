@@ -2,20 +2,37 @@
 
 ## Hierarchy of Maps
 
-**World Map:** TBD
+### World
+
+**Land Distribution Map:**
+A map that helps with the generation of continents & oceans during world generation. 
+
+**World Map:**
+An abstract representation of the whole world.
+
+### Region
+
+**Abstract Region Map:**
+An abstract representation of a region.
+Individual objects like a building or a tree are abstracted away as Forests or Settlements,
+unless they are important enough.
 
 **Region Map:**
-An abstract representation of a large region that contains the following information: 
+An more detailed representation of a region.
+Individual objects like a building or a tree are represented by individual but abstract objects- 
 
-* A grid map with a cell size of a 100 m
-  * Terrain type
-* Graphs
-  * Roads
-  * Rails
-  * Rivers
-* Polygons
-  * Forests
-  * Settlements
-  * Fields
+| Feature | Abstract Region | Region |
+|---|:---:|:---:|
+| Cell Size | 100 m | 1 m |
+| Terrain | Terrain Type | ? |
+| Roads | Graph | Mesh |
+| Rails | Graph | Mesh |
+| Rivers | Graph | Mesh |
+| Forests | Footprint | Plants |
+| Fields | Footprint | ? |
+| Settlements | Footprint | Buildings & Roads |
 
-**Local Map:** TBD
+### Local
+
+**Local Map:**
+An full representation of a region without any abstract objects.
