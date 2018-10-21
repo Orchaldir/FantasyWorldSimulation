@@ -6,7 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
-import jfws.generation.region.RegionMap;
+import jfws.generation.region.AbstractRegionMap;
 import jfws.generation.region.terrain.TerrainType;
 import jfws.generation.region.terrain.TerrainTypeConverter;
 import jfws.generation.region.terrain.TerrainTypeJsonConverter;
@@ -31,7 +31,7 @@ public class MapEditorController {
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
 	private final TerrainType defaultTerrainType;
 	private TerrainType selectedTerrainType;
-	private RegionMap regionMap;
+	private AbstractRegionMap abstractRegionMap;
 
 	public MapEditorController() {
 		log.info("MapEditorController()");
@@ -40,7 +40,7 @@ public class MapEditorController {
 		defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
 		selectedTerrainType = defaultTerrainType;
 
-		regionMap = RegionMap.create(20, 10, defaultTerrainType);
+		abstractRegionMap = new AbstractRegionMap(20, 10, defaultTerrainType);
 	}
 
 	@FXML
