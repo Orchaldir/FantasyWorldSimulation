@@ -3,7 +3,6 @@ package jfws.editor.map;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
 import jfws.generation.region.AbstractRegionMap;
@@ -13,6 +12,7 @@ import jfws.generation.region.terrain.TerrainTypeJsonConverter;
 import jfws.generation.region.terrain.TerrainTypeManager;
 import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
+import jfws.util.rendering.CanvasRenderer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -27,6 +27,9 @@ public class MapEditorController {
 	private Canvas sketchMapCanvas;
 
 	private FileUtils fileUtils = new ApacheFileUtils();
+
+	private CanvasRenderer canvasRenderer;
+
 	private TerrainTypeConverter converter = new TerrainTypeJsonConverter();
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
 	private final TerrainType defaultTerrainType;
@@ -49,10 +52,10 @@ public class MapEditorController {
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(terrainTypeManager.getNames()));
 		terrainTypeComboBox.getSelectionModel().select(defaultTerrainType.getName());
 
-		GraphicsContext gc = sketchMapCanvas.getGraphicsContext2D();
+		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 
-		gc.setFill(Color.AQUA);
-		gc.fillRect(10,10,100,100);
+		canvasRenderer.setFillColor(Color.AQUA);
+		canvasRenderer.renderRectangle(10,10,100,100);
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {
