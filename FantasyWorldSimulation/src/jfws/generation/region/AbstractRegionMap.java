@@ -2,12 +2,13 @@ package jfws.generation.region;
 
 import jfws.generation.region.terrain.TerrainType;
 import jfws.util.map.ArrayMap2d;
+import jfws.util.map.Map2d;
 import lombok.Getter;
 
 public class AbstractRegionMap {
 
 	@Getter
-	private final ArrayMap2d<AbstractRegionCell> cells;
+	private final Map2d<AbstractRegionCell> cells;
 
 	public AbstractRegionMap(int width, int height, TerrainType defaultType) {
 		int size = width * height;

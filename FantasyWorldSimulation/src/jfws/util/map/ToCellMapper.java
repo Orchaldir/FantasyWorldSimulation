@@ -1,8 +1,10 @@
 package jfws.util.map;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @AllArgsConstructor
+@Data
 public class ToCellMapper<T> {
 
 	private final Map2d<T> map;
@@ -21,15 +23,17 @@ public class ToCellMapper<T> {
 		this(map, resolution, resolution);
 	}
 
-	public int getCellX(int x) {
-		return (int) Math.floor((x - originX) / (double)resolutionX);
+	// coordinates to cell
+
+	public int getCellX(double x) {
+		return (int) Math.floor((x - originX) / resolutionX);
 	}
 
-	public int getCellY(int y) {
-		return (int) Math.floor((y - originY) / (double)resolutionY);
+	public int getCellY(double y) {
+		return (int) Math.floor((y - originY) / resolutionY);
 	}
 
-	public T getCell(int x, int y) throws OutsideMapException {
+	public T getCell(double x, double y) throws OutsideMapException {
 		return map.getCell(getCellX(x), getCellY(y));
 	}
 
@@ -39,5 +43,15 @@ public class ToCellMapper<T> {
 
 	public double getHeight() {
 		return map.getHeight() * resolutionY;
+	}
+
+	// cell to coordinates
+
+	public double getCellOriginX(int x) {
+		return originX + resolutionX * x;
+	}
+
+	public double getCellOriginY(int y) {
+		return originY + resolutionY * y;
 	}
 }

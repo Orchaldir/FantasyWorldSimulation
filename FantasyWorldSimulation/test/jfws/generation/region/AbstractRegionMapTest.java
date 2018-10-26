@@ -1,6 +1,6 @@
 package jfws.generation.region;
 
-import jfws.util.map.ArrayMap2d;
+import jfws.util.map.Map2d;
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class AbstractRegionMapTest {
 
 	@Test
 	void testCreate() throws OutsideMapException {
-		ArrayMap2d<AbstractRegionCell> cells = abstractRegionMap.getCells();
+		Map2d<AbstractRegionCell> cells = abstractRegionMap.getCells();
 		assertThat(cells, is(notNullValue()));
 		assertThat(cells.getWidth(), is(equalTo(WIDTH)));
 		assertThat(cells.getHeight(), is(equalTo(HEIGHT)));

@@ -115,4 +115,24 @@ class ToCellMapperTest extends SharedTestData {
 		assertThat(MAPPER.getHeight(), is(closeTo(HEIGHT * RESOLUTION_Y, ERROR)));
 	}
 
+	// getCellOriginX()
+
+	@Test()
+	void testGetCellOriginX(){
+		assertThat(MAPPER.getCellOriginX(0), is(closeTo(ORIGIN_X, ERROR)));
+		assertThat(MAPPER.getCellOriginX(1), is(closeTo(ORIGIN_X + RESOLUTION_X, ERROR)));
+		assertThat(MAPPER.getCellOriginX(2), is(closeTo(ORIGIN_X + RESOLUTION_X * 2, ERROR)));
+		assertThat(MAPPER.getCellOriginX(3), is(closeTo(ORIGIN_X + RESOLUTION_X * 3, ERROR)));
+	}
+
+	// getCellOriginY()
+
+	@Test()
+	void testGetCellOriginY(){
+		assertThat(MAPPER.getCellOriginY(0), is(closeTo(ORIGIN_Y, ERROR)));
+		assertThat(MAPPER.getCellOriginY(1), is(closeTo(ORIGIN_Y + RESOLUTION_Y, ERROR)));
+		assertThat(MAPPER.getCellOriginY(2), is(closeTo(ORIGIN_Y + RESOLUTION_Y * 2, ERROR)));
+		assertThat(MAPPER.getCellOriginY(3), is(closeTo(ORIGIN_Y + RESOLUTION_Y * 3, ERROR)));
+	}
+
 }
