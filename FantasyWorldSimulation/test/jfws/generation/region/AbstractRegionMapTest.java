@@ -1,5 +1,6 @@
 package jfws.generation.region;
 
+import jfws.generation.region.terrain.TerrainType;
 import jfws.util.map.Map2d;
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,11 @@ class AbstractRegionMapTest {
 	public static final int HEIGHT = 5;
 	public static final int SIZE = WIDTH * HEIGHT;
 
-	private AbstractRegionMap abstractRegionMap;
+	protected AbstractRegionMap abstractRegionMap;
+
+	void assertTerrainType(int index, TerrainType type) throws OutsideMapException {
+		assertThat(abstractRegionMap.getCells().getCell(index).getTerrainType(), is(sameInstance(type)));
+	}
 
 	@BeforeEach
 	void setup() {
@@ -30,7 +35,7 @@ class AbstractRegionMapTest {
 		assertThat(cells.getHeight(), is(equalTo(HEIGHT)));
 
 		for(int i = 0; i < SIZE; i++) {
-			assertThat(cells.getCell(i).getTerrainType(), is(sameInstance(TERRAIN_TYPE_A)));
+			assertTerrainType(i, TERRAIN_TYPE_A);
 		}
 	}
 }

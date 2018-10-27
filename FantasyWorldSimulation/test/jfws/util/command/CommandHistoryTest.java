@@ -18,19 +18,19 @@ class CommandHistoryTest {
 
 	public class CommandHistoryForTesting extends CommandHistory {
 
-		public List<ICommand> getCommands() {
+		public List<Command> getCommands() {
 			return Collections.unmodifiableList(history);
 		}
 	}
 
-	private ICommand command0, command1, command2;
+	private Command command0, command1, command2;
 	private CommandHistoryForTesting commandHistory;
 
 	@BeforeEach
 	public void setup() {
-		command0 = Mockito.mock(ICommand.class);
-		command1 = Mockito.mock(ICommand.class);
-		command2 = Mockito.mock(ICommand.class);
+		command0 = Mockito.mock(Command.class);
+		command1 = Mockito.mock(Command.class);
+		command2 = Mockito.mock(Command.class);
 
 		commandHistory = new CommandHistoryForTesting();
 	}

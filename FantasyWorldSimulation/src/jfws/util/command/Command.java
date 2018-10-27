@@ -1,6 +1,6 @@
 package jfws.util.command;
 
-public interface ICommand {
+public interface Command {
 	String getName();
 
 	void execute();

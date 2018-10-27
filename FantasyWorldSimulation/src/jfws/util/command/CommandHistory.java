@@ -5,10 +5,10 @@ import java.util.List;
 
 public class CommandHistory {
 
-	protected final List<ICommand> history = new ArrayList<>();
+	protected final List<Command> history = new ArrayList<>();
 	private int index = getLastIndex();
 
-	public void execute(ICommand command) {
+	public void execute(Command command) {
 		int lastIndex = getLastIndex();
 
 		for(int i = index; i < lastIndex; i++) {
@@ -29,7 +29,7 @@ public class CommandHistory {
 			return;
 		}
 
-		ICommand command = history.get(index);
+		Command command = history.get(index);
 		command.unExecute();
 		index--;
 	}
@@ -43,7 +43,7 @@ public class CommandHistory {
 			return;
 		}
 
-		ICommand command = history.get(index+1);
+		Command command = history.get(index+1);
 		command.execute();
 		index++;
 	}
