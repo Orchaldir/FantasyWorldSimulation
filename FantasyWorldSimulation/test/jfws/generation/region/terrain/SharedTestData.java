@@ -1,6 +1,7 @@
 package jfws.generation.region.terrain;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
+
 import java.util.Arrays;
 import java.util.List;
 

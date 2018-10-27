@@ -1,9 +1,9 @@
 package jfws.generation.region.terrain;
 
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

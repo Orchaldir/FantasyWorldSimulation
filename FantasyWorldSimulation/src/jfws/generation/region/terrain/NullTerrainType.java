@@ -3,7 +3,7 @@ package jfws.generation.region.terrain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 
 // Uses Null Object Pattern
 @AllArgsConstructor

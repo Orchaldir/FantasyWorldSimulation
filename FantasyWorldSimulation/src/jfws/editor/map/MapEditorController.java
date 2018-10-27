@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
-import javafx.scene.paint.Color;
 import jfws.generation.region.AbstractRegionCell;
 import jfws.generation.region.AbstractRegionMap;
 import jfws.generation.region.terrain.TerrainType;
@@ -14,6 +13,7 @@ import jfws.generation.region.terrain.TerrainTypeManager;
 import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
 import jfws.util.map.MapRenderer;
+import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import jfws.util.rendering.CanvasRenderer;
 import lombok.extern.slf4j.Slf4j;
@@ -35,20 +35,23 @@ public class MapEditorController {
 
 	private TerrainTypeConverter converter = new TerrainTypeJsonConverter();
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
-	private final TerrainType defaultTerrainType;
+	private final TerrainType defaultTerrainType, mountainTerrainType;
 	private TerrainType selectedTerrainType;
 	private AbstractRegionMap abstractRegionMap;
 	private ToCellMapper<AbstractRegionCell> toCellMapper;
 	private MapRenderer<AbstractRegionCell> mapRenderer;
 
-	public MapEditorController() {
+	public MapEditorController() throws OutsideMapException {
 		log.info("MapEditorController()");
 
 		terrainTypeManager.load(new File("data/terrain-types.json"));
 		defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
+		mountainTerrainType = terrainTypeManager.getOrDefault("Mountain");
 		selectedTerrainType = defaultTerrainType;
 
 		abstractRegionMap = new AbstractRegionMap(20, 10, defaultTerrainType);
+		abstractRegionMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
+
 		toCellMapper = new ToCellMapper<>(abstractRegionMap.getCells(), 10);
 	}
 
@@ -59,10 +62,13 @@ public class MapEditorController {
 		terrainTypeComboBox.getSelectionModel().select(defaultTerrainType.getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(canvasRenderer, toCellMapper);
+		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper);
 
-		canvasRenderer.setFillColor(Color.AQUA);
-		mapRenderer.render();
+		try {
+			mapRenderer.render();
+		} catch (OutsideMapException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {

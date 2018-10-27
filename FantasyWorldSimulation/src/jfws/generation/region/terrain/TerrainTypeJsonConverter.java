@@ -1,9 +1,9 @@
 package jfws.generation.region.terrain;
 
 import com.google.gson.*;
+import javafx.scene.paint.Color;
 import lombok.extern.slf4j.Slf4j;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -122,11 +122,11 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 		if (hasColor(colorElement)) {
 			JsonObject colorObject = colorElement.getAsJsonObject();
 
-			int red = readColorValue(colorObject, RED);
-			int green = readColorValue(colorObject, GREEN);
-			int blue = readColorValue(colorObject, BLUE);
+			double red = readColorValue(colorObject, RED);
+			double green = readColorValue(colorObject, GREEN);
+			double blue = readColorValue(colorObject, BLUE);
 
-			return new Color(red, green, blue);
+			return new Color(red, green, blue, 1.0);
 		}
 
 		log.warn("loadColor(): TerrainType {} has no color!", name);
@@ -138,11 +138,11 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 		return colorElement != null && colorElement.isJsonObject();
 	}
 
-	private int readColorValue(JsonObject jsonObject, String name) {
+	private double readColorValue(JsonObject jsonObject, String name) {
 		JsonElement element = jsonObject.get(name);
 
 		if (element != null) {
-			return element.getAsInt();
+			return element.getAsDouble();
 		}
 
 		return 0;

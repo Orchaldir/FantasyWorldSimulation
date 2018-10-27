@@ -1,6 +1,6 @@
 package jfws.generation.region.terrain;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 
 public interface TerrainType {
 
