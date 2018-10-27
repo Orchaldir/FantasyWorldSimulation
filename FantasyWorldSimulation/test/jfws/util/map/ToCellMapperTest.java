@@ -8,33 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ToCellMapperTest extends SharedTestData {
 
-	public static final double ERROR = 0.001;
-
-	public static final int ORIGIN_X = 3;
-	public static final int ORIGIN_Y = 4;
-	public static final int RESOLUTION_X = 2;
-	public static final int RESOLUTION_Y = 3;
-
-	public static final int MAX_X = ORIGIN_X + WIDTH * RESOLUTION_X - 1;
-	public static final int MAX_Y = ORIGIN_Y + HEIGHT * RESOLUTION_Y - 1;
-
-	public static final int CELL_X_0 = ORIGIN_X + 1 * RESOLUTION_X / 2;
-	public static final int CELL_X_1 = ORIGIN_X + 3 * RESOLUTION_X / 2;
-	public static final int CELL_X_2 = ORIGIN_X + 5 * RESOLUTION_X / 2;
-
-	public static final int CELL_Y_0 = ORIGIN_Y + 1 * RESOLUTION_Y / 2;
-	public static final int CELL_Y_1 = ORIGIN_Y + 3 * RESOLUTION_Y / 2;
-	public static final int CELL_Y_2 = ORIGIN_Y + 5 * RESOLUTION_Y / 2;
-
-	private static final ToCellMapper<Integer> MAPPER = new ToCellMapper<>(MAP, ORIGIN_X, ORIGIN_Y, RESOLUTION_X, RESOLUTION_Y);
-
 	// getCellX()
 
 	@Test
 	void testGetCellX() {
-		assertThat(MAPPER.getCellX(CELL_X_0), is(equalTo(0)));
-		assertThat(MAPPER.getCellX(CELL_X_1), is(equalTo(1)));
-		assertThat(MAPPER.getCellX(CELL_X_2), is(equalTo(2)));
+		assertThat(MAPPER.getCellX(CENTER_X_0), is(equalTo(0)));
+		assertThat(MAPPER.getCellX(CENTER_X_1), is(equalTo(1)));
+		assertThat(MAPPER.getCellX(CENTER_X_2), is(equalTo(2)));
 	}
 
 	@Test
@@ -53,9 +33,9 @@ class ToCellMapperTest extends SharedTestData {
 
 	@Test
 	void testGetCellY() {
-		assertThat(MAPPER.getCellY(CELL_Y_0), is(equalTo(0)));
-		assertThat(MAPPER.getCellY(CELL_Y_1), is(equalTo(1)));
-		assertThat(MAPPER.getCellY(CELL_Y_2), is(equalTo(2)));
+		assertThat(MAPPER.getCellY(CENTER_Y_0), is(equalTo(0)));
+		assertThat(MAPPER.getCellY(CENTER_Y_1), is(equalTo(1)));
+		assertThat(MAPPER.getCellY(CENTER_Y_2), is(equalTo(2)));
 	}
 
 	@Test
