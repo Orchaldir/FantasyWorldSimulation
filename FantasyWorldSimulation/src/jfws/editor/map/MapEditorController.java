@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
 import jfws.generation.region.AbstractRegionCell;
 import jfws.generation.region.AbstractRegionMap;
 import jfws.generation.region.terrain.TerrainType;
@@ -64,6 +65,10 @@ public class MapEditorController {
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper);
 
+		render();
+	}
+
+	private void render() {
 		try {
 			mapRenderer.render();
 		} catch (OutsideMapException e) {
@@ -84,5 +89,20 @@ public class MapEditorController {
 		TerrainType selectedType = terrainTypeManager.getOrDefault(selectedName);
 		log.info("onTerrainTypeSelected(): terrainType={} isDefault={}", selectedName, selectedType.isDefault());
 		selectTerrainType(selectedType);
+	}
+
+	@FXML
+	public void onMouseClicked(MouseEvent e) {
+		try {
+			AbstractRegionCell cell = toCellMapper.getCell(e.getX(), e.getY());
+
+			log.info("onMouseClicked(): x={} y={} oldTerrain={}", e.getX(), e.getY(), cell.getTerrainType().getName());
+
+			cell.setTerrainType(selectedTerrainType);
+
+			render();
+		} catch (OutsideMapException e1) {
+			log.info("onMouseClicked(): Outsid map! x={} y={}", e.getX(), e.getY());
+		}
 	}
 }
