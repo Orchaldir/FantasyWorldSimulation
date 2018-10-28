@@ -21,6 +21,8 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 	private final static String RED = "red";
 	private final static String GREEN = "green";
 	private final static String BLUE = "blue";
+	private final static String BASE_ELEVATION = "base_elevation";
+	private final static String ELEVATION_VARIATION = "elevation_variation";
 
 	@Override
 	public String save(Collection<TerrainType> types) {
@@ -43,6 +45,9 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 		jsonObject.addProperty(NAME, type.getName());
 
 		saveColor(jsonObject, type);
+
+		jsonObject.addProperty(BASE_ELEVATION, type.getBaseElevation());
+		jsonObject.addProperty(ELEVATION_VARIATION, type.getElevationVariation());
 
 		return jsonObject;
 	}
@@ -98,8 +103,10 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 			if(hasRequiredFields(jsonObject)) {
 				String name = jsonObject.get(NAME).getAsString();
 				Color color = loadColor(jsonObject, name);
+				double baseElevation = loadBaseElevation(jsonObject, name);
+				double elevationVariation = loadElevationVariation(jsonObject, name);
 
-				return Optional.of(new TerrainTypeImpl(name, color));
+				return Optional.of(new TerrainTypeImpl(name, color, baseElevation, elevationVariation));
 			}
 			else {
 				log.warn("loadTerrainType(): JsonObject has no name!");
@@ -119,7 +126,7 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 	private Color loadColor(JsonObject jsonObject, String name) {
 		JsonElement colorElement = jsonObject.get(COLOR);
 
-		if (hasColor(colorElement)) {
+		if (isObject(colorElement)) {
 			JsonObject colorObject = colorElement.getAsJsonObject();
 
 			double red = readColorValue(colorObject, RED);
@@ -134,8 +141,36 @@ public class TerrainTypeJsonConverter implements TerrainTypeConverter {
 		return NullTerrainType.DEFAULT_COLOR;
 	}
 
-	private boolean hasColor(JsonElement colorElement) {
+	private double loadBaseElevation(JsonObject jsonObject, String name) {
+		JsonElement elevationElement = jsonObject.get(BASE_ELEVATION);
+
+		if (iDouble(elevationElement)) {
+			return elevationElement.getAsDouble();
+		}
+
+		log.warn("loadBaseElevation(): TerrainType {} has no base elevation!", name);
+
+		return NullTerrainType.DEFAULT_BASE_ELEVATION;
+	}
+
+	private double loadElevationVariation(JsonObject jsonObject, String name) {
+		JsonElement elevationElement = jsonObject.get(ELEVATION_VARIATION);
+
+		if (iDouble(elevationElement)) {
+			return elevationElement.getAsDouble();
+		}
+
+		log.warn("loadElevationVariation(): TerrainType {} has no elevation variation!", name);
+
+		return NullTerrainType.DEFAULT_ELEVATION_VARIATION;
+	}
+
+	private boolean isObject(JsonElement colorElement) {
 		return colorElement != null && colorElement.isJsonObject();
+	}
+
+	private boolean iDouble(JsonElement colorElement) {
+		return colorElement != null && colorElement.isJsonPrimitive();
 	}
 
 	private double readColorValue(JsonObject jsonObject, String name) {

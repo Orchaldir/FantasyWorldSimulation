@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 public class NullTerrainType implements TerrainType {
 
 	public static final Color DEFAULT_COLOR = Color.PINK;
+	public static final double DEFAULT_BASE_ELEVATION = 0;
+	public static final double DEFAULT_ELEVATION_VARIATION = 0;
 
 	private final String name;
 
@@ -25,6 +27,16 @@ public class NullTerrainType implements TerrainType {
 	@Override
 	public Color getColor() {
 		return DEFAULT_COLOR;
+	}
+
+	@Override
+	public double getBaseElevation() {
+		return DEFAULT_BASE_ELEVATION;
+	}
+
+	@Override
+	public double getElevationVariation() {
+		return DEFAULT_ELEVATION_VARIATION;
 	}
 
 	public boolean isDefault() {

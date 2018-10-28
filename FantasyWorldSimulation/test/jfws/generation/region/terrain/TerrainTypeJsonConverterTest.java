@@ -21,7 +21,8 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		converter = new TerrainTypeJsonConverter();
 	}
 
-	private void assertTerrainType(Optional<TerrainType> optionalType, String name, Color color) {
+	private void assertTerrainType(Optional<TerrainType> optionalType, String name, Color color,
+								   double baseElevation, double elevationVariation) {
 		assertTrue(optionalType.isPresent());
 
 		TerrainType type = optionalType.get();
@@ -33,6 +34,9 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 
 		assertThat(type.getColor(), is(notNullValue()));
 		assertThat(type.getColor(), is(equalTo(color)));
+
+		assertThat(type.getBaseElevation(), is(equalTo(baseElevation)));
+		assertThat(type.getElevationVariation(), is(equalTo(elevationVariation)));
 	}
 
 	@Test
@@ -44,12 +48,24 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		assertThat(types.size(), is(equalTo(3)));
 
 		assertThat(types, containsInAnyOrder(
-				allOf(hasProperty("name", is(NAME_A)),
-					hasProperty("color", is(equalTo(TERRAIN_TYPE_A.getColor())))),
-				allOf(hasProperty("name", is(NAME_B)),
-					hasProperty("color", is(equalTo(TERRAIN_TYPE_B.getColor())))),
-				allOf(hasProperty("name", is(NAME_C)),
-					hasProperty("color", is(equalTo(TERRAIN_TYPE_C.getColor()))))));
+				allOf(
+					hasProperty("name", is(NAME_A)),
+					hasProperty("color", is(equalTo(TERRAIN_TYPE_A.getColor()))),
+					hasProperty("baseElevation", is(equalTo(TERRAIN_TYPE_A.getBaseElevation()))),
+					hasProperty("elevationVariation", is(equalTo(TERRAIN_TYPE_A.getElevationVariation())))
+				),
+				allOf(
+					hasProperty("name", is(NAME_B)),
+					hasProperty("color", is(equalTo(TERRAIN_TYPE_B.getColor()))),
+					hasProperty("baseElevation", is(equalTo(TERRAIN_TYPE_B.getBaseElevation()))),
+					hasProperty("elevationVariation", is(equalTo(TERRAIN_TYPE_B.getElevationVariation())))
+				),
+				allOf(
+					hasProperty("name", is(NAME_C)),
+					hasProperty("color", is(equalTo(TERRAIN_TYPE_C.getColor()))),
+					hasProperty("baseElevation", is(equalTo(TERRAIN_TYPE_C.getBaseElevation()))),
+					hasProperty("elevationVariation", is(equalTo(TERRAIN_TYPE_C.getElevationVariation())))
+				)));
 	}
 
 	@Test
@@ -57,7 +73,8 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		String json = converter.saveTerrainType(TERRAIN_TYPE_A);
 		Optional<TerrainType> optionalType = converter.loadTerrainType(json);
 
-		assertTerrainType(optionalType, NAME_A, TERRAIN_TYPE_A.getColor());
+		assertTerrainType(optionalType, NAME_A, TERRAIN_TYPE_A.getColor(),
+				TERRAIN_TYPE_A.getBaseElevation(), TERRAIN_TYPE_A.getElevationVariation());
 
 		assertThat(optionalType.get(), is(not(TERRAIN_TYPE_A)));
 	}
@@ -110,7 +127,7 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 	void testLoadTerrainTypeWithoutColor() {
 		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\"}");
 
-		assertTerrainType(optionalType, NAME_B, NullTerrainType.DEFAULT_COLOR);
+		assertTerrainType(optionalType, NAME_B, NullTerrainType.DEFAULT_COLOR, 0, 0);
 	}
 
 	@Test

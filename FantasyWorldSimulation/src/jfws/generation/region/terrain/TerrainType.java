@@ -8,5 +8,9 @@ public interface TerrainType {
 
 	Color getColor();
 
+	double getBaseElevation();
+
+	double getElevationVariation();
+
 	boolean isDefault();
 }

@@ -13,6 +13,8 @@ public class TerrainTypeImpl implements TerrainType {
 
 	private final String name;
 	private final Color color;
+	private final double baseElevation;
+	private final double elevationVariation;
 
 	public boolean isDefault() {
 		return false;

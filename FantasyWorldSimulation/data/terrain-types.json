@@ -5,7 +5,9 @@
       "red": 0.5,
       "green": 1.0,
       "blue": 0.5
-    }
+    },
+    "base_elevation": 0,
+    "elevation_variation": 0
   },
   {
     "name": "Hill",
@@ -13,7 +15,9 @@
       "red": 0,
       "green": 0.75,
       "blue": 0
-    }
+    },
+    "base_elevation": 50,
+    "elevation_variation": 50
   },
   {
     "name": "Low Mountain",
@@ -21,7 +25,9 @@
       "red": 0.75,
       "green": 0.75,
       "blue": 0.75
-    }
+    },
+    "base_elevation": 200,
+    "elevation_variation": 50
   },
   {
     "name": "Medium Mountain",
@@ -29,7 +35,9 @@
       "red": 0.5,
       "green": 0.5,
       "blue": 0.5
-    }
+    },
+    "base_elevation": 500,
+    "elevation_variation": 100
   },
   {
     "name": "High Mountain",
@@ -37,7 +45,9 @@
       "red": 0.25,
       "green": 0.25,
       "blue": 0.25
-    }
+    },
+    "base_elevation": 1000,
+    "elevation_variation": 100
   },
   {
     "name": "Ocean",
@@ -45,6 +55,8 @@
       "red": 0,
       "green": 0,
       "blue": 1.0
-    }
+    },
+    "base_elevation": -50,
+    "elevation_variation": 10
   }
 ]

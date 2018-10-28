@@ -117,7 +117,7 @@ public class MapEditorController {
 			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
 
 			if(cell.getTerrainType() == selectedTerrainType) {
-				log.info("{}(): Cell {} already has the terrain type. x={} y={} terrain={}", text, index, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
+				log.info("{}(): Cell {} is already {}. x={} y={}", text, index, cell.getTerrainType().getName(), mouseEvent.getX(), mouseEvent.getY());
 				return;
 			}
 
