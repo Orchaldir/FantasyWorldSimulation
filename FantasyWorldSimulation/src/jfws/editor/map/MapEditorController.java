@@ -7,10 +7,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import jfws.generation.region.AbstractRegionCell;
 import jfws.generation.region.AbstractRegionMap;
+import jfws.generation.region.ChangeTerrainTypeCommand;
 import jfws.generation.region.terrain.TerrainType;
 import jfws.generation.region.terrain.TerrainTypeConverter;
 import jfws.generation.region.terrain.TerrainTypeJsonConverter;
 import jfws.generation.region.terrain.TerrainTypeManager;
+import jfws.util.command.CommandHistory;
 import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
 import jfws.util.map.MapRenderer;
@@ -41,6 +43,8 @@ public class MapEditorController {
 	private AbstractRegionMap abstractRegionMap;
 	private ToCellMapper<AbstractRegionCell> toCellMapper;
 	private MapRenderer<AbstractRegionCell> mapRenderer;
+
+	private CommandHistory commandHistory = new CommandHistory();
 
 	public MapEditorController() throws OutsideMapException {
 		log.info("MapEditorController()");
@@ -96,14 +100,23 @@ public class MapEditorController {
 
 		try {
 			AbstractRegionCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
+			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
 
 			log.info("onMouseDragged(): x={} y={} oldTerrain={}", mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
 
-			cell.setTerrainType(selectedTerrainType);
+			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(abstractRegionMap, index, selectedTerrainType);
+			commandHistory.execute(command);
 
 			render();
 		} catch (OutsideMapException e1) {
 			log.info("onMouseDragged(): Outside map! x={} y={}", mouseEvent.getX(), mouseEvent.getY());
 		}
+	}
+
+	@FXML
+	public void onUndoClicked() {
+		log.info("onUndoClicked()");
+		commandHistory.unExecute();
+		render();
 	}
 }

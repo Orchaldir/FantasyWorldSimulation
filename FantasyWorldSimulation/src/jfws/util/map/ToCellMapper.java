@@ -33,6 +33,10 @@ public class ToCellMapper<T> {
 		return (int) Math.floor((y - originY) / resolutionY);
 	}
 
+	public int getIndex(double x, double y) {
+		return map.getIndex(getCellX(x), getCellY(y));
+	}
+
 	public T getCell(double x, double y) throws OutsideMapException {
 		return map.getCell(getCellX(x), getCellY(y));
 	}

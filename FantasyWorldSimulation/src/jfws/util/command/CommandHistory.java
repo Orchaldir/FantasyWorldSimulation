@@ -1,12 +1,19 @@
 package jfws.util.command;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class CommandHistory {
 
 	protected final List<Command> history = new ArrayList<>();
 	private int index = getLastIndex();
+
+	public int getCommandsToUnExecute() {
+		return index + 1;
+	}
 
 	public void execute(Command command) {
 		int lastIndex = getLastIndex();
@@ -25,6 +32,8 @@ public class CommandHistory {
 	}
 
 	public void unExecute() {
+		log.info("unExecute(): commands={}", getCommandsToUnExecute());
+
 		if (!canUnExecute()) {
 			return;
 		}

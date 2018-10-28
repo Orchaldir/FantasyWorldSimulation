@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,6 +34,19 @@ class CommandHistoryTest {
 		command2 = Mockito.mock(Command.class);
 
 		commandHistory = new CommandHistoryForTesting();
+	}
+
+	// getCommandsToUnExecute()
+
+	@Test
+	public void testGetCommandsToUnExecute() {
+		assertThat(commandHistory.getCommandsToUnExecute(), equalTo(0));
+		commandHistory.execute(command0);
+		assertThat(commandHistory.getCommandsToUnExecute(), equalTo(1));
+		commandHistory.execute(command1);
+		assertThat(commandHistory.getCommandsToUnExecute(), equalTo(2));
+		commandHistory.execute(command2);
+		assertThat(commandHistory.getCommandsToUnExecute(), equalTo(3));
 	}
 
 	// execute()
