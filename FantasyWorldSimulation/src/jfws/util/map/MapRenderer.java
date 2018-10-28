@@ -3,15 +3,25 @@ package jfws.util.map;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
+@Slf4j
 public class MapRenderer<T> {
 
 	private ColorSelector<T> colorSelector;
 	private Renderer renderer;
 	private ToCellMapper<T> toCellMapper;
 
-	public void render() throws OutsideMapException {
+	public void render() {
+		try {
+			tryRender();
+		} catch (OutsideMapException e) {
+			log.error("render(): Tried to render cell outside the map! x={} y={}", e.getX(), e.getY());
+		}
+	}
+
+	private void tryRender() throws OutsideMapException {
 		Map2d<T> map = toCellMapper.getMap();
 		double resolutionX = toCellMapper.getResolutionX();
 		double resolutionY = toCellMapper.getResolutionY();

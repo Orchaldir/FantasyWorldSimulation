@@ -32,7 +32,7 @@ public class ChangeTerrainTypeCommand implements Command {
 			oldTerrainType = cell.getTerrainType();
 			cell.setTerrainType(newTerrainType);
 		} catch (OutsideMapException e) {
-			e.printStackTrace();
+			log.error("execute(): ", e);
 		}
 	}
 
@@ -43,11 +43,12 @@ public class ChangeTerrainTypeCommand implements Command {
 		}
 
 		log.info("unExecute(): index={} oldTerrainType={}", index, oldTerrainType);
+
 		try {
 			AbstractRegionCell cell = map.getCells().getCell(index);
 			cell.setTerrainType(oldTerrainType);
 		} catch (OutsideMapException e) {
-			e.printStackTrace();
+			log.error("unExecute(): ", e);
 		}
 	}
 }

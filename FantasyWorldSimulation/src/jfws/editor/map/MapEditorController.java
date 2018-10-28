@@ -48,19 +48,19 @@ public class MapEditorController {
 		terrainTypeManager.load(new File("data/terrain-types.json"));
 		defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
 		mountainTerrainType = terrainTypeManager.getOrDefault("Mountain");
-		selectedTerrainType = defaultTerrainType;
+		selectedTerrainType = mountainTerrainType;
 
 		abstractRegionMap = new AbstractRegionMap(20, 10, defaultTerrainType);
 		abstractRegionMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
 
-		toCellMapper = new ToCellMapper<>(abstractRegionMap.getCells(), 10);
+		toCellMapper = new ToCellMapper<>(abstractRegionMap.getCells(), 20);
 	}
 
 	@FXML
 	private void initialize() {
 		log.info("initialize()");
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(terrainTypeManager.getNames()));
-		terrainTypeComboBox.getSelectionModel().select(defaultTerrainType.getName());
+		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper);
@@ -69,11 +69,8 @@ public class MapEditorController {
 	}
 
 	private void render() {
-		try {
-			mapRenderer.render();
-		} catch (OutsideMapException e) {
-			e.printStackTrace();
-		}
+		log.info("render()");
+		mapRenderer.render();
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {
@@ -92,17 +89,21 @@ public class MapEditorController {
 	}
 
 	@FXML
-	public void onMouseClicked(MouseEvent e) {
-		try {
-			AbstractRegionCell cell = toCellMapper.getCell(e.getX(), e.getY());
+	public void onMouseDragged(MouseEvent mouseEvent) {
+		if(!mouseEvent.isPrimaryButtonDown()) {
+			return;
+		}
 
-			log.info("onMouseClicked(): x={} y={} oldTerrain={}", e.getX(), e.getY(), cell.getTerrainType().getName());
+		try {
+			AbstractRegionCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
+
+			log.info("onMouseDragged(): x={} y={} oldTerrain={}", mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
 
 			cell.setTerrainType(selectedTerrainType);
 
 			render();
 		} catch (OutsideMapException e1) {
-			log.info("onMouseClicked(): Outsid map! x={} y={}", e.getX(), e.getY());
+			log.info("onMouseDragged(): Outside map! x={} y={}", mouseEvent.getX(), mouseEvent.getY());
 		}
 	}
 }
