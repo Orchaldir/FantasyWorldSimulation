@@ -93,23 +93,38 @@ public class MapEditorController {
 	}
 
 	@FXML
+	public void onMouseClicked(MouseEvent mouseEvent) {
+		onMouseEvent(mouseEvent,  "onMouseClicked");
+	}
+
+	@FXML
 	public void onMouseDragged(MouseEvent mouseEvent) {
-		if(!mouseEvent.isPrimaryButtonDown()) {
+		if (!mouseEvent.isPrimaryButtonDown()) {
 			return;
 		}
 
+		onMouseEvent(mouseEvent, "onMouseDragged");
+	}
+
+	private void onMouseEvent(MouseEvent mouseEvent, String text) {
 		try {
 			AbstractRegionCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
+
+			if(cell.getTerrainType() == selectedTerrainType) {
+				log.info("{}(): Cell already has the terrain type. x={} y={} terrain={}", text, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
+				return;
+			}
+
 			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
 
-			log.info("onMouseDragged(): x={} y={} oldTerrain={}", mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
+			log.info("{}(): x={} y={} oldTerrain={}", text, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
 
 			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(abstractRegionMap, index, selectedTerrainType);
 			commandHistory.execute(command);
 
 			render();
 		} catch (OutsideMapException e1) {
-			log.info("onMouseDragged(): Outside map! x={} y={}", mouseEvent.getX(), mouseEvent.getY());
+			log.info("{}(): Outside map! x={} y={}", text, mouseEvent.getX(), mouseEvent.getY());
 		}
 	}
 
