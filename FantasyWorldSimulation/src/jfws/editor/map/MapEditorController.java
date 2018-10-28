@@ -55,7 +55,7 @@ public class MapEditorController {
 
 		terrainTypeManager.load(new File("data/terrain-types.json"));
 		defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
-		mountainTerrainType = terrainTypeManager.getOrDefault("Mountain");
+		mountainTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
 		selectedTerrainType = mountainTerrainType;
 
 		abstractRegionMap = new AbstractRegionMap(20, 10, defaultTerrainType);
@@ -114,13 +114,12 @@ public class MapEditorController {
 	private void onMouseEvent(MouseEvent mouseEvent, String text) {
 		try {
 			AbstractRegionCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
+			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
 
 			if(cell.getTerrainType() == selectedTerrainType) {
-				log.info("{}(): Cell already has the terrain type. x={} y={} terrain={}", text, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
+				log.info("{}(): Cell {} already has the terrain type. x={} y={} terrain={}", text, index, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
 				return;
 			}
-
-			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
 
 			log.info("{}(): x={} y={} oldTerrain={}", text, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
 
