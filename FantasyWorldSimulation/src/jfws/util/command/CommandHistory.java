@@ -11,10 +11,6 @@ public class CommandHistory {
 	protected final List<Command> history = new ArrayList<>();
 	private int index = getLastIndex();
 
-	public int getCommandsToUnExecute() {
-		return index + 1;
-	}
-
 	public void execute(Command command) {
 		int lastIndex = getLastIndex();
 
@@ -25,6 +21,10 @@ public class CommandHistory {
 		command.execute();
 		history.add(command);
 		index = getLastIndex();
+	}
+
+	public int getCommandsToUnExecute() {
+		return index + 1;
 	}
 
 	public boolean canUnExecute() {
@@ -43,11 +43,17 @@ public class CommandHistory {
 		index--;
 	}
 
+	public int getCommandsToReExecute() {
+		return getLastIndex() - index;
+	}
+
 	public boolean canReExecute() {
 		return index < getLastIndex();
 	}
 
 	public void reExecute() {
+		log.info("reExecute(): commands={}", getCommandsToReExecute());
+
 		if(!canReExecute()) {
 			return;
 		}

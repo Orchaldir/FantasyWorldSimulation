@@ -49,6 +49,31 @@ class CommandHistoryTest {
 		assertThat(commandHistory.getCommandsToUnExecute(), equalTo(3));
 	}
 
+	// getCommandsToReExecute()
+
+	@Test
+	public void testGetCommandsToReExecute() {
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(0));
+
+		commandHistory.execute(command0);
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(0));
+
+		commandHistory.execute(command1);
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(0));
+
+		commandHistory.execute(command2);
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(0));
+
+		commandHistory.unExecute();
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(1));
+
+		commandHistory.unExecute();
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(2));
+
+		commandHistory.unExecute();
+		assertThat(commandHistory.getCommandsToReExecute(), equalTo(3));
+	}
+
 	// execute()
 
 	@Test

@@ -3,6 +3,7 @@ package jfws.editor.map;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import jfws.generation.region.AbstractRegionCell;
@@ -31,6 +32,9 @@ public class MapEditorController {
 
 	@FXML
 	private Canvas sketchMapCanvas;
+
+	@FXML
+	private Button undoButton, redoButton;
 
 	private FileUtils fileUtils = new ApacheFileUtils();
 
@@ -69,6 +73,7 @@ public class MapEditorController {
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper);
 
+		updateHistory();
 		render();
 	}
 
@@ -122,6 +127,7 @@ public class MapEditorController {
 			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(abstractRegionMap, index, selectedTerrainType);
 			commandHistory.execute(command);
 
+			updateHistory();
 			render();
 		} catch (OutsideMapException e1) {
 			log.info("{}(): Outside map! x={} y={}", text, mouseEvent.getX(), mouseEvent.getY());
@@ -132,6 +138,20 @@ public class MapEditorController {
 	public void onUndoClicked() {
 		log.info("onUndoClicked()");
 		commandHistory.unExecute();
+		updateHistory();
 		render();
+	}
+
+	@FXML
+	public void onRedoClicked() {
+		log.info("onRedoClicked()");
+		commandHistory.reExecute();
+		updateHistory();
+		render();
+	}
+
+	private void updateHistory() {
+		undoButton.setDisable(!commandHistory.canUnExecute());
+		redoButton.setDisable(!commandHistory.canReExecute());
 	}
 }
