@@ -12,6 +12,7 @@ public class MapRenderer<T> {
 	private ColorSelector<T> colorSelector;
 	private Renderer renderer;
 	private ToCellMapper<T> toCellMapper;
+	private double borderBetweenCells;
 
 	public void render() {
 		try {
@@ -23,8 +24,8 @@ public class MapRenderer<T> {
 
 	private void tryRender() throws OutsideMapException {
 		Map2d<T> map = toCellMapper.getMap();
-		double resolutionX = toCellMapper.getResolutionX();
-		double resolutionY = toCellMapper.getResolutionY();
+		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
+		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;
 
 		for(int row = 0; row < map.getHeight(); row++) {
 			double originY = toCellMapper.getCellOriginY(row);

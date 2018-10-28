@@ -15,6 +15,8 @@ import static org.mockito.Mockito.when;
 
 class MapRendererTest extends SharedTestData {
 
+	public static final double BORDER = 1;
+
 	private ColorSelector<Integer> colorSelector;
 	private Renderer renderer;
 	private MapRenderer<Integer> mapRenderer;
@@ -24,13 +26,13 @@ class MapRendererTest extends SharedTestData {
 	void setup() {
 		colorSelector = Mockito.mock(ColorSelector.class);
 		renderer = Mockito.mock(Renderer.class);
-		mapRenderer = new MapRenderer<>(colorSelector, renderer, MAPPER);
+		mapRenderer = new MapRenderer<>(colorSelector, renderer, MAPPER, BORDER);
 		orderVerifier = Mockito.inOrder(renderer);
 	}
 
 	private void verifyRenderRectangle(double x, double y, Color color) {
 		orderVerifier.verify(renderer).setFillColor(ArgumentMatchers.eq(color));
-		orderVerifier.verify(renderer).renderRectangle(eq(x, ERROR), eq(y, ERROR), eq(RESOLUTION_X, ERROR), eq(RESOLUTION_Y, ERROR));
+		orderVerifier.verify(renderer).renderRectangle(eq(x, ERROR), eq(y, ERROR), eq(RESOLUTION_X-BORDER, ERROR), eq(RESOLUTION_Y-BORDER, ERROR));
 	}
 
 	private void verifyRenderRow(double y) {

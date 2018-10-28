@@ -71,7 +71,7 @@ public class MapEditorController {
 		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper);
+		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper, 1);
 
 		updateHistory();
 		render();
