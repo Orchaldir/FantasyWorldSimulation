@@ -15,7 +15,7 @@ public class AbstractRegionMap {
 		AbstractRegionCell[] cellArray = new AbstractRegionCell[size];
 
 		for(int i = 0; i < size; i++) {
-			cellArray[i] = new AbstractRegionCell(defaultType);
+			cellArray[i] = new AbstractRegionCell(defaultType, AbstractRegionCell.DEFAULT_ELEVATION);
 		}
 
 		cells = new ArrayMap2d<>(width, height, cellArray);

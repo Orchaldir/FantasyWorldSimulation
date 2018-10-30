@@ -4,6 +4,7 @@ import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static jfws.generation.region.AbstractRegionCell.DEFAULT_ELEVATION;
 import static jfws.generation.region.terrain.SharedTestData.TERRAIN_TYPE_A;
 import static jfws.generation.region.terrain.SharedTestData.TERRAIN_TYPE_B;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,8 +24,8 @@ class ChangeTerrainTypeCommandTest extends AbstractRegionMapTest{
 	void testExecute() throws OutsideMapException {
 		command.execute();
 
-		assertTerrainType(0, TERRAIN_TYPE_A);
-		assertTerrainType(INDEX, TERRAIN_TYPE_B);
+		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+		assertCell(INDEX, TERRAIN_TYPE_B, DEFAULT_ELEVATION);
 	}
 
 	@Test
@@ -32,16 +33,16 @@ class ChangeTerrainTypeCommandTest extends AbstractRegionMapTest{
 		command.execute();
 		command.unExecute();
 
-		assertTerrainType(0, TERRAIN_TYPE_A);
-		assertTerrainType(INDEX, TERRAIN_TYPE_A);
+		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+		assertCell(INDEX, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
 	}
 
 	@Test
 	void testUnExecuteWithoutExecute() throws OutsideMapException {
 		assertThrows(IllegalStateException.class, () -> command.unExecute());
 
-		assertTerrainType(0, TERRAIN_TYPE_A);
-		assertTerrainType(INDEX, TERRAIN_TYPE_A);
+		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+		assertCell(INDEX, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
 	}
 
 }

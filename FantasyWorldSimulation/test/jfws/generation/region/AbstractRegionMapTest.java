@@ -18,8 +18,10 @@ class AbstractRegionMapTest {
 
 	protected AbstractRegionMap abstractRegionMap;
 
-	void assertTerrainType(int index, TerrainType type) throws OutsideMapException {
-		assertThat(abstractRegionMap.getCells().getCell(index).getTerrainType(), is(sameInstance(type)));
+	void assertCell(int index, TerrainType type, double elevation) throws OutsideMapException {
+		AbstractRegionCell cell = abstractRegionMap.getCells().getCell(index);
+		assertThat(cell.getTerrainType(), is(sameInstance(type)));
+		assertThat(cell.getElevation(), is(equalTo(elevation)));
 	}
 
 	@BeforeEach
@@ -35,7 +37,7 @@ class AbstractRegionMapTest {
 		assertThat(cells.getHeight(), is(equalTo(HEIGHT)));
 
 		for(int i = 0; i < SIZE; i++) {
-			assertTerrainType(i, TERRAIN_TYPE_A);
+			assertCell(i, TERRAIN_TYPE_A, AbstractRegionCell.DEFAULT_ELEVATION);
 		}
 	}
 }

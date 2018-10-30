@@ -24,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 
+import static jfws.generation.region.AbstractRegionCell.ELEVATION_COLOR_SELECTOR;
+
 @Slf4j
 public class MapEditorController {
 
@@ -71,7 +73,7 @@ public class MapEditorController {
 		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(AbstractRegionCell.TERRAIN_COLOR_SELECTOR, canvasRenderer, toCellMapper, 1);
+		mapRenderer = new MapRenderer<>(ELEVATION_COLOR_SELECTOR, canvasRenderer, toCellMapper, 1);
 
 		updateHistory();
 		render();
