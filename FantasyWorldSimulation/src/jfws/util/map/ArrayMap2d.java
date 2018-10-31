@@ -2,11 +2,15 @@ package jfws.util.map;
 
 import lombok.Getter;
 
-@Getter
-public class ArrayMap2d<T> implements Map2d<T> {
+import java.util.Arrays;
+import java.util.Collection;
 
+public class ArrayMap2d<T> implements Map2d<T> {
+	@Getter
 	private final int width;
+	@Getter
 	private final int height;
+	@Getter
 	private final int size;
 	private final T[] cells;
 
@@ -68,5 +72,10 @@ public class ArrayMap2d<T> implements Map2d<T> {
 		}
 
 		throw new OutsideMapException(this, x, y, getIndex(x, y), false);
+	}
+
+	@Override
+	public Collection<T> getCells() {
+		return Arrays.asList(cells);
 	}
 }

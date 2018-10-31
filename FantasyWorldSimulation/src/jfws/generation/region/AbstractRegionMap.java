@@ -1,5 +1,6 @@
 package jfws.generation.region;
 
+import jfws.generation.region.elevation.ElevationGenerator;
 import jfws.generation.region.terrain.TerrainType;
 import jfws.util.map.ArrayMap2d;
 import jfws.util.map.Map2d;
@@ -19,5 +20,9 @@ public class AbstractRegionMap {
 		}
 
 		cells = new ArrayMap2d<>(width, height, cellArray);
+	}
+
+	public void generateElevation(ElevationGenerator generator) {
+		cells.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
 	}
 }

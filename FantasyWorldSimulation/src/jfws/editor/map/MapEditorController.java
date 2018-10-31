@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import jfws.generation.region.AbstractRegionCell;
 import jfws.generation.region.AbstractRegionMap;
 import jfws.generation.region.ChangeTerrainTypeCommand;
+import jfws.generation.region.elevation.BaseElevationGenerator;
 import jfws.generation.region.terrain.TerrainType;
 import jfws.generation.region.terrain.TerrainTypeConverter;
 import jfws.generation.region.terrain.TerrainTypeJsonConverter;
@@ -48,6 +49,7 @@ public class MapEditorController {
 	private TerrainType selectedTerrainType;
 	private AbstractRegionMap abstractRegionMap;
 	private ToCellMapper<AbstractRegionCell> toCellMapper;
+	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
 	private MapRenderer<AbstractRegionCell> mapRenderer;
 
 	private CommandHistory commandHistory = new CommandHistory();
@@ -81,6 +83,7 @@ public class MapEditorController {
 
 	private void render() {
 		log.info("render()");
+		abstractRegionMap.generateElevation(elevationGenerator);
 		mapRenderer.render();
 	}
 

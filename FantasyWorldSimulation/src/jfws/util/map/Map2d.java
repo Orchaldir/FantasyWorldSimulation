@@ -1,5 +1,7 @@
 package jfws.util.map;
 
+import java.util.Collection;
+
 public interface Map2d<T> {
 
 	int getWidth();
@@ -17,4 +19,6 @@ public interface Map2d<T> {
 
 	T getCell(int index) throws OutsideMapException;
 	T getCell(int x, int y) throws OutsideMapException;
+
+	Collection<T> getCells();
 }
