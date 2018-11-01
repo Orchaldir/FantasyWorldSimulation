@@ -123,9 +123,6 @@ public class MapEditorController {
 			mapRenderer.setColorSelector(selectedColorSelector);
 			render();
 		}
-		else {
-			log.info("onRenderStyleSelected(): {} already is use.", selectedName);
-		}
 	}
 
 	@FXML

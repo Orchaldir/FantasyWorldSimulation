@@ -7,7 +7,7 @@
       "blue": 0.5
     },
     "base_elevation": 0,
-    "elevation_variation": 0
+    "elevation_variation": 5
   },
   {
     "name": "Hill",
@@ -16,8 +16,8 @@
       "green": 0.75,
       "blue": 0
     },
-    "base_elevation": 50,
-    "elevation_variation": 50
+    "base_elevation": 20,
+    "elevation_variation": 10
   },
   {
     "name": "Low Mountain",
@@ -46,8 +46,18 @@
       "green": 0.25,
       "blue": 0.25
     },
-    "base_elevation": 1000,
+    "base_elevation": 800,
     "elevation_variation": 100
+  },
+  {
+    "name": "Shallow Ocean",
+    "color": {
+      "red": 0.0,
+      "green": 0.75,
+      "blue": 1.0
+    },
+    "base_elevation": -10,
+    "elevation_variation": 5
   },
   {
     "name": "Ocean",
@@ -57,6 +67,16 @@
       "blue": 1.0
     },
     "base_elevation": -50,
+    "elevation_variation": 10
+  },
+  {
+    "name": "Deep Ocean",
+    "color": {
+      "red": 0,
+      "green": 0,
+      "blue": 0.75
+    },
+    "base_elevation": -100,
     "elevation_variation": 10
   }
 ]
