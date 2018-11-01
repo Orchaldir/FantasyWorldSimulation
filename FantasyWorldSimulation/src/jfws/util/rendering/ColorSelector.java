@@ -4,5 +4,7 @@ import javafx.scene.paint.Color;
 
 public interface ColorSelector<T> {
 
+	String getName();
+
 	Color select(T parameter);
 }

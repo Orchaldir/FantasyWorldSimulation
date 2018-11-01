@@ -3,12 +3,16 @@ package jfws.util.map;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Slf4j
 public class MapRenderer<T> {
 
+	@Getter
+	@Setter
 	private ColorSelector<T> colorSelector;
 	private Renderer renderer;
 	private ToCellMapper<T> toCellMapper;

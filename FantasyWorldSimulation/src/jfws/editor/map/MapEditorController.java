@@ -10,6 +10,8 @@ import jfws.generation.region.AbstractRegionCell;
 import jfws.generation.region.AbstractRegionMap;
 import jfws.generation.region.ChangeTerrainTypeCommand;
 import jfws.generation.region.elevation.BaseElevationGenerator;
+import jfws.generation.region.rendering.ElevationColorSelector;
+import jfws.generation.region.rendering.TerrainColorSelector;
 import jfws.generation.region.terrain.TerrainType;
 import jfws.generation.region.terrain.TerrainTypeConverter;
 import jfws.generation.region.terrain.TerrainTypeJsonConverter;
@@ -21,17 +23,17 @@ import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import jfws.util.rendering.CanvasRenderer;
+import jfws.util.rendering.ColorSelector;
+import jfws.util.rendering.ColorSelectorMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-
-import static jfws.generation.region.AbstractRegionCell.ELEVATION_COLOR_SELECTOR;
 
 @Slf4j
 public class MapEditorController {
 
 	@FXML
-	private ComboBox<String> terrainTypeComboBox;
+	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
 
 	@FXML
 	private Canvas sketchMapCanvas;
@@ -52,6 +54,8 @@ public class MapEditorController {
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
 	private MapRenderer<AbstractRegionCell> mapRenderer;
 
+	private ColorSelectorMap<AbstractRegionCell> colorSelectorMap;
+
 	private CommandHistory commandHistory = new CommandHistory();
 
 	public MapEditorController() throws OutsideMapException {
@@ -66,16 +70,23 @@ public class MapEditorController {
 		abstractRegionMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
 
 		toCellMapper = new ToCellMapper<>(abstractRegionMap.getCells(), 20);
+
+		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
+		colorSelectorMap.add(new ElevationColorSelector());
 	}
 
 	@FXML
 	private void initialize() {
 		log.info("initialize()");
+
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(terrainTypeManager.getNames()));
 		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
 
+		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
+		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
+
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(ELEVATION_COLOR_SELECTOR, canvasRenderer, toCellMapper, 1);
+		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, toCellMapper, 1);
 
 		updateHistory();
 		render();
@@ -100,6 +111,21 @@ public class MapEditorController {
 		TerrainType selectedType = terrainTypeManager.getOrDefault(selectedName);
 		log.info("onTerrainTypeSelected(): terrainType={} isDefault={}", selectedName, selectedType.isDefault());
 		selectTerrainType(selectedType);
+	}
+
+	@FXML
+	public void onRenderStyleSelected() {
+		String selectedName = renderStyleComboBox.getSelectionModel().getSelectedItem();
+		ColorSelector<AbstractRegionCell> selectedColorSelector = colorSelectorMap.get(selectedName);
+
+		if(mapRenderer.getColorSelector() != selectedColorSelector) {
+			log.info("onRenderStyleSelected(): Selected {}.", selectedName);
+			mapRenderer.setColorSelector(selectedColorSelector);
+			render();
+		}
+		else {
+			log.info("onRenderStyleSelected(): {} already is use.", selectedName);
+		}
 	}
 
 	@FXML
