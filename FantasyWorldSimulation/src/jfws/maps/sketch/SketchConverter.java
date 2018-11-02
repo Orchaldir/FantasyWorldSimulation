@@ -5,5 +5,7 @@ import java.io.IOException;
 
 public interface SketchConverter {
 
+	SketchMap load(File file) throws IOException;
+
 	void save(File file, SketchMap map) throws IOException;
 }

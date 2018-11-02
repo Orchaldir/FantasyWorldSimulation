@@ -55,7 +55,7 @@ public class MapEditorController {
 	private ToCellMapper<SketchCell> toCellMapper;
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
 	private MapRenderer<SketchCell> mapRenderer;
-	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils);
+	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
 
 	private ColorSelectorMap<SketchCell> colorSelectorMap;
 
