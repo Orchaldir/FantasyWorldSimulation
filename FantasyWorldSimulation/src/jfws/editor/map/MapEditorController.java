@@ -6,16 +6,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
-import jfws.generation.region.AbstractRegionCell;
-import jfws.generation.region.AbstractRegionMap;
-import jfws.generation.region.ChangeTerrainTypeCommand;
-import jfws.generation.region.elevation.BaseElevationGenerator;
-import jfws.generation.region.rendering.ElevationColorSelector;
-import jfws.generation.region.rendering.TerrainColorSelector;
-import jfws.generation.region.terrain.TerrainType;
-import jfws.generation.region.terrain.TerrainTypeConverter;
-import jfws.generation.region.terrain.TerrainTypeJsonConverter;
-import jfws.generation.region.terrain.TerrainTypeManager;
+import jfws.maps.sketch.SketchCell;
+import jfws.maps.sketch.SketchMap;
+import jfws.maps.sketch.ChangeTerrainTypeCommand;
+import jfws.maps.sketch.elevation.BaseElevationGenerator;
+import jfws.maps.sketch.rendering.ElevationColorSelector;
+import jfws.maps.sketch.rendering.TerrainColorSelector;
+import jfws.maps.sketch.terrain.TerrainType;
+import jfws.maps.sketch.terrain.TerrainTypeConverter;
+import jfws.maps.sketch.terrain.TerrainTypeJsonConverter;
+import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.command.CommandHistory;
 import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
@@ -49,12 +49,12 @@ public class MapEditorController {
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
 	private final TerrainType defaultTerrainType, mountainTerrainType;
 	private TerrainType selectedTerrainType;
-	private AbstractRegionMap abstractRegionMap;
-	private ToCellMapper<AbstractRegionCell> toCellMapper;
+	private SketchMap sketchMap;
+	private ToCellMapper<SketchCell> toCellMapper;
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
-	private MapRenderer<AbstractRegionCell> mapRenderer;
+	private MapRenderer<SketchCell> mapRenderer;
 
-	private ColorSelectorMap<AbstractRegionCell> colorSelectorMap;
+	private ColorSelectorMap<SketchCell> colorSelectorMap;
 
 	private CommandHistory commandHistory = new CommandHistory();
 
@@ -66,10 +66,10 @@ public class MapEditorController {
 		mountainTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
 		selectedTerrainType = mountainTerrainType;
 
-		abstractRegionMap = new AbstractRegionMap(20, 10, defaultTerrainType);
-		abstractRegionMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
+		sketchMap = new SketchMap(20, 10, defaultTerrainType);
+		sketchMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
 
-		toCellMapper = new ToCellMapper<>(abstractRegionMap.getCells(), 20);
+		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), 20);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
@@ -94,7 +94,7 @@ public class MapEditorController {
 
 	private void render() {
 		log.info("render()");
-		abstractRegionMap.generateElevation(elevationGenerator);
+		sketchMap.generateElevation(elevationGenerator);
 		mapRenderer.render();
 	}
 
@@ -116,7 +116,7 @@ public class MapEditorController {
 	@FXML
 	public void onRenderStyleSelected() {
 		String selectedName = renderStyleComboBox.getSelectionModel().getSelectedItem();
-		ColorSelector<AbstractRegionCell> selectedColorSelector = colorSelectorMap.get(selectedName);
+		ColorSelector<SketchCell> selectedColorSelector = colorSelectorMap.get(selectedName);
 
 		if(mapRenderer.getColorSelector() != selectedColorSelector) {
 			log.info("onRenderStyleSelected(): Selected {}.", selectedName);
@@ -141,7 +141,7 @@ public class MapEditorController {
 
 	private void onMouseEvent(MouseEvent mouseEvent, String text) {
 		try {
-			AbstractRegionCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
+			SketchCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
 			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
 
 			if(cell.getTerrainType() == selectedTerrainType) {
@@ -151,7 +151,7 @@ public class MapEditorController {
 
 			log.info("{}(): x={} y={} oldTerrain={}", text, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
 
-			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(abstractRegionMap, index, selectedTerrainType);
+			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(sketchMap, index, selectedTerrainType);
 			commandHistory.execute(command);
 
 			updateHistory();

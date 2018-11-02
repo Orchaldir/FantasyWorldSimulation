@@ -1,4 +1,4 @@
-package jfws.generation.region.terrain;
+package jfws.maps.sketch.terrain;
 
 import com.google.gson.*;
 import javafx.scene.paint.Color;

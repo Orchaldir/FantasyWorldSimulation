@@ -1,6 +1,5 @@
-package jfws.generation.region.terrain;
+package jfws.maps.sketch.terrain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javafx.scene.paint.Color;

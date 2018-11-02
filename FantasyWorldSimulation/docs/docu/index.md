@@ -12,16 +12,18 @@ An abstract representation of the whole world.
 
 ### Region
 
-**Abstract Region Map:**
+**Sketch Map:**
 An abstract representation of a region.
 Individual objects like a building or a tree are abstracted away as Forests or Settlements,
 unless they are important enough.
 
+![Sketch Map](images/sketch-map.png)
+
 **Region Map:**
 An more detailed representation of a region.
-Individual objects like a building or a tree are represented by individual but abstract objects- 
+Individual objects like a building or a tree are represented by individual but abstract objects. 
 
-| Feature | Abstract Region | Region |
+| Feature | Sketch | Region |
 |---|:---:|:---:|
 | Cell Size | 100 m | 1 m |
 | Terrain | Terrain Type | ? |

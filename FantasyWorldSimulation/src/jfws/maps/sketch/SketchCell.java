@@ -1,12 +1,12 @@
-package jfws.generation.region;
+package jfws.maps.sketch;
 
-import jfws.generation.region.terrain.TerrainType;
+import jfws.maps.sketch.terrain.TerrainType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class AbstractRegionCell {
+public class SketchCell {
 
 	public final static double MIN_ELEVATION =  -200.0;
 	public final static double DEFAULT_ELEVATION = 0.0;

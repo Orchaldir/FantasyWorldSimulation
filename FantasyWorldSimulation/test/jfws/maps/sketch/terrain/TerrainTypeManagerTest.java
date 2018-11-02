@@ -1,6 +1,7 @@
-package jfws.generation.region.terrain;
+package jfws.maps.sketch.terrain;
 
 import jfws.util.io.FileUtils;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -80,7 +81,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
 
-		assertThat(manager.getNames(), containsInAnyOrder(NAME_B, NAME_C));
+		assertThat(manager.getNames(), Matchers.containsInAnyOrder(NAME_B, NAME_C));
 	}
 
 	// load()

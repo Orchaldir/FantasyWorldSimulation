@@ -1,6 +1,7 @@
-package jfws.generation.region.terrain;
+package jfws.maps.sketch.terrain;
 
 import javafx.scene.paint.Color;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,7 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		TerrainType type = optionalType.get();
 
 		assertThat(type, is(notNullValue()));
-		assertThat(type, is(not(TERRAIN_TYPE_A)));
+		assertThat(type, is(Matchers.not(TERRAIN_TYPE_A)));
 
 		assertThat(type.getName(), is(equalTo(name)));
 
@@ -76,7 +77,7 @@ class TerrainTypeJsonConverterTest extends SharedTestData {
 		assertTerrainType(optionalType, NAME_A, TERRAIN_TYPE_A.getColor(),
 				TERRAIN_TYPE_A.getBaseElevation(), TERRAIN_TYPE_A.getElevationVariation());
 
-		assertThat(optionalType.get(), is(not(TERRAIN_TYPE_A)));
+		assertThat(optionalType.get(), is(Matchers.not(TERRAIN_TYPE_A)));
 	}
 
 	// load()

@@ -1,8 +1,8 @@
-package jfws.generation.region.elevation;
+package jfws.maps.sketch.elevation;
 
 import javafx.scene.paint.Color;
-import jfws.generation.region.terrain.TerrainType;
-import jfws.generation.region.terrain.TerrainTypeImpl;
+import jfws.maps.sketch.terrain.TerrainType;
+import jfws.maps.sketch.terrain.TerrainTypeImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

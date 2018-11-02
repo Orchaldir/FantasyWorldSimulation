@@ -1,6 +1,6 @@
-package jfws.generation.region.elevation;
+package jfws.maps.sketch.elevation;
 
-import jfws.generation.region.terrain.TerrainType;
+import jfws.maps.sketch.terrain.TerrainType;
 
 public class BaseElevationGenerator implements ElevationGenerator {
 	@Override

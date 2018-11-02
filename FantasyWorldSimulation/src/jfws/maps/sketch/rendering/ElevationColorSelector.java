@@ -1,19 +1,19 @@
-package jfws.generation.region.rendering;
+package jfws.maps.sketch.rendering;
 
 import javafx.scene.paint.Color;
-import jfws.generation.region.AbstractRegionCell;
+import jfws.maps.sketch.SketchCell;
 import jfws.util.rendering.ColorSelector;
 
-import static jfws.generation.region.AbstractRegionCell.*;
+import static jfws.maps.sketch.SketchCell.*;
 
-public class ElevationColorSelector implements ColorSelector<AbstractRegionCell> {
+public class ElevationColorSelector implements ColorSelector<SketchCell> {
 	@Override
 	public String getName() {
 		return "Elevation";
 	}
 
 	@Override
-	public Color select(AbstractRegionCell cell) {
+	public Color select(SketchCell cell) {
 		double elevation = cell.getElevation();
 
 		if(elevation < MIN_ELEVATION || elevation > MAX_ELEVATION) {
