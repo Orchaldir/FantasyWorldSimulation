@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import jfws.maps.sketch.SketchCell;
+import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
 import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.elevation.BaseElevationGenerator;
@@ -28,6 +29,7 @@ import jfws.util.rendering.ColorSelectorMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 public class MapEditorController {
@@ -53,12 +55,13 @@ public class MapEditorController {
 	private ToCellMapper<SketchCell> toCellMapper;
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
 	private MapRenderer<SketchCell> mapRenderer;
+	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils);
 
 	private ColorSelectorMap<SketchCell> colorSelectorMap;
 
 	private CommandHistory commandHistory = new CommandHistory();
 
-	public MapEditorController() throws OutsideMapException {
+	public MapEditorController() throws OutsideMapException, IOException {
 		log.info("MapEditorController()");
 
 		terrainTypeManager.load(new File("data/terrain-types.json"));
@@ -68,6 +71,7 @@ public class MapEditorController {
 
 		sketchMap = new SketchMap(20, 10, defaultTerrainType);
 		sketchMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
+		sketchConverter.save(new File("data/map/test.json"), sketchMap);
 
 		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), 20);
 

@@ -8,6 +8,8 @@ import lombok.Getter;
 
 public class SketchMap {
 
+	public static final int VERSION = 1;
+
 	@Getter
 	private final Map2d<SketchCell> cells;
 
