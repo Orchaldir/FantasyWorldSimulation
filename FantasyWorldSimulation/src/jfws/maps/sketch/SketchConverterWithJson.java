@@ -31,12 +31,19 @@ public class SketchConverterWithJson implements SketchConverter {
 	public static final String WRONG_VERSION = "Wrong version!";
 	public static final String NO_SIZE = "No size!";
 	public static final String WRONG_SIZE_FORMAT = "Wrong size format!";
+	public static final String NO_USED_TERRAIN_TYPES = "No used terrain types!";
+	public static final String WRONG_USED_TERRAIN_TYPES_FORMAT = "Wrong used terrain types format!";
 
 	private final FileUtils fileUtils;
 	private final TerrainTypeManager terrainTypeManager;
 
-	private final Map<TerrainType,Integer> usedTerrainTypes = new HashMap<>();
+	// temporary map data
+	private final Map<TerrainType,Integer> terrainTypeToIdMap = new HashMap<>();
+	private final Map<Integer,TerrainType> idToTerrainTypeMap = new HashMap<>();
+	private int width;
+	private int height;
 
+	// json
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 	private final JsonParser parser = new JsonParser();
 
@@ -84,12 +91,13 @@ public class SketchConverterWithJson implements SketchConverter {
 		JsonObject jsonObject = jsonElement.getAsJsonObject();
 
 		checkVersion(jsonObject);
+		parseMapSize(jsonObject);
 
-		int width = getSize(jsonObject, WIDTH);
-		int height = getSize(jsonObject, HEIGHT);
-
-		if(width < 1 || height < 1) {
-			throwException(INVALID_MAP_SIZE);
+		try {
+			parseUsedTerrainTypes(jsonObject);
+		}
+		catch(NullPointerException e) {
+			throwException(WRONG_USED_TERRAIN_TYPES_FORMAT);
 		}
 
 		return null;
@@ -117,6 +125,15 @@ public class SketchConverterWithJson implements SketchConverter {
 		}
 	}
 
+	private void parseMapSize(JsonObject jsonObject) throws IOException {
+		width = getSize(jsonObject, WIDTH);
+		height = getSize(jsonObject, HEIGHT);
+
+		if(width < 1 || height < 1) {
+			throwException(INVALID_MAP_SIZE);
+		}
+	}
+
 	private int getSize(JsonObject jsonObject, String property) throws IOException {
 		if(!jsonObject.has(property)) {
 			throwException(NO_SIZE);
@@ -129,6 +146,39 @@ public class SketchConverterWithJson implements SketchConverter {
 		}
 
 		return 0; // never reached?
+	}
+
+	private void parseUsedTerrainTypes(JsonObject jsonObject) throws IOException {
+		idToTerrainTypeMap.clear();
+
+		if(!jsonObject.has(USED_TERRAIN_TYPES)) {
+			throwException(NO_USED_TERRAIN_TYPES);
+		}
+
+		JsonElement usedTerrainTypesElement = jsonObject.get(USED_TERRAIN_TYPES);
+
+		if(!usedTerrainTypesElement.isJsonArray()) {
+			throwException(WRONG_USED_TERRAIN_TYPES_FORMAT);
+		}
+
+		JsonArray jsonArray = usedTerrainTypesElement.getAsJsonArray();
+
+		for(JsonElement element : jsonArray) {
+			String name = element.getAsString();
+			TerrainType type = terrainTypeManager.getOrDefault(name);
+
+			if(type.isDefault()) {
+				log.warn("parseUsedTerrainTypes(): Terrain type {} does not  exist.", name);
+			}
+
+			idToTerrainTypeMap.put(idToTerrainTypeMap.size(), type);
+		}
+
+		if(idToTerrainTypeMap.size() == 0) {
+			throwException(NO_USED_TERRAIN_TYPES);
+		}
+
+		log.info("parseUsedTerrainTypes(): Conatins {} terrain types.", idToTerrainTypeMap.size());
 	}
 
 	// save
@@ -167,23 +217,23 @@ public class SketchConverterWithJson implements SketchConverter {
 	}
 
 	private void saveUsedTerrainTypes(JsonObject jsonObject, Map2d<SketchCell> cells) {
-		usedTerrainTypes.clear();
+		terrainTypeToIdMap.clear();
 
 		JsonArray jsonArray = new JsonArray();
 
 		for (SketchCell cell : cells.getCells()) {
 			TerrainType type = cell.getTerrainType();
 
-			if(!usedTerrainTypes.containsKey(type)) {
-				int id  = usedTerrainTypes.size();
+			if(!terrainTypeToIdMap.containsKey(type)) {
+				int id  = terrainTypeToIdMap.size();
 				log.info("saveUsedTerrainTypes(): type={} id={}", type.getName(), id);
-				usedTerrainTypes.put(type, id);
+				terrainTypeToIdMap.put(type, id);
 
 				jsonArray.add(type.getName());
 			}
 		}
 
-		log.info("saveUsedTerrainTypes(): types={}", usedTerrainTypes.size());
+		log.info("saveUsedTerrainTypes(): types={}", terrainTypeToIdMap.size());
 
 		jsonObject.add(USED_TERRAIN_TYPES, jsonArray);
 	}
@@ -197,7 +247,7 @@ public class SketchConverterWithJson implements SketchConverter {
 			for(int x = 0; x < cells.getWidth(); x++) {
 				SketchCell cell = cells.getCell(x, y);
 
-				row.append(usedTerrainTypes.getOrDefault(cell.getTerrainType(), -1));
+				row.append(terrainTypeToIdMap.getOrDefault(cell.getTerrainType(), -1));
 
 				if(x < cells.getWidth()-1) {
 					row.append(',');

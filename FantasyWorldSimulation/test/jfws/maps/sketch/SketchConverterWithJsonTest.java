@@ -86,4 +86,26 @@ class SketchConverterWithJsonTest {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":A}"), WRONG_SIZE_FORMAT);
 	}
 
+	// used terrain types
+
+	@Test
+	void testNoUsedTerrainTypes() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3}"), NO_USED_TERRAIN_TYPES);
+	}
+
+	@Test
+	void testEmptyUsedTerrainTypes() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[]}"), NO_USED_TERRAIN_TYPES);
+	}
+
+	@Test
+	void testUsedTerrainTypesNotAnArray() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":3}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":\"text\"}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
+	}
+
+	@Test
+	void testUsedTerrainTypesContainsWrongFormat() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[3,2]}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
+	}
 }
