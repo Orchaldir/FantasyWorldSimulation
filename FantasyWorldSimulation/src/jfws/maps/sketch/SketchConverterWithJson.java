@@ -78,7 +78,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		}
 	}
 
-	public SketchMap parseString(String text) throws IOException {
+	protected SketchMap parseString(String text) throws IOException {
 		try {
 			return parseJsonElement(parser.parse(text));
 		} catch(NullPointerException e) {
@@ -265,7 +265,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		}
 	}
 
-	public String convertToJson(SketchMap map) throws IOException {
+	protected String convertToJson(SketchMap map) throws IOException {
 		Map2d<SketchCell> cells = map.getCells();
 
 		JsonObject jsonObject = new JsonObject();

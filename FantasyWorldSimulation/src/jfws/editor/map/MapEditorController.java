@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
@@ -34,6 +35,9 @@ import java.io.IOException;
 @Slf4j
 public class MapEditorController {
 
+	public static final int DEFAULT_RESOLUTION = 20;
+	public static final int DEFAULT_BORDER_BETWEEN_CELLS = 1;
+
 	@FXML
 	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
 
@@ -43,6 +47,7 @@ public class MapEditorController {
 	@FXML
 	private Button undoButton, redoButton;
 
+	private FileChooser fileChooser = new FileChooser();
 	private FileUtils fileUtils = new ApacheFileUtils();
 
 	private CanvasRenderer canvasRenderer;
@@ -70,13 +75,14 @@ public class MapEditorController {
 		selectedTerrainType = mountainTerrainType;
 
 		sketchMap = new SketchMap(20, 10, defaultTerrainType);
-		sketchMap.getCells().getCell(5, 3).setTerrainType(mountainTerrainType);
-		sketchConverter.save(new File("data/map/test.json"), sketchMap);
 
-		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), 20);
+		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), DEFAULT_RESOLUTION);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
+
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
+		fileChooser.getExtensionFilters().add(extFilter);
 	}
 
 	@FXML
@@ -90,7 +96,7 @@ public class MapEditorController {
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, toCellMapper, 1);
+		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, toCellMapper, DEFAULT_BORDER_BETWEEN_CELLS);
 
 		updateHistory();
 		render();
@@ -106,6 +112,45 @@ public class MapEditorController {
 		if(this.selectedTerrainType != selectedTerrainType) {
 			log.info("selectTerrainType(): {} -> {}", this.selectedTerrainType.getName(), selectedTerrainType.getName());
 			this.selectedTerrainType = selectedTerrainType;
+		}
+	}
+
+	@FXML
+	public void onLoadMap() {
+		File file = fileChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
+
+		if (file != null) {
+			log.info("onLoadMap(): file={}", file.getPath());
+
+			try {
+				sketchMap = sketchConverter.load(file);
+				toCellMapper = new ToCellMapper<>(sketchMap.getCells(), DEFAULT_RESOLUTION);
+				mapRenderer.setToCellMapper(toCellMapper);
+				render();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			log.info("onLoadMap(): No file.");
+		}
+	}
+
+	@FXML
+	public void onSaveMap() {
+		File file = fileChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
+
+		if (file != null) {
+			log.info("onSaveMap(): file={}", file.getPath());
+
+			try {
+				 sketchConverter.save(file, sketchMap);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			log.info("onSaveMap(): No file.");
 		}
 	}
 

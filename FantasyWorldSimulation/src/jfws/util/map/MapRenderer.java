@@ -15,6 +15,7 @@ public class MapRenderer<T> {
 	@Setter
 	private ColorSelector<T> colorSelector;
 	private Renderer renderer;
+	@Setter
 	private ToCellMapper<T> toCellMapper;
 	private double borderBetweenCells;
 
