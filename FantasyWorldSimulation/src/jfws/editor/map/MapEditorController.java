@@ -17,7 +17,7 @@ import jfws.maps.sketch.rendering.ElevationColorSelector;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeConverter;
-import jfws.maps.sketch.terrain.TerrainTypeJsonConverter;
+import jfws.maps.sketch.terrain.TerrainTypeConverterWithJson;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.command.CommandHistory;
 import jfws.util.io.ApacheFileUtils;
@@ -56,7 +56,7 @@ public class MapEditorController {
 
 	private CanvasRenderer canvasRenderer;
 
-	private TerrainTypeConverter converter = new TerrainTypeJsonConverter();
+	private TerrainTypeConverter converter = new TerrainTypeConverterWithJson();
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
 	private final TerrainType defaultTerrainType, mountainTerrainType;
 	private TerrainType selectedTerrainType;

@@ -13,13 +13,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TerrainTypeJsonConverterTest extends SharedTestData {
+class TerrainTypeConverterWithJsonTest extends SharedTestData {
 
-	private TerrainTypeJsonConverter converter;
+	private TerrainTypeConverterWithJson converter;
 
 	@BeforeEach
 	void setup() {
-		converter = new TerrainTypeJsonConverter();
+		converter = new TerrainTypeConverterWithJson();
 	}
 
 	private void assertTerrainType(Optional<TerrainType> optionalType, String name, Color color,

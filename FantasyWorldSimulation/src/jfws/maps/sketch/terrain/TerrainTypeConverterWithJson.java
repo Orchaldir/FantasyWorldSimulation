@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class TerrainTypeJsonConverter implements TerrainTypeConverter {
+public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 	private final JsonParser parser = new JsonParser();
