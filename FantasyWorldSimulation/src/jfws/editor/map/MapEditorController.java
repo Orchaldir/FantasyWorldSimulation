@@ -3,6 +3,7 @@ package jfws.editor.map;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
@@ -31,6 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+
+import static javafx.scene.control.Alert.AlertType.ERROR;
 
 @Slf4j
 public class MapEditorController {
@@ -83,6 +87,8 @@ public class MapEditorController {
 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
 		fileChooser.getExtensionFilters().add(extFilter);
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+		fileChooser.setInitialDirectory(new File(currentPath));
 	}
 
 	@FXML
@@ -128,7 +134,10 @@ public class MapEditorController {
 				mapRenderer.setToCellMapper(toCellMapper);
 				render();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Alert alert = new Alert(ERROR);
+				alert.setTitle("Map loading failed!");
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 			}
 		}
 		else {

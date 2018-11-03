@@ -26,19 +26,28 @@ public class SketchConverterWithJson implements SketchConverter {
 	public static final String TERRAIN_TYPE_ROW_SEPARATOR = ",";
 
 	// exceptions
+
+	private static String createNoPropertyException(String property) {
+		return String.format("Map does not contain property %s!", property);
+	}
+
+	private static String createWrongFormatException(String property) {
+		return String.format("Property %s has a wrong format!", property);
+	}
+
 	public static final String NOT_A_JSON_OBJECT = "Not a json object!";
 	public static final String INVALID_MAP_SIZE = "Invalid map size!";
-	public static final String NO_VERSION = "No version!";
-	public static final String WRONG_VERSION_FORMAT = "Wrong version format!";
+	public static final String NO_VERSION = createNoPropertyException(VERSION);
+	public static final String WRONG_VERSION_FORMAT = createWrongFormatException(VERSION);
 	public static final String WRONG_VERSION = "Wrong version!";
 	public static final String NO_SIZE = "No size!";
 	public static final String WRONG_SIZE_FORMAT = "Wrong size format!";
-	public static final String NO_USED_TERRAIN_TYPES = "No used terrain types!";
-	public static final String WRONG_USED_TERRAIN_TYPES_FORMAT = "Wrong used terrain types format!";
-	public static final String NO_TERRAIN_TYPE_MAP = "No terrain type map!";
-	public static final String WRONG_TERRAIN_TYPE_MAP_FORMAT = "Wrong terrain type map format!";
-	public static final String WRONG_TERRAIN_TYPE_MAP_SIZE = "Wrong terrain type map size!";
-	public static final String WRONG_TERRAIN_TYPE_ROW_FORMAT = "Wrong terrain type map format!";
+	public static final String NO_USED_TERRAIN_TYPES = createNoPropertyException(USED_TERRAIN_TYPES);
+	public static final String WRONG_USED_TERRAIN_TYPES_FORMAT = createWrongFormatException(USED_TERRAIN_TYPES);
+	public static final String NO_TERRAIN_TYPE_MAP = createNoPropertyException(TERRAIN_TYPE_MAP);
+	public static final String WRONG_TERRAIN_TYPE_MAP_FORMAT = createWrongFormatException(TERRAIN_TYPE_MAP);
+	public static final String WRONG_TERRAIN_TYPE_MAP_SIZE = String.format("Property %s has wrong size!", TERRAIN_TYPE_MAP);
+	public static final String WRONG_TERRAIN_TYPE_ROW_FORMAT = "Wrong terrain type row format!";
 	public static final String NOT_USED_TERRAIN_TYPE = "Contains not used terrain type!";
 
 	private final FileUtils fileUtils;
