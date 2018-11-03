@@ -4,6 +4,7 @@ import com.google.gson.*;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.io.FileUtils;
+import jfws.util.map.ArrayMap2d;
 import jfws.util.map.Map2d;
 import jfws.util.map.OutsideMapException;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class SketchConverterWithJson implements SketchConverter {
 	public static final String HEIGHT = "height";
 	public static final String USED_TERRAIN_TYPES = "used_terrain_types";
 	public static final String TERRAIN_TYPE_MAP = "terrain_type_map";
+	public static final String TERRAIN_TYPE_ROW_SEPARATOR = ",";
 
 	// exceptions
 	public static final String NOT_A_JSON_OBJECT = "Not a json object!";
@@ -33,6 +35,11 @@ public class SketchConverterWithJson implements SketchConverter {
 	public static final String WRONG_SIZE_FORMAT = "Wrong size format!";
 	public static final String NO_USED_TERRAIN_TYPES = "No used terrain types!";
 	public static final String WRONG_USED_TERRAIN_TYPES_FORMAT = "Wrong used terrain types format!";
+	public static final String NO_TERRAIN_TYPE_MAP = "No terrain type map!";
+	public static final String WRONG_TERRAIN_TYPE_MAP_FORMAT = "Wrong terrain type map format!";
+	public static final String WRONG_TERRAIN_TYPE_MAP_SIZE = "Wrong terrain type map size!";
+	public static final String WRONG_TERRAIN_TYPE_ROW_FORMAT = "Wrong terrain type map format!";
+	public static final String NOT_USED_TERRAIN_TYPE = "Contains not used terrain type!";
 
 	private final FileUtils fileUtils;
 	private final TerrainTypeManager terrainTypeManager;
@@ -100,7 +107,9 @@ public class SketchConverterWithJson implements SketchConverter {
 			throwException(WRONG_USED_TERRAIN_TYPES_FORMAT);
 		}
 
-		return null;
+		ArrayMap2d<SketchCell> cellMap = parseTerrainTypeMap(jsonObject);
+
+		return new SketchMap(cellMap);
 	}
 
 	private void checkVersion(JsonObject jsonObject) throws IOException {
@@ -168,7 +177,7 @@ public class SketchConverterWithJson implements SketchConverter {
 			TerrainType type = terrainTypeManager.getOrDefault(name);
 
 			if(type.isDefault()) {
-				log.warn("parseUsedTerrainTypes(): Terrain type {} does not  exist.", name);
+				log.warn("parseUsedTerrainTypes(): Terrain type {} does not exist.", name);
 			}
 
 			idToTerrainTypeMap.put(idToTerrainTypeMap.size(), type);
@@ -178,7 +187,66 @@ public class SketchConverterWithJson implements SketchConverter {
 			throwException(NO_USED_TERRAIN_TYPES);
 		}
 
-		log.info("parseUsedTerrainTypes(): Conatins {} terrain types.", idToTerrainTypeMap.size());
+		log.info("parseUsedTerrainTypes(): Contains {} terrain types.", idToTerrainTypeMap.size());
+	}
+
+	private ArrayMap2d<SketchCell> parseTerrainTypeMap(JsonObject jsonObject) throws IOException {
+		if(!jsonObject.has(TERRAIN_TYPE_MAP)) {
+			throwException(NO_TERRAIN_TYPE_MAP);
+		}
+
+		JsonElement usedTerrainTypesElement = jsonObject.get(TERRAIN_TYPE_MAP);
+
+		if(!usedTerrainTypesElement.isJsonArray()) {
+			throwException(WRONG_TERRAIN_TYPE_MAP_FORMAT);
+		}
+
+		JsonArray jsonArray = usedTerrainTypesElement.getAsJsonArray();
+
+		if(jsonArray.size() != height) {
+			throwException(WRONG_TERRAIN_TYPE_MAP_SIZE);
+		}
+
+		int size = width * height;
+		SketchCell[] cellArray = new SketchCell[size];
+		ArrayMap2d<SketchCell> cellMap = new ArrayMap2d<>(width, height, cellArray);
+
+		for(int y = 0; y < height; y++) {
+			parseTerrainTypeRow(jsonArray, cellArray, cellMap, y);
+		}
+
+		return cellMap;
+	}
+
+	private void parseTerrainTypeRow(JsonArray jsonArray, SketchCell[] cellArray, ArrayMap2d<SketchCell> cellMap, int y) throws IOException {
+		JsonElement element = jsonArray.get(y);
+		String rowString = element.getAsString();
+		String[] rowParts = rowString.split(TERRAIN_TYPE_ROW_SEPARATOR);
+
+		if(rowParts.length != width) {
+			throwException(WRONG_TERRAIN_TYPE_MAP_SIZE);
+		}
+
+		for(int x = 0; x < width; x++) {
+			try {
+				parseTerrainTypeCell(cellArray, cellMap.getIndex(x, y), rowParts[x]);
+			}
+			catch (NumberFormatException e) {
+				throwException(WRONG_TERRAIN_TYPE_ROW_FORMAT);
+			}
+		}
+	}
+
+	private void parseTerrainTypeCell(SketchCell[] cellArray, int index, String rowPart) throws IOException {
+		int terrainTypeId = Integer.parseInt(rowPart);
+
+		TerrainType type = idToTerrainTypeMap.get(terrainTypeId);
+
+		if(type == null) {
+			throwException(NOT_USED_TERRAIN_TYPE);
+		}
+
+		cellArray[index] = new SketchCell(type, SketchCell.DEFAULT_ELEVATION);
 	}
 
 	// save
@@ -250,7 +318,7 @@ public class SketchConverterWithJson implements SketchConverter {
 				row.append(terrainTypeToIdMap.getOrDefault(cell.getTerrainType(), -1));
 
 				if(x < cells.getWidth()-1) {
-					row.append(',');
+					row.append(TERRAIN_TYPE_ROW_SEPARATOR);
 				}
 			}
 

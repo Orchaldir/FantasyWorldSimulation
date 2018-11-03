@@ -1,6 +1,12 @@
 package jfws.maps.sketch;
 
+import jfws.maps.sketch.terrain.TerrainType;
+import jfws.maps.sketch.terrain.TerrainTypeManager;
+import jfws.util.map.Map2d;
+import jfws.util.map.OutsideMapException;
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -14,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SketchConverterWithJsonTest {
 
+	private TerrainTypeManager manager;
 	private SketchConverterWithJson converter;
 
 	@BeforeEach
 	void setup() {
-		converter = new SketchConverterWithJson(null, null);
+		manager = new TerrainTypeManager(null, null);
+		converter = new SketchConverterWithJson(null, manager);
 	}
 
 	private <T extends Throwable> void assertException(Class<T> expectedType, Executable executable, String message) {
@@ -46,8 +54,6 @@ class SketchConverterWithJsonTest {
 	}
 
 	// version
-
-	// "{\"width\":1,\"height\":10,\"used_terrain_types\":[\"A\"],\"terrain_type_map\":[\"0\"]}"
 
 	@Test
 	void testNoVersion() {
@@ -104,8 +110,76 @@ class SketchConverterWithJsonTest {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":\"text\"}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
 	}
 
+	// terrain type map
+
 	@Test
-	void testUsedTerrainTypesContainsWrongFormat() {
-		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[3,2]}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
+	void testNoTerrainTypeMap() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]}"), NO_TERRAIN_TYPE_MAP);
+	}
+
+	@Test
+	void testTerrainTypeMapIsEmpty() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"],\"terrain_type_map\":[]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
+	}
+
+	@Test
+	void testTerrainTypeMapIsNotAnArray() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"],\"terrain_type_map\":6}"), WRONG_TERRAIN_TYPE_MAP_FORMAT);
+	}
+
+	@Test
+	void testTerrainTypeMapHasWrongNumberOfRows() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"0,0\",\"0,0\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
+	}
+
+	@Test
+	void testTerrainTypeMapRowHasWrongSize() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"0,0,1\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"0,0\",\"0\"]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
+	}
+
+	@Test
+	void testTerrainTypeMapRowHasWrongContent() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"A,0\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_ROW_FORMAT);
+	}
+
+	@Test
+	void testTerrainTypeMapHasNotUsedTerrainType() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"2,0\",\"0,0\"]}"), NOT_USED_TERRAIN_TYPE);
+	}
+
+	@Test
+	void testParseString() throws IOException, OutsideMapException {
+		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}");
+
+		assertNotNull(sketchMap);
+
+		Map2d<SketchCell> cells = sketchMap.getCells();
+
+		assertNotNull(cells);
+		assertThat(cells.getWidth(), is(2));
+		assertThat(cells.getHeight(), is(3));
+
+		TerrainType terrainTypeA = manager.getOrDefault("A");
+		TerrainType terrainTypeB = manager.getOrDefault("B");
+
+		for(int i = 0; i < cells.getSize(); i++) {
+			SketchCell cell = sketchMap.getCells().getCell(i);
+
+			if(i == 3) {
+				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeB)));
+			}
+			else {
+				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeA)));
+			}
+		}
 	}
 }

@@ -24,6 +24,10 @@ public class SketchMap {
 		cells = new ArrayMap2d<>(width, height, cellArray);
 	}
 
+	public SketchMap(Map2d<SketchCell> cells) {
+		this.cells = cells;
+	}
+
 	public void generateElevation(ElevationGenerator generator) {
 		cells.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
 	}
