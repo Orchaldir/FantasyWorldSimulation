@@ -4,21 +4,22 @@ import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.map.Map2d;
 import jfws.util.map.OutsideMapException;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
 
 import static jfws.maps.sketch.SketchConverterWithJson.*;
+import static jfws.maps.sketch.terrain.SharedTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SketchConverterWithJsonTest {
+
+	public static final int WIDTH = 3;
+	public static final int HEIGHT = 2;
 
 	private TerrainTypeManager manager;
 	private SketchConverterWithJson converter;
@@ -35,8 +36,6 @@ class SketchConverterWithJsonTest {
 	}
 
 	// load
-
-	// save
 
 	@Test
 	void testParseStringWithNull() {
@@ -181,5 +180,41 @@ class SketchConverterWithJsonTest {
 				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeA)));
 			}
 		}
+	}
+
+	// test
+
+	@Test
+	void test() throws IOException, OutsideMapException {
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+		manager.add(TERRAIN_TYPE_C);
+
+		SketchMap sketchMap =  new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
+		Map2d<SketchCell> cellMap = sketchMap.getCells();
+
+		cellMap.getCell(1, 0).setTerrainType(TERRAIN_TYPE_B);
+		cellMap.getCell(2, 0).setTerrainType(TERRAIN_TYPE_C);
+		cellMap.getCell(0, 1).setTerrainType(TERRAIN_TYPE_C);
+		cellMap.getCell(2, 1).setTerrainType(TERRAIN_TYPE_B);
+
+		String text = converter.convertToJson(sketchMap);
+		SketchMap loadedSketchMap = converter.parseString(text);
+
+		assertNotNull(loadedSketchMap);
+		assertThat(loadedSketchMap, is(not(sketchMap)));
+
+		cellMap = loadedSketchMap.getCells();
+
+		assertThat(cellMap.getWidth(), is(WIDTH));
+		assertThat(cellMap.getHeight(), is(HEIGHT));
+
+		assertThat(cellMap.getCell(0,0).getTerrainType(), is(equalTo(TERRAIN_TYPE_A)));
+		assertThat(cellMap.getCell(1,0).getTerrainType(), is(equalTo(TERRAIN_TYPE_B)));
+		assertThat(cellMap.getCell(2,0).getTerrainType(), is(equalTo(TERRAIN_TYPE_C)));
+
+		assertThat(cellMap.getCell(0,1).getTerrainType(), is(equalTo(TERRAIN_TYPE_C)));
+		assertThat(cellMap.getCell(1,1).getTerrainType(), is(equalTo(TERRAIN_TYPE_A)));
+		assertThat(cellMap.getCell(2,1).getTerrainType(), is(equalTo(TERRAIN_TYPE_B)));
 	}
 }

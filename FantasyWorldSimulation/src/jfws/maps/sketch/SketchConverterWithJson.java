@@ -310,7 +310,7 @@ public class SketchConverterWithJson implements SketchConverter {
 			}
 		}
 
-		log.info("saveUsedTerrainTypes(): types={}", terrainTypeToIdMap.size());
+		log.info("saveUsedTerrainTypes(): Contains {} terrain types.", terrainTypeToIdMap.size());
 
 		jsonObject.add(USED_TERRAIN_TYPES, jsonArray);
 	}
