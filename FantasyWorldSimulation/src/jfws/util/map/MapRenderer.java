@@ -17,7 +17,12 @@ public class MapRenderer<T> {
 	private Renderer renderer;
 	@Setter
 	private ToCellMapper<T> toCellMapper;
+	private double worldToScreenFactor;
 	private double borderBetweenCells;
+
+	public double convertToWorld(double screen) {
+		return screen / worldToScreenFactor;
+	}
 
 	public void render() {
 		try {
@@ -32,6 +37,8 @@ public class MapRenderer<T> {
 		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
 		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;
 
+		renderer.setScale(worldToScreenFactor);
+
 		for(int row = 0; row < map.getHeight(); row++) {
 			double originY = toCellMapper.getCellOriginY(row);
 
@@ -42,5 +49,7 @@ public class MapRenderer<T> {
 				renderer.renderRectangle(originX, originY, resolutionX, resolutionY);
 			}
 		}
+
+		renderer.setScale(1.0 / worldToScreenFactor);
 	}
 }

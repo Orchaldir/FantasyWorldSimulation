@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 
 class MapRendererTest extends SharedTestData {
 
+	public static final double WORLD_TO_SCREEN_FACTOR = 1.0;
 	public static final double BORDER = 1;
 
 	private ColorSelector<Integer> colorSelector;
@@ -26,20 +27,8 @@ class MapRendererTest extends SharedTestData {
 	void setup() {
 		colorSelector = Mockito.mock(ColorSelector.class);
 		renderer = Mockito.mock(Renderer.class);
-		mapRenderer = new MapRenderer<>(colorSelector, renderer, MAPPER, BORDER);
+		mapRenderer = new MapRenderer<>(colorSelector, renderer, MAPPER, WORLD_TO_SCREEN_FACTOR, BORDER);
 		orderVerifier = Mockito.inOrder(renderer);
-	}
-
-	private void verifyRenderRectangle(double x, double y, Color color) {
-		orderVerifier.verify(renderer).setFillColor(ArgumentMatchers.eq(color));
-		orderVerifier.verify(renderer).renderRectangle(eq(x, ERROR), eq(y, ERROR), eq(RESOLUTION_X-BORDER, ERROR), eq(RESOLUTION_Y-BORDER, ERROR));
-	}
-
-	private void verifyRenderRow(double y) {
-		verifyRenderRectangle(CELL_X_0, y, Color.RED);
-		verifyRenderRectangle(CELL_X_1, y, Color.GREEN);
-		verifyRenderRectangle(CELL_X_2, y, Color.BLUE);
-		verifyRenderRectangle(CELL_X_3, y, Color.YELLOW);
 	}
 
 	@Test()
@@ -63,12 +52,30 @@ class MapRendererTest extends SharedTestData {
 	}
 
 	private void verifyRender() {
+		verifyScale(WORLD_TO_SCREEN_FACTOR);
 		verifyRenderRow(CELL_Y_0);
 		verifyRenderRow(CELL_Y_1);
 		verifyRenderRow(CELL_Y_2);
 		verifyRenderRow(CELL_Y_3);
 		verifyRenderRow(CELL_Y_4);
+		verifyScale(1.0 / WORLD_TO_SCREEN_FACTOR);
 		orderVerifier.verifyNoMoreInteractions();
+	}
+
+	private void verifyScale(double scale) {
+		orderVerifier.verify(renderer).setScale(scale);
+	}
+
+	private void verifyRenderRow(double y) {
+		verifyRenderRectangle(CELL_X_0, y, Color.RED);
+		verifyRenderRectangle(CELL_X_1, y, Color.GREEN);
+		verifyRenderRectangle(CELL_X_2, y, Color.BLUE);
+		verifyRenderRectangle(CELL_X_3, y, Color.YELLOW);
+	}
+
+	private void verifyRenderRectangle(double x, double y, Color color) {
+		orderVerifier.verify(renderer).setFillColor(ArgumentMatchers.eq(color));
+		orderVerifier.verify(renderer).renderRectangle(eq(x, ERROR), eq(y, ERROR), eq(RESOLUTION_X-BORDER, ERROR), eq(RESOLUTION_Y-BORDER, ERROR));
 	}
 
 	private void verifyColorSelector() {

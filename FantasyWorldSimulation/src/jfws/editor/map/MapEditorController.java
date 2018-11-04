@@ -39,8 +39,9 @@ import static javafx.scene.control.Alert.AlertType.ERROR;
 @Slf4j
 public class MapEditorController {
 
-	public static final int DEFAULT_RESOLUTION = 20;
-	public static final int DEFAULT_BORDER_BETWEEN_CELLS = 1;
+	public static final double SKETCH_TO_WORLD = 100.0;
+	public static final double WORLD_TO_SCREEN = 0.2;
+	public static final int BORDER_BETWEEN_CELLS = 5;
 
 	@FXML
 	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
@@ -70,7 +71,7 @@ public class MapEditorController {
 
 	private CommandHistory commandHistory = new CommandHistory();
 
-	public MapEditorController() throws OutsideMapException, IOException {
+	public MapEditorController() {
 		log.info("MapEditorController()");
 
 		terrainTypeManager.load(new File("data/terrain-types.json"));
@@ -80,7 +81,7 @@ public class MapEditorController {
 
 		sketchMap = new SketchMap(20, 10, defaultTerrainType);
 
-		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), DEFAULT_RESOLUTION);
+		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), SKETCH_TO_WORLD);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
@@ -102,7 +103,7 @@ public class MapEditorController {
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, toCellMapper, DEFAULT_BORDER_BETWEEN_CELLS);
+		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, toCellMapper, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
 		updateHistory();
 		render();
@@ -130,7 +131,7 @@ public class MapEditorController {
 
 			try {
 				sketchMap = sketchConverter.load(file);
-				toCellMapper = new ToCellMapper<>(sketchMap.getCells(), DEFAULT_RESOLUTION);
+				toCellMapper = new ToCellMapper<>(sketchMap.getCells(), SKETCH_TO_WORLD);
 				mapRenderer.setToCellMapper(toCellMapper);
 				render();
 			} catch (IOException e) {
@@ -198,16 +199,26 @@ public class MapEditorController {
 	}
 
 	private void onMouseEvent(MouseEvent mouseEvent, String text) {
+		double worldX = mapRenderer.convertToWorld(mouseEvent.getX());
+		double worldY = mapRenderer.convertToWorld(mouseEvent.getY());
+		String mousePosText = String.format("Canvas: x=%.0f y=%.0f World: x=%.1f y=%.1f",
+				mouseEvent.getX(), mouseEvent.getY(), worldX, worldY);
+
+		onMouseEvent(text, worldX, worldY, mousePosText);
+	}
+
+	private void onMouseEvent(String text, double worldX, double worldY, String mousePosText) {
 		try {
-			SketchCell cell = toCellMapper.getCell(mouseEvent.getX(), mouseEvent.getY());
-			int index = toCellMapper.getIndex(mouseEvent.getX(), mouseEvent.getY());
+			SketchCell cell = toCellMapper.getCell(worldX, worldY);
+			int index = toCellMapper.getIndex(worldX, worldY);
 
 			if(cell.getTerrainType() == selectedTerrainType) {
-				log.info("{}(): Cell {} is already {}. x={} y={}", text, index, cell.getTerrainType().getName(), mouseEvent.getX(), mouseEvent.getY());
+				log.info("{}(): Cell {} is already {}. {}",
+						text, index, cell.getTerrainType().getName(), mousePosText);
 				return;
 			}
 
-			log.info("{}(): x={} y={} oldTerrain={}", text, mouseEvent.getX(), mouseEvent.getY(), cell.getTerrainType().getName());
+			log.info("{}(): {} oldTerrain={}", text, mousePosText, cell.getTerrainType().getName());
 
 			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(sketchMap, index, selectedTerrainType);
 			commandHistory.execute(command);
@@ -215,7 +226,7 @@ public class MapEditorController {
 			updateHistory();
 			render();
 		} catch (OutsideMapException e1) {
-			log.info("{}(): Outside map! x={} y={}", text, mouseEvent.getX(), mouseEvent.getY());
+			log.info("{}(): Outside map! {}", text, mousePosText);
 		}
 	}
 

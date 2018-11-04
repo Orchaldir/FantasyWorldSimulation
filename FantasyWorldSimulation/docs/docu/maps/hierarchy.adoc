@@ -5,25 +5,24 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 === World Maps
 
-*Land Distribution Map:*
+==== Land Distribution Map
 A map that helps with the generation of continents & oceans during world generation. 
 
-*World Map:*
+==== World Map
 An abstract representation of the whole world.
 
 === Region Maps
 
-*Sketch Map:*
+==== Sketch Map
 An abstract representation of a region.
 Individual objects like a building or a tree are abstracted away as Forests or Settlements,
 unless they are important enough.
 
 image::sketch-map.png[Sketch Map]
 
-*Region Map:*
-An more detailed representation of a region.
+==== Region Map
+A more detailed representation of a region that is generated from a <<Sketch Map>>.
 Individual objects like a building or a tree are represented by individual but abstract objects. 
-
 
 .Comparison of the Sketch & Region map
 [%header,cols=3*]
@@ -41,5 +40,5 @@ Individual objects like a building or a tree are represented by individual but a
 
 === Local Maps
 
-*Local Map:*
+==== Local Map
 An full representation of a region without any abstract objects.
