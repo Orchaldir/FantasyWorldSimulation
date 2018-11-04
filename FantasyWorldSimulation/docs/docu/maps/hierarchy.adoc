@@ -24,9 +24,11 @@ image::sketch-map.png[Sketch Map]
 An more detailed representation of a region.
 Individual objects like a building or a tree are represented by individual but abstract objects. 
 
+
+.Comparison of the Sketch & Region map
 [%header,cols=3*]
 |===
-| Feature | Sketch | Region
+| | Sketch | Region
 | Cell Size | 100 m | 1 m
 | Terrain | Terrain Type | ?
 | Roads | Graph | Mesh

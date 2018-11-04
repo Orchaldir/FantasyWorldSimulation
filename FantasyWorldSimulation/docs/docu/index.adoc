@@ -1,6 +1,8 @@
 
 :imagesdir: images/
 
-= Documentation
+= Maps
 
 include::maps/hierarchy.adoc[]
+
+include::maps/coordinate-systems.adoc[]

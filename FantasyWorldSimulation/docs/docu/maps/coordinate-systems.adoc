@@ -1,0 +1,43 @@
+
+ifndef::imagesdir[:imagesdir: ../images]
+
+== Coordinate Systems
+
+A coordinate systems defines the relative position of cells & features of a map
+and how to convert between different coordinate systems.
+
+.Comparison of the different coordinate systems
+[%header,cols=4*]
+|===
+| Feature | Map | World | Screen
+
+| Unit
+| 1 cell
+| 1 meter
+| 1 pixel
+
+| Origin
+| Top Left
+| ?
+| Top Left
+
+|===
+
+=== Map Coordinate Systems
+
+Each map has its own *Map Coordinate System* based on its regular grid of cells.
+
+=== World Coordinate System
+
+The *World Coordinate System* is the coordinate system in which all features are defined.
+It does not matter to which map a feature belongs.
+
+This has multiple advantages:
+
+* No coordinate conversion between maps.
+* Easier to understand by the user.
+* Changing the resolution of a map does not change the coordinates of its features.
+
+=== Screen Coordinate System
+
+The final result of the map editor is a highly detailed image displayed in the gui or saved to a file.
