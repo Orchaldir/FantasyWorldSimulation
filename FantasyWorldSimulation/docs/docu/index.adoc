@@ -1,0 +1,6 @@
+
+:imagesdir: images/
+
+= Documentation
+
+include::maps/hierarchy.adoc[]
