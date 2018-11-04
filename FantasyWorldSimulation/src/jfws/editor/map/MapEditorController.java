@@ -39,7 +39,6 @@ import static javafx.scene.control.Alert.AlertType.ERROR;
 @Slf4j
 public class MapEditorController {
 
-	public static final double SKETCH_TO_WORLD = 100.0;
 	public static final double WORLD_TO_SCREEN = 0.2;
 	public static final int BORDER_BETWEEN_CELLS = 5;
 
@@ -62,7 +61,6 @@ public class MapEditorController {
 	private final TerrainType defaultTerrainType, mountainTerrainType;
 	private TerrainType selectedTerrainType;
 	private SketchMap sketchMap;
-	private ToCellMapper<SketchCell> toCellMapper;
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
 	private MapRenderer<SketchCell> mapRenderer;
 	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
@@ -80,8 +78,6 @@ public class MapEditorController {
 		selectedTerrainType = mountainTerrainType;
 
 		sketchMap = new SketchMap(20, 10, defaultTerrainType);
-
-		toCellMapper = new ToCellMapper<>(sketchMap.getCells(), SKETCH_TO_WORLD);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
@@ -103,7 +99,7 @@ public class MapEditorController {
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, toCellMapper, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
+		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, sketchMap.getToCellMapper(), WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
 		updateHistory();
 		render();
@@ -131,8 +127,7 @@ public class MapEditorController {
 
 			try {
 				sketchMap = sketchConverter.load(file);
-				toCellMapper = new ToCellMapper<>(sketchMap.getCells(), SKETCH_TO_WORLD);
-				mapRenderer.setToCellMapper(toCellMapper);
+				mapRenderer.setToCellMapper(sketchMap.getToCellMapper());
 				render();
 			} catch (IOException e) {
 				Alert alert = new Alert(ERROR);
@@ -209,6 +204,7 @@ public class MapEditorController {
 
 	private void onMouseEvent(String text, double worldX, double worldY, String mousePosText) {
 		try {
+			ToCellMapper<SketchCell> toCellMapper = sketchMap.getToCellMapper();
 			SketchCell cell = toCellMapper.getCell(worldX, worldY);
 			int index = toCellMapper.getIndex(worldX, worldY);
 

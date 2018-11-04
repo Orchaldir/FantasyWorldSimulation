@@ -4,14 +4,19 @@ import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.util.map.ArrayMap2d;
 import jfws.util.map.Map2d;
+import jfws.util.map.ToCellMapper;
 import lombok.Getter;
 
 public class SketchMap {
 
 	public static final int VERSION = 1;
+	public static final double SKETCH_TO_WORLD = 100.0;
 
 	@Getter
 	private final Map2d<SketchCell> cells;
+
+	@Getter
+	private final ToCellMapper<SketchCell> toCellMapper;
 
 	public SketchMap(int width, int height, TerrainType defaultType) {
 		int size = width * height;
@@ -22,10 +27,12 @@ public class SketchMap {
 		}
 
 		cells = new ArrayMap2d<>(width, height, cellArray);
+		toCellMapper = new ToCellMapper<>(cells, SKETCH_TO_WORLD);
 	}
 
 	public SketchMap(Map2d<SketchCell> cells) {
 		this.cells = cells;
+		toCellMapper = new ToCellMapper<>(cells, SKETCH_TO_WORLD);
 	}
 
 	public void generateElevation(ElevationGenerator generator) {
