@@ -7,6 +7,8 @@ import jfws.util.map.Map2d;
 import jfws.util.map.ToCellMapper;
 import lombok.Getter;
 
+import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
+
 public class SketchMap {
 
 	public static final int VERSION = 1;
@@ -23,7 +25,7 @@ public class SketchMap {
 		SketchCell[] cellArray = new SketchCell[size];
 
 		for(int i = 0; i < size; i++) {
-			cellArray[i] = new SketchCell(defaultType, SketchCell.DEFAULT_ELEVATION);
+			cellArray[i] = new SketchCell(defaultType, DEFAULT_ELEVATION);
 		}
 
 		cells = new ArrayMap2d<>(width, height, cellArray);

@@ -1,5 +1,6 @@
 package jfws.maps.sketch;
 
+import jfws.features.elevation.ElevationCell;
 import jfws.maps.sketch.elevation.BaseElevationGenerator;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.util.map.Map2d;
@@ -38,7 +39,7 @@ class SketchMapTest {
 		assertThat(cells.getHeight(), is(equalTo(HEIGHT)));
 
 		for(int i = 0; i < SIZE; i++) {
-			assertCell(i, TERRAIN_TYPE_A, SketchCell.DEFAULT_ELEVATION);
+			assertCell(i, TERRAIN_TYPE_A, ElevationCell.DEFAULT_ELEVATION);
 		}
 	}
 

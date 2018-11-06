@@ -13,7 +13,7 @@ import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
 import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.elevation.BaseElevationGenerator;
-import jfws.maps.sketch.rendering.ElevationColorSelector;
+import jfws.features.elevation.ElevationColorSelector;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeConverter;

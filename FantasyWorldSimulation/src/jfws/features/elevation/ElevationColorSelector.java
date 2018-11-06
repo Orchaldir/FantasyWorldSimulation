@@ -1,19 +1,18 @@
-package jfws.maps.sketch.rendering;
+package jfws.features.elevation;
 
 import javafx.scene.paint.Color;
-import jfws.maps.sketch.SketchCell;
 import jfws.util.rendering.ColorSelector;
 
-import static jfws.maps.sketch.SketchCell.*;
+import static jfws.features.elevation.ElevationCell.*;
 
-public class ElevationColorSelector implements ColorSelector<SketchCell> {
+public class ElevationColorSelector<T extends ElevationCell> implements ColorSelector<T> {
 	@Override
 	public String getName() {
 		return "Elevation";
 	}
 
 	@Override
-	public Color select(SketchCell cell) {
+	public Color select(T cell) {
 		double elevation = cell.getElevation();
 
 		if(elevation < MIN_ELEVATION || elevation > MAX_ELEVATION) {

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
+
 @Slf4j
 public class SketchConverterWithJson implements SketchConverter {
 
@@ -255,7 +257,7 @@ public class SketchConverterWithJson implements SketchConverter {
 			throwException(NOT_USED_TERRAIN_TYPE);
 		}
 
-		cellArray[index] = new SketchCell(type, SketchCell.DEFAULT_ELEVATION);
+		cellArray[index] = new SketchCell(type, DEFAULT_ELEVATION);
 	}
 
 	// save
