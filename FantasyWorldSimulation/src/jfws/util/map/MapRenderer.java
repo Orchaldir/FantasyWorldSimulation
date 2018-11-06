@@ -3,20 +3,13 @@ package jfws.util.map;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Slf4j
-public class MapRenderer<T> {
+public class MapRenderer {
 
-	@Getter
-	@Setter
-	private ColorSelector<T> colorSelector;
 	private Renderer renderer;
-	@Setter
-	private ToCellMapper<T> toCellMapper;
 	private double worldToScreenFactor;
 	private double borderBetweenCells;
 
@@ -24,15 +17,15 @@ public class MapRenderer<T> {
 		return screen / worldToScreenFactor;
 	}
 
-	public void render() {
+	public <T> void render(ToCellMapper<T> toCellMapper, ColorSelector<T> colorSelector) {
 		try {
-			tryRender();
+			tryRender(toCellMapper, colorSelector);
 		} catch (OutsideMapException e) {
 			log.error("render(): Tried to render cell outside the map! x={} y={}", e.getX(), e.getY());
 		}
 	}
 
-	private void tryRender() throws OutsideMapException {
+	private <T> void tryRender(ToCellMapper<T> toCellMapper, ColorSelector<T> colorSelector) throws OutsideMapException {
 		Map2d<T> map = toCellMapper.getMap();
 		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
 		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;

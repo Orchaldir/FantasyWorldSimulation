@@ -20,14 +20,14 @@ class MapRendererTest extends SharedTestData {
 
 	private ColorSelector<Integer> colorSelector;
 	private Renderer renderer;
-	private MapRenderer<Integer> mapRenderer;
+	private MapRenderer mapRenderer;
 	private InOrder orderVerifier;
 
 	@BeforeEach
 	void setup() {
 		colorSelector = Mockito.mock(ColorSelector.class);
 		renderer = Mockito.mock(Renderer.class);
-		mapRenderer = new MapRenderer<>(colorSelector, renderer, MAPPER, WORLD_TO_SCREEN_FACTOR, BORDER);
+		mapRenderer = new MapRenderer(renderer, WORLD_TO_SCREEN_FACTOR, BORDER);
 		orderVerifier = Mockito.inOrder(renderer);
 	}
 
@@ -35,7 +35,7 @@ class MapRendererTest extends SharedTestData {
 	void testRender() throws OutsideMapException {
 		prepareTestRender();
 
-		mapRenderer.render();
+		mapRenderer.render(MAPPER, colorSelector);
 
 		verifyColorSelector();
 		verifyRender();

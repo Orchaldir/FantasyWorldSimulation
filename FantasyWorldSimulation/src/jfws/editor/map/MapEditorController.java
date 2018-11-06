@@ -62,10 +62,11 @@ public class MapEditorController {
 	private TerrainType selectedTerrainType;
 	private SketchMap sketchMap;
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
-	private MapRenderer<SketchCell> mapRenderer;
+	private MapRenderer mapRenderer;
 	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
 
 	private ColorSelectorMap<SketchCell> colorSelectorMap;
+	private ColorSelector<SketchCell> selectedColorSelector;
 
 	private CommandHistory commandHistory = new CommandHistory();
 
@@ -81,6 +82,7 @@ public class MapEditorController {
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
+		selectedColorSelector = colorSelectorMap.getDefaultColorSelector();
 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
 		fileChooser.getExtensionFilters().add(extFilter);
@@ -99,7 +101,7 @@ public class MapEditorController {
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
 		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer<>(colorSelectorMap.getDefaultColorSelector(), canvasRenderer, sketchMap.getToCellMapper(), WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
+		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
 		updateHistory();
 		render();
@@ -108,7 +110,7 @@ public class MapEditorController {
 	private void render() {
 		log.info("render()");
 		sketchMap.generateElevation(elevationGenerator);
-		mapRenderer.render();
+		mapRenderer.render(sketchMap.getToCellMapper(), selectedColorSelector);
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {
@@ -127,7 +129,6 @@ public class MapEditorController {
 
 			try {
 				sketchMap = sketchConverter.load(file);
-				mapRenderer.setToCellMapper(sketchMap.getToCellMapper());
 				render();
 			} catch (IOException e) {
 				Alert alert = new Alert(ERROR);
@@ -172,9 +173,9 @@ public class MapEditorController {
 		String selectedName = renderStyleComboBox.getSelectionModel().getSelectedItem();
 		ColorSelector<SketchCell> selectedColorSelector = colorSelectorMap.get(selectedName);
 
-		if(mapRenderer.getColorSelector() != selectedColorSelector) {
+		if(this.selectedColorSelector != selectedColorSelector) {
 			log.info("onRenderStyleSelected(): Selected {}.", selectedName);
-			mapRenderer.setColorSelector(selectedColorSelector);
+			this.selectedColorSelector = selectedColorSelector;
 			render();
 		}
 	}
