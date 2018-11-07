@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import jfws.maps.region.RegionCell;
+import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
@@ -40,7 +42,7 @@ import static javafx.scene.control.Alert.AlertType.ERROR;
 public class MapEditorController {
 
 	public static final double WORLD_TO_SCREEN = 0.2;
-	public static final int BORDER_BETWEEN_CELLS = 5;
+	public static final int BORDER_BETWEEN_CELLS = 0;
 
 	@FXML
 	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
@@ -68,6 +70,9 @@ public class MapEditorController {
 	private ColorSelectorMap<SketchCell> colorSelectorMap;
 	private ColorSelector<SketchCell> selectedColorSelector;
 
+	private RegionMap regionMap;
+	private ColorSelector<RegionCell> colorSelectorForRegion;
+
 	private CommandHistory commandHistory = new CommandHistory();
 
 	public MapEditorController() {
@@ -83,6 +88,9 @@ public class MapEditorController {
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
 		selectedColorSelector = colorSelectorMap.getDefaultColorSelector();
+
+		regionMap = new RegionMap(sketchMap, 10);
+		colorSelectorForRegion = new ElevationColorSelector<>();
 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
 		fileChooser.getExtensionFilters().add(extFilter);
@@ -110,7 +118,7 @@ public class MapEditorController {
 	private void render() {
 		log.info("render()");
 		sketchMap.generateElevation(elevationGenerator);
-		mapRenderer.render(sketchMap.getToCellMapper(), selectedColorSelector);
+		mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {
