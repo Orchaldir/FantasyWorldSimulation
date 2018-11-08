@@ -8,4 +8,6 @@ public interface ElevationCell {
 	double MAX_ELEVATION =  1000.0;
 
 	double getElevation();
+
+	void setElevation(double value);
 }

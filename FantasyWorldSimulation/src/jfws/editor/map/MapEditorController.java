@@ -8,14 +8,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import jfws.features.elevation.ElevationColorSelector;
+import jfws.features.elevation.ElevationInterpolator;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
+import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
-import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.elevation.BaseElevationGenerator;
-import jfws.features.elevation.ElevationColorSelector;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeConverter;
@@ -27,6 +28,7 @@ import jfws.util.io.FileUtils;
 import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
+import jfws.util.math.interpolation.BicubicInterpolator;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.ColorSelectorMap;
@@ -43,6 +45,7 @@ public class MapEditorController {
 
 	public static final double WORLD_TO_SCREEN = 0.2;
 	public static final int BORDER_BETWEEN_CELLS = 0;
+	public static final int CELLS_PER_SKETCH_CELL = 20;
 
 	@FXML
 	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
@@ -72,6 +75,7 @@ public class MapEditorController {
 
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
+	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(new BicubicInterpolator());
 
 	private CommandHistory commandHistory = new CommandHistory();
 
@@ -89,12 +93,12 @@ public class MapEditorController {
 		colorSelectorMap.add(new ElevationColorSelector());
 		selectedColorSelector = colorSelectorMap.getDefaultColorSelector();
 
-		regionMap = new RegionMap(sketchMap, 10);
+		regionMap = new RegionMap(sketchMap, CELLS_PER_SKETCH_CELL);
 		colorSelectorForRegion = new ElevationColorSelector<>();
 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
 		fileChooser.getExtensionFilters().add(extFilter);
-		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+		String currentPath = Paths.get("./data/map/").toAbsolutePath().normalize().toString();
 		fileChooser.setInitialDirectory(new File(currentPath));
 	}
 
@@ -118,6 +122,11 @@ public class MapEditorController {
 	private void render() {
 		log.info("render()");
 		sketchMap.generateElevation(elevationGenerator);
+		try {
+			elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap(), CELLS_PER_SKETCH_CELL);
+		} catch (OutsideMapException e) {
+			e.printStackTrace();
+		}
 		mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 	}
 

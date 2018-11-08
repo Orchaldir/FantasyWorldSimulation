@@ -26,11 +26,11 @@ public class RegionMap {
 		RegionCell[] cellArray = new RegionCell[size];
 
 		for(int i = 0; i < size; i++) {
-			cellArray[i] = new RegionCell((i%width)*5);
+			cellArray[i] = new RegionCell(ElevationCell.DEFAULT_ELEVATION);
 		}
 
 		regionCellMap = new ArrayMap2d<>(width, height, cellArray);
-		toCellMapper = new ToCellMapper<>(regionCellMap, 10.0);
+		toCellMapper = new ToCellMapper<>(regionCellMap, 5.0);
 	}
 
 	public RegionMap(SketchMap sketchMap, int cellsPerSketchCell) {
