@@ -19,10 +19,10 @@ public class ElevationColorSelector<T extends ElevationCell> implements ColorSel
 			return Color.PINK;
 		}
 		else if(elevation < DEFAULT_ELEVATION) {
-			return interpolate(elevation, MIN_ELEVATION, DEFAULT_ELEVATION, Color.DARKBLUE, Color.CYAN);
+			return interpolate(elevation, MIN_ELEVATION, DEFAULT_ELEVATION - 1, Color.DARKBLUE, Color.CYAN);
 		}
 		else if(elevation < HILL_ELEVATION) {
-			return interpolate(elevation, DEFAULT_ELEVATION, HILL_ELEVATION, Color.LIGHTGREEN, Color.DARKGREEN);
+			return interpolate(elevation, DEFAULT_ELEVATION, HILL_ELEVATION - 1, Color.LIGHTGREEN, Color.DARKGREEN);
 		}
 
 		return interpolate(elevation, HILL_ELEVATION, MAX_ELEVATION, Color.GREY, Color.WHITE);
