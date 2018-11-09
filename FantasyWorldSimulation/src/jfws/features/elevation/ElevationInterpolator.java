@@ -6,28 +6,30 @@ import jfws.util.math.interpolation.Interpolator2d;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static jfws.util.math.interpolation.Interpolator1d.ARRAY_SIZE;
+
 @AllArgsConstructor
 @Slf4j
 public class ElevationInterpolator {
 
 	private Interpolator2d interpolator;
-	private final double[][] values = new double[4][4];
+	private final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
 
 	public <T extends ElevationCell, U extends ElevationCell>
 	void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap, int cellSize) throws OutsideMapException {
 		for(int y = 0; y < sourceMap.getHeight(); y++) {
 			for(int x = 0; x < sourceMap.getWidth(); x++) {
 				prepareSourceValues(sourceMap, x, y);
-				interpolate(targetMap, cellSize, x, y);
+				interpolate(targetMap, x, y, cellSize);
 			}
 		}
 	}
 
 	private <T extends ElevationCell>
 	void prepareSourceValues(Map2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
-		for(int y = 0; y < 4; y++) {
-			for(int x = 0; x < 4; x++) {
-				values[x][y] = getSourceValue(sourceMap, sourceX+x-1, sourceY+y-1);
+		for(int y = 0; y < ARRAY_SIZE; y++) {
+			for(int x = 0; x < ARRAY_SIZE; x++) {
+				sourceValues[x][y] = getSourceValue(sourceMap, sourceX+x-1, sourceY+y-1);
 			}
 		}
 	}
@@ -41,15 +43,20 @@ public class ElevationInterpolator {
 	}
 
 	private <U extends ElevationCell>
-	void interpolate(Map2d<U> targetMap, int cellSize, int sourceX, int sourceY) throws OutsideMapException {
-		for(int y = 0; y < cellSize; y++) {
-			int targetY = sourceY * cellSize + y;
-			for(int x = 0; x < cellSize; x++) {
-				int targetX = sourceX * cellSize + x;
+	void interpolate(Map2d<U> targetMap, int sourceX, int sourceY, int cellSize) throws OutsideMapException {
+		for(int cellY = 0; cellY < cellSize; cellY++) {
+			int targetY = getTargetIndex(sourceY, cellSize, cellY);
+
+			for(int cellX = 0; cellX < cellSize; cellX++) {
+				int targetX = getTargetIndex(sourceX, cellSize, cellX);
 				U targetCell = targetMap.getCell(targetX, targetY);
-				double elevation = interpolator.interpolate(values, x / (double)cellSize, y / (double)cellSize);
+				double elevation = interpolator.interpolate(sourceValues, cellX / (double)cellSize, cellY / (double)cellSize);
 				targetCell.setElevation(elevation);
 			}
 		}
+	}
+
+	private int getTargetIndex(int sourceIndex, int cellSize, int cellX) {
+		return sourceIndex * cellSize + cellX;
 	}
 }

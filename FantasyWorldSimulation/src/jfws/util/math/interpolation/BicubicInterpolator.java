@@ -1,9 +1,11 @@
 package jfws.util.math.interpolation;
 
+import static jfws.util.math.interpolation.Interpolator1d.ARRAY_SIZE;
+
 public class BicubicInterpolator implements Interpolator2d {
 
 	private CubicInterpolator cubicInterpolator = new CubicInterpolator();
-	private double[] intermediateResult = new double[4];
+	private double[] intermediateResult = new double[ARRAY_SIZE];
 
 	@Override
 	public double interpolate(double[][] p, double x, double y) {
