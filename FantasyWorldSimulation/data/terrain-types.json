@@ -56,7 +56,7 @@
       "green": 0.75,
       "blue": 1.0
     },
-    "base_elevation": -10,
+    "base_elevation": -50,
     "elevation_variation": 5
   },
   {
@@ -66,7 +66,7 @@
       "green": 0,
       "blue": 1.0
     },
-    "base_elevation": -50,
+    "base_elevation": -100,
     "elevation_variation": 10
   },
   {
@@ -76,7 +76,7 @@
       "green": 0,
       "blue": 0.75
     },
-    "base_elevation": -100,
+    "base_elevation": -150,
     "elevation_variation": 10
   }
 ]

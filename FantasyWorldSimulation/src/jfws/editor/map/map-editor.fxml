@@ -29,6 +29,12 @@
                   <MenuItem mnemonicParsing="false" onAction="#onSaveMap" text="Save Map" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="View">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#onViewSketchMap" text="Sketch Map" />
+                  <MenuItem mnemonicParsing="false" onAction="#onViewRegionMap" text="Region Map" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <BorderPane prefHeight="478.0" prefWidth="600.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">

@@ -47,6 +47,11 @@ public class MapEditorController {
 	public static final int BORDER_BETWEEN_CELLS = 0;
 	public static final int CELLS_PER_SKETCH_CELL = 20;
 
+	enum MapType {
+		SKETCH_MAP,
+		REGION_MAP
+	}
+
 	@FXML
 	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
 
@@ -67,15 +72,17 @@ public class MapEditorController {
 	private TerrainType selectedTerrainType;
 	private SketchMap sketchMap;
 	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
-	private MapRenderer mapRenderer;
 	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
 
 	private ColorSelectorMap<SketchCell> colorSelectorMap;
-	private ColorSelector<SketchCell> selectedColorSelector;
+	private ColorSelector<SketchCell> colorSelectorForSketch;
 
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(new BicubicInterpolator());
+
+	private MapType mapToRender =  MapType.SKETCH_MAP;
+	private MapRenderer mapRenderer;
 
 	private CommandHistory commandHistory = new CommandHistory();
 
@@ -91,7 +98,7 @@ public class MapEditorController {
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
-		selectedColorSelector = colorSelectorMap.getDefaultColorSelector();
+		colorSelectorForSketch = colorSelectorMap.getDefaultColorSelector();
 
 		regionMap = new RegionMap(sketchMap, CELLS_PER_SKETCH_CELL);
 		colorSelectorForRegion = new ElevationColorSelector<>();
@@ -127,7 +134,15 @@ public class MapEditorController {
 		} catch (OutsideMapException e) {
 			e.printStackTrace();
 		}
-		mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
+
+		switch (mapToRender) {
+			case REGION_MAP:
+				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
+				break;
+			case SKETCH_MAP:
+				mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);
+				break;
+		}
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {
@@ -190,9 +205,29 @@ public class MapEditorController {
 		String selectedName = renderStyleComboBox.getSelectionModel().getSelectedItem();
 		ColorSelector<SketchCell> selectedColorSelector = colorSelectorMap.get(selectedName);
 
-		if(this.selectedColorSelector != selectedColorSelector) {
+		if(this.colorSelectorForSketch != selectedColorSelector) {
 			log.info("onRenderStyleSelected(): Selected {}.", selectedName);
-			this.selectedColorSelector = selectedColorSelector;
+			this.colorSelectorForSketch = selectedColorSelector;
+			render();
+		}
+	}
+
+	@FXML
+	public void onViewRegionMap() {
+		log.info("onViewRegionMap()");
+		changeMapToRender(MapType.REGION_MAP);
+	}
+
+	@FXML
+	public void onViewSketchMap() {
+		log.info("onViewSketchMap()");
+		changeMapToRender(MapType.SKETCH_MAP);
+	}
+
+	public void changeMapToRender(MapType newMapToRender) {
+		if(mapToRender != newMapToRender) {
+			log.info("changeMapToRender(): {} -> {}", mapToRender, newMapToRender);
+			mapToRender = newMapToRender;
 			render();
 		}
 	}
