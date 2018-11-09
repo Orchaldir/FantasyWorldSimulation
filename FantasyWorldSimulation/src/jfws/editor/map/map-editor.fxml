@@ -31,8 +31,8 @@
           </Menu>
             <Menu mnemonicParsing="false" text="View">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#onViewSketchMap" text="Sketch Map" />
-                  <MenuItem mnemonicParsing="false" onAction="#onViewRegionMap" text="Region Map" />
+                <MenuItem fx:id="viewSketchMapItem" mnemonicParsing="false" onAction="#onViewSketchMap" text="Sketch Map" />
+                  <MenuItem fx:id="viewRegionMapItem" mnemonicParsing="false" onAction="#onViewRegionMap" text="Region Map" />
               </items>
             </Menu>
         </menus>

@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
@@ -60,6 +61,9 @@ public class MapEditorController {
 
 	@FXML
 	private Button undoButton, redoButton;
+
+	@FXML
+	private MenuItem viewRegionMapItem, viewSketchMapItem;
 
 	private FileChooser fileChooser = new FileChooser();
 	private FileUtils fileUtils = new ApacheFileUtils();
@@ -123,6 +127,7 @@ public class MapEditorController {
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
 		updateHistory();
+		updateViewControls();
 		render();
 	}
 
@@ -228,6 +233,7 @@ public class MapEditorController {
 		if(mapToRender != newMapToRender) {
 			log.info("changeMapToRender(): {} -> {}", mapToRender, newMapToRender);
 			mapToRender = newMapToRender;
+			updateViewControls();
 			render();
 		}
 	}
@@ -298,5 +304,20 @@ public class MapEditorController {
 	private void updateHistory() {
 		undoButton.setDisable(!commandHistory.canUnExecute());
 		redoButton.setDisable(!commandHistory.canReExecute());
+	}
+
+	private void updateViewControls() {
+		switch (mapToRender) {
+			case REGION_MAP:
+				renderStyleComboBox.setDisable(true);
+				viewRegionMapItem.setDisable(true);
+				viewSketchMapItem.setDisable(false);
+				break;
+			case SKETCH_MAP:
+				renderStyleComboBox.setDisable(false);
+				viewRegionMapItem.setDisable(false);
+				viewSketchMapItem.setDisable(true);
+				break;
+		}
 	}
 }
