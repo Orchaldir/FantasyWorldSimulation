@@ -2,7 +2,7 @@
 
 ## Documentation
 
-See [Documentation](FantasyWorldSimulation/docs/docu/index.md).
+See [Documentation](FantasyWorldSimulation/docs/docu/index.adoc).
 
 ## Architectural Decision Records
 
