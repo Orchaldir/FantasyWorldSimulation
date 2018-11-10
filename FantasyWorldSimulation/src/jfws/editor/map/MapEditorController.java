@@ -1,7 +1,6 @@
 package jfws.editor.map;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
@@ -107,7 +106,7 @@ public class MapEditorController {
 		colorSelectorMap.add(new ElevationColorSelector());
 		colorSelectorForSketch = colorSelectorMap.getDefaultColorSelector();
 
-		regionMap = new RegionMap(sketchMap, CELLS_PER_SKETCH_CELL);
+		regionMap = RegionMap.fromSketchMap(sketchMap, CELLS_PER_SKETCH_CELL);
 		colorSelectorForRegion = new ElevationColorSelector<>();
 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");

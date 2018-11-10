@@ -20,7 +20,7 @@ public class RegionMap {
 	@Getter
 	private final ToCellMapper<RegionCell> toCellMapper;
 
-	public RegionMap(int width, int height) {
+	public RegionMap(int width, int height, double resolution) {
 		log.info("RegionMap(): width={} height={}", width, height);
 		int size = width * height;
 		RegionCell[] cellArray = new RegionCell[size];
@@ -30,10 +30,14 @@ public class RegionMap {
 		}
 
 		regionCellMap = new ArrayMap2d<>(width, height, cellArray);
-		toCellMapper = new ToCellMapper<>(regionCellMap, 5.0);
+		toCellMapper = new ToCellMapper<>(regionCellMap, resolution);
 	}
 
-	public RegionMap(SketchMap sketchMap, int cellsPerSketchCell) {
-		this(sketchMap.getCells().getWidth() * cellsPerSketchCell, sketchMap.getCells().getHeight() * cellsPerSketchCell);
+	public static RegionMap fromSketchMap(SketchMap sketchMap, int cellsPerSketchCell) {
+		int width = sketchMap.getCells().getWidth() * cellsPerSketchCell;
+		int height = sketchMap.getCells().getHeight() * cellsPerSketchCell;
+		double resolution = sketchMap.getToCellMapper().getResolutionX() / cellsPerSketchCell;
+
+		return new RegionMap(width, height, resolution);
 	}
 }
