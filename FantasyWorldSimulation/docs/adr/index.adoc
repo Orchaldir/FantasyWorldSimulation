@@ -1,0 +1,8 @@
+= Architectural Decision Records
+
+* link:0001-test-driven-development.adoc[ADR 0001 - Use Test Driven Development]
+* link:0002-Mockito.adoc[ADR 0002 - Use Mockito for testing]
+* link:0003-Lombok.adoc[ADR 0003 - Use Lombok to avoid repetitive code]
+* link:0004.adoc[ADR 0004 - Use JSON with Gson]
+* link:0005.adoc[ADR 0005 - Use SLF4J for logging]
+* link:0006.adoc[ADR 0006 - Using AsciiDoc for documentation]

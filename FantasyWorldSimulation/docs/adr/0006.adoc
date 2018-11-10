@@ -1,0 +1,22 @@
+= ADR 0006 - Using AsciiDoc for documentation
+
+*Status:* accepted
+
+*Date:* 2018-11-10
+
+== Considered Options
+
+* Markdown
+* AsciiDoc
+
+== Decision Outcome
+
+*Chosen option:* AsciiDoc
+
+* AsciiDoc more powerful than Markdown.
+* More familiar with AsciiDoc.
+
+== Links
+
+* http://asciidoc.org
+* https://asciidoctor.org/docs/asciidoc-vs-markdown[AsciiDoc vs Markdown]

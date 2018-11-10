@@ -1,0 +1,20 @@
+= ADR 000x - Title
+
+*Status:* [accepted | superseeded by link:0005-example.md[ADR-0005] | deprecated ]
+
+*Date:* 2018-09-30
+
+== Context and Problem Statement
+
+== Considered Options
+
+== Decision Outcome
+
+*Chosen option:* [ Option A | … ]
+
+* Consequence A
+* Consequence B
+
+== Links
+
+* …

@@ -1,32 +1,32 @@
-# ADR 0004 - Use JSON with Gson
+= ADR 0004 - Use JSON with Gson
 
-**Status:** accepted
+*Status:* accepted
 
-**Date:** 2018-10-07
+*Date:* 2018-10-07
 
-## Context and Problem Statement
+== Context and Problem Statement
 
 * How to read data from files and write it back?
 * What file format?
 * Use an existing data?
 
-## Considered Options
+== Considered Options
 
 * Custom file formats
 * JSON
 * XML
 * YAML
 
-## Decision Outcome
+== Decision Outcome
 
-**Chosen option:** JSON with Gson
+*Chosen option:* JSON with Gson
 
 * Small files.
 * Easy to read & write.
 * Indentation has no effect.
 * Existing good experience.
 
-## Links
+== Links
 
 * https://github.com/google/gson
 * https://en.wikipedia.org/wiki/JSON
