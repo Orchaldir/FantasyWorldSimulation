@@ -12,9 +12,14 @@ import lombok.ToString;
 public class TerrainTypeImpl implements TerrainType {
 
 	private final String name;
+	private final String group;
 	private final Color color;
 	private final double baseElevation;
 	private final double elevationVariation;
+
+	public TerrainTypeImpl(String name, Color color, double baseElevation, double elevationVariation) {
+		this(name, "", color, baseElevation, elevationVariation);
+	}
 
 	public boolean isDefault() {
 		return false;

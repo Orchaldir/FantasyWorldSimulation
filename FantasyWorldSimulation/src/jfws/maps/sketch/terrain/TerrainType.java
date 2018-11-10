@@ -4,7 +4,11 @@ import javafx.scene.paint.Color;
 
 public interface TerrainType {
 
+	String NO_GROUP = "";
+
 	String getName();
+
+	String getGroup();
 
 	Color getColor();
 

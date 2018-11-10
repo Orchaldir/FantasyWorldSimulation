@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
+
 @Slf4j
 public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 
@@ -17,6 +19,7 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 
 	// properties
 	private final static String NAME = "name";
+	private final static String GROUP = "group";
 	private final static String COLOR = "color";
 	private final static String RED = "red";
 	private final static String GREEN = "green";
@@ -44,12 +47,19 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty(NAME, type.getName());
 
+		saveGroup(jsonObject, type);
 		saveColor(jsonObject, type);
 
 		jsonObject.addProperty(BASE_ELEVATION, type.getBaseElevation());
 		jsonObject.addProperty(ELEVATION_VARIATION, type.getElevationVariation());
 
 		return jsonObject;
+	}
+
+	private void saveGroup(JsonObject jsonObject, TerrainType type) {
+		if(!type.getGroup().isEmpty()) {
+			jsonObject.addProperty(GROUP, type.getGroup());
+		}
 	}
 
 	private void saveColor(JsonObject jsonObject, TerrainType type) {
@@ -102,11 +112,12 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 
 			if(hasRequiredFields(jsonObject)) {
 				String name = jsonObject.get(NAME).getAsString();
+				String group = loadGroup(jsonObject);
 				Color color = loadColor(jsonObject, name);
 				double baseElevation = loadBaseElevation(jsonObject, name);
 				double elevationVariation = loadElevationVariation(jsonObject, name);
 
-				return Optional.of(new TerrainTypeImpl(name, color, baseElevation, elevationVariation));
+				return Optional.of(new TerrainTypeImpl(name, group, color, baseElevation, elevationVariation));
 			}
 			else {
 				log.warn("loadTerrainType(): JsonObject has no name!");
@@ -121,6 +132,14 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 
 	private boolean hasRequiredFields(JsonObject jsonObject) {
 		return jsonObject.has(NAME);
+	}
+
+	private String loadGroup(JsonObject jsonObject) {
+		if (jsonObject.has(GROUP)) {
+			return  jsonObject.get(GROUP).getAsString();
+		}
+
+		return NO_GROUP;
 	}
 
 	private Color loadColor(JsonObject jsonObject, String name) {

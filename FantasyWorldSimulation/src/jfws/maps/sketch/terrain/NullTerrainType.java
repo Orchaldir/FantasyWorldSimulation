@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @ToString(of = {"name"})
 public class NullTerrainType implements TerrainType {
 
+	public static final String DEFAULT_GROUP = "Default";
 	public static final Color DEFAULT_COLOR = Color.PINK;
 	public static final double DEFAULT_BASE_ELEVATION = 0;
 	public static final double DEFAULT_ELEVATION_VARIATION = 0;
@@ -21,6 +22,11 @@ public class NullTerrainType implements TerrainType {
 	public NullTerrainType(String name) {
 		this.name = name;
 		log.warn("NullTerrainType(): name='{}'", name);
+	}
+
+	@Override
+	public String getGroup() {
+		return DEFAULT_GROUP;
 	}
 
 	@Override
