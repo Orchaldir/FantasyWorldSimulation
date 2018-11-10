@@ -1,6 +1,7 @@
 package jfws.editor.map;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
@@ -38,8 +39,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
+import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 
 @Slf4j
 public class MapEditorController {
@@ -117,8 +120,7 @@ public class MapEditorController {
 	private void initialize() {
 		log.info("initialize()");
 
-		terrainTypeComboBox.setItems(FXCollections.observableArrayList(terrainTypeManager.getNames()));
-		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
+		initTerrainTypeComboBox();
 
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
@@ -129,6 +131,17 @@ public class MapEditorController {
 		updateHistory();
 		updateViewControls();
 		render();
+	}
+
+	private void initTerrainTypeComboBox() {
+		List<String> names = terrainTypeManager.getNames(NO_GROUP);
+
+		for(String group : terrainTypeManager.getGroups()) {
+			names.addAll(terrainTypeManager.getNames(group));
+		}
+
+		terrainTypeComboBox.setItems(FXCollections.observableArrayList(names));
+		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
 	}
 
 	private void render() {

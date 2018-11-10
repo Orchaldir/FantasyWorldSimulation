@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 
 @AllArgsConstructor
 @Slf4j
@@ -29,6 +32,23 @@ public class TerrainTypeManager {
 
 	public List<String> getNames() {
 		return new ArrayList<>(terrainTypeMap.keySet());
+	}
+
+	public List<String> getNames(String group) {
+		return terrainTypeMap.values().
+				stream().
+				filter(t -> t.getGroup().equals(group)).
+				map(TerrainType::getName).
+				collect(Collectors.toList());
+	}
+
+	public List<String> getGroups() {
+		return terrainTypeMap.values().
+				stream().
+				map(TerrainType::getGroup).
+				filter(g -> !g.equals(NO_GROUP)).
+				distinct().
+				collect(Collectors.toList());
 	}
 
 	public int size() {
