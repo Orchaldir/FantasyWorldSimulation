@@ -133,10 +133,10 @@ public class MapEditorController {
 	}
 
 	private void initTerrainTypeComboBox() {
-		List<String> names = terrainTypeManager.getNames(NO_GROUP);
+		List<String> names = terrainTypeManager.getNamesForGroup(NO_GROUP);
 
 		for(String group : terrainTypeManager.getGroups()) {
-			names.addAll(terrainTypeManager.getNames(group));
+			names.addAll(terrainTypeManager.getNamesForGroup(group));
 		}
 
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(names));

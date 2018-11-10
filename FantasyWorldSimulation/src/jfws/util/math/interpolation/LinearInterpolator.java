@@ -6,8 +6,12 @@ public class LinearInterpolator implements Interpolator1d {
 	public static final int END = 2;
 
 	@Override
-	public double interpolate(double[] p, double x) {
-		double diff = p[END] - p[START];
-		return p[START] + x * diff;
+	public double interpolate(double[] p, double factor) {
+		return interpolate(p[START], p[END], factor);
+	}
+
+	public double interpolate(double start, double end, double factor) {
+		double diff = end - start;
+		return start + factor * diff;
 	}
 }

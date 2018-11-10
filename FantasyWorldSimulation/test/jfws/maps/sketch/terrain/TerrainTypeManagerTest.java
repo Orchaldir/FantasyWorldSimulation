@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.IOException;
 
+import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -53,6 +54,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 		assertThat(type, is(notNullValue()));
 		assertThat(type, is(instanceOf(NullTerrainType.class)));
 		assertThat(type.getName(), is(equalTo(NAME_A)));
+		assertThat(type.getGroup(), is(equalTo(NullTerrainType.DEFAULT_GROUP)));
 		assertThat(type.getColor(), is(notNullValue()));
 		assertThat(type.getColor(), is(equalTo(NullTerrainType.DEFAULT_COLOR)));
 		assertTrue(type.isDefault());
@@ -82,6 +84,47 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_C);
 
 		assertThat(manager.getNames(), Matchers.containsInAnyOrder(NAME_B, NAME_C));
+	}
+
+	// getNamesForGroup()
+
+	@Test
+	void testGetNamesForGroupEmpty() {
+		assertTrue(manager.getNamesForGroup(GROUP).isEmpty());
+	}
+
+	@Test
+	void testGetNamesForGroup() {
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+		manager.add(TERRAIN_TYPE_C);
+
+		assertThat(manager.getNamesForGroup(NO_GROUP), Matchers.containsInAnyOrder(NAME_A, NAME_B));
+		assertThat(manager.getNamesForGroup(GROUP), Matchers.containsInAnyOrder(NAME_C));
+	}
+
+	// getGroups()
+
+	@Test
+	void testGetGroupsEmpty() {
+		assertTrue(manager.getGroups().isEmpty());
+	}
+
+	@Test
+	void testGetNoGroups() {
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+
+		assertTrue(manager.getGroups().isEmpty());
+	}
+
+	@Test
+	void testGetGroups() {
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+		manager.add(TERRAIN_TYPE_C);
+
+		assertThat(manager.getGroups(), Matchers.containsInAnyOrder(GROUP));
 	}
 
 	// load()

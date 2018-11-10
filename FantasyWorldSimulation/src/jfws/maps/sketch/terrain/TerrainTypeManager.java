@@ -34,7 +34,7 @@ public class TerrainTypeManager {
 		return new ArrayList<>(terrainTypeMap.keySet());
 	}
 
-	public List<String> getNames(String group) {
+	public List<String> getNamesForGroup(String group) {
 		return terrainTypeMap.values().
 				stream().
 				filter(t -> t.getGroup().equals(group)).
