@@ -321,11 +321,13 @@ public class MapEditorController {
 	private void updateViewControls() {
 		switch (mapToRender) {
 			case REGION_MAP:
+				mapRenderer.setBorderBetweenCells(0);
 				renderStyleComboBox.setDisable(true);
 				viewRegionMapItem.setDisable(true);
 				viewSketchMapItem.setDisable(false);
 				break;
 			case SKETCH_MAP:
+				mapRenderer.setBorderBetweenCells(5);
 				renderStyleComboBox.setDisable(false);
 				viewRegionMapItem.setDisable(false);
 				viewSketchMapItem.setDisable(true);

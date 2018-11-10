@@ -3,6 +3,7 @@ package jfws.util.map;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
@@ -11,6 +12,7 @@ public class MapRenderer {
 
 	private Renderer renderer;
 	private double worldToScreenFactor;
+	@Setter
 	private double borderBetweenCells;
 
 	public double convertToWorld(double screen) {
@@ -30,6 +32,7 @@ public class MapRenderer {
 		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
 		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;
 
+		renderer.clear(0, 0, toCellMapper.getWidth(), toCellMapper.getHeight());
 		renderer.setScale(worldToScreenFactor);
 
 		for(int row = 0; row < map.getHeight(); row++) {

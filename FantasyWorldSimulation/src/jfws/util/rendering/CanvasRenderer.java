@@ -10,6 +10,11 @@ public class CanvasRenderer implements Renderer {
 	private final GraphicsContext graphicsContext;
 
 	@Override
+	public void clear(double x, double y, double width, double height) {
+		graphicsContext.clearRect(x, y, width, height);
+	}
+
+	@Override
 	public void setScale(double scale) {
 		graphicsContext.scale(scale, scale);
 	}
