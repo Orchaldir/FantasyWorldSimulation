@@ -45,6 +45,7 @@ public class SketchMap {
 
 	public void generateElevation(ElevationGenerator generator) {
 		log.debug("generateElevation()");
+		generator.prepare();
 		cells.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
 	}
 }

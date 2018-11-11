@@ -17,7 +17,8 @@ import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
-import jfws.maps.sketch.elevation.BaseElevationGenerator;
+import jfws.maps.sketch.elevation.ElevationGenerator;
+import jfws.maps.sketch.elevation.ElevationGeneratorWithNoise;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeConverter;
@@ -30,6 +31,7 @@ import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
+import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.ColorSelectorMap;
@@ -46,7 +48,7 @@ import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 @Slf4j
 public class MapEditorController {
 
-	public static final double WORLD_TO_SCREEN = 0.2;
+	public static final double WORLD_TO_SCREEN = 0.5;
 	public static final int BORDER_BETWEEN_CELLS = 0;
 	public static final int CELLS_PER_SKETCH_CELL = 50;
 
@@ -77,7 +79,7 @@ public class MapEditorController {
 	private final TerrainType defaultTerrainType, mountainTerrainType;
 	private TerrainType selectedTerrainType;
 	private SketchMap sketchMap;
-	private BaseElevationGenerator elevationGenerator = new BaseElevationGenerator();
+	private ElevationGenerator elevationGenerator = new ElevationGeneratorWithNoise(new GeneratorWithRandom(42));
 	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
 
 	private ColorSelectorMap<SketchCell> colorSelectorMap;

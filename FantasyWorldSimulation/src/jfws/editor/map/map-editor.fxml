@@ -49,7 +49,7 @@
             </ToolBar>
          </top>
          <center>
-            <Canvas fx:id="sketchMapCanvas" height="400.0" onMouseClicked="#onMouseClicked" onMouseDragged="#onMouseDragged" width="600.0" BorderPane.alignment="TOP_LEFT" />
+            <Canvas fx:id="sketchMapCanvas" height="600.0" onMouseClicked="#onMouseClicked" onMouseDragged="#onMouseDragged" width="1000.0" BorderPane.alignment="TOP_LEFT" />
          </center>
       </BorderPane>
    </children>

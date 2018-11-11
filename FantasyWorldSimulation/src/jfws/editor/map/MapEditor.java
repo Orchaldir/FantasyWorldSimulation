@@ -12,7 +12,7 @@ public class MapEditor extends Application {
 	public void start(Stage primaryStage) throws Exception{
 		Parent root = FXMLLoader.load(getClass().getResource("map-editor.fxml"));
 		primaryStage.setTitle("Map Editor");
-		primaryStage.setScene(new Scene(root, 600, 500));
+		primaryStage.setScene(new Scene(root, 1000, 800));
 		primaryStage.show();
 	}
 
