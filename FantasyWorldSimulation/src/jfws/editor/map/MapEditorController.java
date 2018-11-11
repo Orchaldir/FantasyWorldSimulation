@@ -174,7 +174,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onLoadMap() {
-		File file = fileChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
+		File file = fileChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onLoadMap(): file={}", file.getPath());
@@ -196,7 +196,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onSaveMap() {
-		File file = fileChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
+		File file = fileChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onSaveMap(): file={}", file.getPath());
