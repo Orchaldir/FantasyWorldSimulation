@@ -20,6 +20,8 @@ public class MapRenderer {
 	}
 
 	public <T> void render(ToCellMapper<T> toCellMapper, ColorSelector<T> colorSelector) {
+		log.info("render()");
+
 		try {
 			tryRender(toCellMapper, colorSelector);
 		} catch (OutsideMapException e) {

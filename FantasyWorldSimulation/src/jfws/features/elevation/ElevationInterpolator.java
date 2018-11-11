@@ -17,12 +17,14 @@ public class ElevationInterpolator {
 
 	public <T extends ElevationCell, U extends ElevationCell>
 	void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap, int cellSize) throws OutsideMapException {
+		log.debug("interpolate(): cellSize={}", cellSize);
 		for(int y = 0; y < sourceMap.getHeight(); y++) {
 			for(int x = 0; x < sourceMap.getWidth(); x++) {
 				prepareSourceValues(sourceMap, x, y);
-				interpolate(targetMap, x, y, cellSize);
+				interpolateCell(targetMap, x, y, cellSize);
 			}
 		}
+		log.debug("interpolate(): finished");
 	}
 
 	private <T extends ElevationCell>
@@ -43,7 +45,7 @@ public class ElevationInterpolator {
 	}
 
 	private <U extends ElevationCell>
-	void interpolate(Map2d<U> targetMap, int sourceX, int sourceY, int cellSize) throws OutsideMapException {
+	void interpolateCell(Map2d<U> targetMap, int sourceX, int sourceY, int cellSize) throws OutsideMapException {
 		for(int cellY = 0; cellY < cellSize; cellY++) {
 			int targetY = getTargetIndex(sourceY, cellSize, cellY);
 

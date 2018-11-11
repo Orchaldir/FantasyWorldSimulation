@@ -38,11 +38,13 @@ public class SketchMap {
 	}
 
 	public SketchMap(Map2d<SketchCell> cells) {
+		log.info("SketchMap(): cells={}", cells.getSize());
 		this.cells = cells;
 		toCellMapper = new ToCellMapper<>(cells, SKETCH_TO_WORLD);
 	}
 
 	public void generateElevation(ElevationGenerator generator) {
+		log.debug("generateElevation()");
 		cells.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
 	}
 }
