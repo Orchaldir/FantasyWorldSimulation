@@ -54,10 +54,6 @@ class TerrainTypeManagerTest extends SharedTestData {
 		assertThat(type, is(notNullValue()));
 		assertThat(type, is(instanceOf(NullTerrainType.class)));
 		assertThat(type.getName(), is(equalTo(NAME_A)));
-		assertThat(type.getGroup(), is(equalTo(NullTerrainType.DEFAULT_GROUP)));
-		assertThat(type.getColor(), is(notNullValue()));
-		assertThat(type.getColor(), is(equalTo(NullTerrainType.DEFAULT_COLOR)));
-		assertTrue(type.isDefault());
 	}
 
 	@Test

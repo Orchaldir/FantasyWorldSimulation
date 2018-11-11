@@ -193,12 +193,6 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 	}
 
 	private double readColorValue(JsonObject jsonObject, String name) {
-		JsonElement element = jsonObject.get(name);
-
-		if (element != null) {
-			return element.getAsDouble();
-		}
-
-		return 0;
+		return jsonObject.get(name).getAsDouble();
 	}
 }

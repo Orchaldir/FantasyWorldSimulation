@@ -2,6 +2,9 @@ package jfws.maps.sketch.terrain;
 
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TerrainTypeImplTest extends SharedTestData {
@@ -15,4 +18,9 @@ class TerrainTypeImplTest extends SharedTestData {
 		assertFalse(TERRAIN_TYPE_C.isDefault());
 	}
 
+
+	@Test
+	void testToString() {
+		assertThat(TERRAIN_TYPE_A.toString(), is(equalTo("TerrainTypeImpl(name=A)")));
+	}
 }
