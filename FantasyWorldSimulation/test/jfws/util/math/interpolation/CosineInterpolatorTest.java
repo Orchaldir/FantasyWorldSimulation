@@ -3,18 +3,18 @@ package jfws.util.math.interpolation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class LinearInterpolatorTest extends TwoValueInterpolatorTest {
+class CosineInterpolatorTest extends TwoValueInterpolatorTest {
 
 	@BeforeEach
 	void setup() {
-		interpolator = new LinearInterpolator();
+		interpolator = new CosineInterpolator();
 	}
 
 	@Test
 	void test() {
-		testInterpolation(0.25, 4.5);
+		testInterpolation(0.25, 4.2929);
 		testInterpolation(0.5, MIDDLE);
-		testInterpolation(0.75, 5.5);
+		testInterpolation(0.75, 5.7071);
 	}
 
 }
