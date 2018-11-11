@@ -29,7 +29,7 @@ import jfws.util.io.FileUtils;
 import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
-import jfws.util.math.interpolation.BicubicInterpolator;
+import jfws.util.math.interpolation.BiTwoValueInterpolator;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.ColorSelectorMap;
@@ -48,7 +48,7 @@ public class MapEditorController {
 
 	public static final double WORLD_TO_SCREEN = 0.2;
 	public static final int BORDER_BETWEEN_CELLS = 0;
-	public static final int CELLS_PER_SKETCH_CELL = 20;
+	public static final int CELLS_PER_SKETCH_CELL = 50;
 
 	enum MapType {
 		SKETCH_MAP,
@@ -85,7 +85,7 @@ public class MapEditorController {
 
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
-	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(new BicubicInterpolator());
+	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
@@ -146,20 +146,23 @@ public class MapEditorController {
 	private void render() {
 		log.info("render()");
 		sketchMap.generateElevation(elevationGenerator);
-		try {
-			elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap(), CELLS_PER_SKETCH_CELL);
-		} catch (OutsideMapException e) {
-			e.printStackTrace();
-		}
 
 		switch (mapToRender) {
 			case REGION_MAP:
+				try {
+					elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap(), CELLS_PER_SKETCH_CELL);
+				} catch (OutsideMapException e) {
+					e.printStackTrace();
+				}
+
 				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 				break;
 			case SKETCH_MAP:
 				mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);
 				break;
 		}
+
+		log.info("render(): Finished");
 	}
 
 	private void selectTerrainType(TerrainType selectedTerrainType) {

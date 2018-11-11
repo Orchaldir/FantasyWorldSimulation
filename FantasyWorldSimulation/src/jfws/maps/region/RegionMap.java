@@ -21,8 +21,11 @@ public class RegionMap {
 	private final ToCellMapper<RegionCell> toCellMapper;
 
 	public RegionMap(int width, int height, double resolution) {
-		log.info("RegionMap(): width={} height={}", width, height);
 		int size = width * height;
+
+
+		log.info("RegionMap(): width={} height={} size={}", width, height, size);
+
 		RegionCell[] cellArray = new RegionCell[size];
 
 		for(int i = 0; i < size; i++) {

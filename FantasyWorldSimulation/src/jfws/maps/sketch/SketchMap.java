@@ -6,9 +6,11 @@ import jfws.util.map.ArrayMap2d;
 import jfws.util.map.Map2d;
 import jfws.util.map.ToCellMapper;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
 
+@Slf4j
 public class SketchMap {
 
 	public static final int VERSION = 1;
@@ -22,6 +24,9 @@ public class SketchMap {
 
 	public SketchMap(int width, int height, TerrainType defaultType) {
 		int size = width * height;
+
+		log.info("SketchMap(): width={} height={} size={}", width, height, size);
+
 		SketchCell[] cellArray = new SketchCell[size];
 
 		for(int i = 0; i < size; i++) {
