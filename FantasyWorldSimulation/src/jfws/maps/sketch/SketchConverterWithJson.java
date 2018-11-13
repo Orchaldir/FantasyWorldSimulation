@@ -111,12 +111,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		checkVersion(jsonObject);
 		parseMapSize(jsonObject);
 
-		try {
-			parseUsedTerrainTypes(jsonObject);
-		}
-		catch(NullPointerException e) {
-			throwException(WRONG_USED_TERRAIN_TYPES_FORMAT);
-		}
+		parseUsedTerrainTypes(jsonObject);
 
 		ArrayMap2d<SketchCell> cellMap = parseTerrainTypeMap(jsonObject);
 

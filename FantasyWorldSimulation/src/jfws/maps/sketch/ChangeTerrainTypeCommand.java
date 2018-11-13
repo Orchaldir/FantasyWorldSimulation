@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChangeTerrainTypeCommand implements Command {
 
+	public static final String NAME = "ChangeTerrainType";
+
 	private final SketchMap map;
 	private final int index;
 	private final TerrainType newTerrainType;
@@ -21,7 +23,7 @@ public class ChangeTerrainTypeCommand implements Command {
 
 	@Override
 	public String getName() {
-		return "ChangeTerrainType";
+		return NAME;
 	}
 
 	@Override

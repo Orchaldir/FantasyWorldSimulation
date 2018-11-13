@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_A;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_B;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChangeTerrainTypeCommandTest extends SketchMapTest {
@@ -19,6 +22,11 @@ class ChangeTerrainTypeCommandTest extends SketchMapTest {
 	void setup() {
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 		command = new ChangeTerrainTypeCommand(sketchMap, INDEX, TERRAIN_TYPE_B);
+	}
+
+	@Test
+	void testGetName() {
+		assertThat(command.getName(), is(equalTo(ChangeTerrainTypeCommand.NAME)));
 	}
 
 	@Test

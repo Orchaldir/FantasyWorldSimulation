@@ -1,6 +1,7 @@
 package jfws.util.math.interpolation;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import static jfws.util.math.interpolation.TwoValueInterpolator.END;
 import static jfws.util.math.interpolation.TwoValueInterpolator.START;
@@ -8,6 +9,7 @@ import static jfws.util.math.interpolation.TwoValueInterpolator.START;
 @AllArgsConstructor
 public class BiTwoValueInterpolator implements Interpolator2d {
 
+	@Getter
 	private TwoValueInterpolator interpolator;
 
 	@Override

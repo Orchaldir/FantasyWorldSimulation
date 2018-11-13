@@ -35,7 +35,7 @@ class SketchConverterWithJsonTest {
 		assertThat(throwable.getMessage(), is(equalTo(message)));
 	}
 
-	// load
+	// parseString()
 
 	@Test
 	void testParseStringWithNull() {
@@ -67,6 +67,7 @@ class SketchConverterWithJsonTest {
 	@Test
 	void testWrongVersionFormat() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":A}"), WRONG_VERSION_FORMAT);
+		assertException(IOException.class, () -> converter.parseString("{\"version\":[1,2]}"), WRONG_VERSION_FORMAT);
 	}
 
 	// map size
@@ -82,6 +83,12 @@ class SketchConverterWithJsonTest {
 	}
 
 	@Test
+	void testInvalidWidth() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":-1,\"height\":3}"), INVALID_MAP_SIZE);
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":0,\"height\":3}"), INVALID_MAP_SIZE);
+	}
+
+	@Test
 	void tesNoHeight() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":1}"), NO_SIZE);
 	}
@@ -89,6 +96,12 @@ class SketchConverterWithJsonTest {
 	@Test
 	void testWrongHeightFormat() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":A}"), WRONG_SIZE_FORMAT);
+	}
+
+	@Test
+	void testInvalidHeight() {
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":3,\"height\":-1}"), INVALID_MAP_SIZE);
+		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":3,\"height\":0}"), INVALID_MAP_SIZE);
 	}
 
 	// used terrain types
