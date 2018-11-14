@@ -1,10 +1,8 @@
 package jfws.maps.sketch.terrain;
 
 import jfws.util.io.FileUtils;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +25,8 @@ class TerrainTypeManagerTest extends SharedTestData {
 
 	@BeforeEach
 	void  setUp() {
-		fileUtils = Mockito.mock(FileUtils.class);
-		converter = Mockito.mock(TerrainTypeConverter.class);
+		fileUtils = mock(FileUtils.class);
+		converter = mock(TerrainTypeConverter.class);
 		manager = new TerrainTypeManager(fileUtils, converter);
 	}
 
@@ -79,7 +77,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
 
-		assertThat(manager.getNames(), Matchers.containsInAnyOrder(NAME_B, NAME_C));
+		assertThat(manager.getNames(), containsInAnyOrder(NAME_B, NAME_C));
 	}
 
 	// getNamesForGroup()
@@ -95,8 +93,8 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
 
-		assertThat(manager.getNamesForGroup(NO_GROUP), Matchers.containsInAnyOrder(NAME_A, NAME_B));
-		assertThat(manager.getNamesForGroup(GROUP), Matchers.containsInAnyOrder(NAME_C));
+		assertThat(manager.getNamesForGroup(NO_GROUP), containsInAnyOrder(NAME_A, NAME_B));
+		assertThat(manager.getNamesForGroup(GROUP), containsInAnyOrder(NAME_C));
 	}
 
 	// getGroups()
@@ -120,7 +118,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
 
-		assertThat(manager.getGroups(), Matchers.containsInAnyOrder(GROUP));
+		assertThat(manager.getGroups(), containsInAnyOrder(GROUP));
 	}
 
 	// load()

@@ -3,7 +3,6 @@ package jfws.maps.sketch.elevation;
 import jfws.util.math.random.RandomNumberGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -16,7 +15,7 @@ class ElevationGeneratorWithNoiseTest extends ElevationGeneratorTest {
 
 	@BeforeEach
 	void setUp() {
-		randomNumberGenerator = Mockito.mock(RandomNumberGenerator.class);
+		randomNumberGenerator = mock(RandomNumberGenerator.class);
 		generator = new ElevationGeneratorWithNoise(randomNumberGenerator);
 	}
 

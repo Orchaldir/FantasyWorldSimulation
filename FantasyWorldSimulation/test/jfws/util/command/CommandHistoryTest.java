@@ -2,7 +2,6 @@ package jfws.util.command;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,9 +21,9 @@ class CommandHistoryTest {
 
 	@BeforeEach
 	public void setUp() {
-		command0 = Mockito.mock(Command.class);
-		command1 = Mockito.mock(Command.class);
-		command2 = Mockito.mock(Command.class);
+		command0 = mock(Command.class);
+		command1 = mock(Command.class);
+		command2 = mock(Command.class);
 
 		commandHistory = new CommandHistoryForTesting();
 	}

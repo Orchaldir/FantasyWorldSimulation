@@ -1,7 +1,6 @@
 package jfws.maps.region;
 
 import jfws.features.elevation.ElevationCell;
-import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchMap;
 import jfws.util.map.ArrayMap2d;
 import jfws.util.map.Map2d;

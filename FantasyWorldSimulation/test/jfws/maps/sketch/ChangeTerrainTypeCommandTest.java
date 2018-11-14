@@ -1,6 +1,5 @@
 package jfws.maps.sketch;
 
-import jfws.features.elevation.ElevationCell;
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
