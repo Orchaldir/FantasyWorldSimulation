@@ -10,21 +10,21 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 class GeneratorWithRandomTest {
 
-	static final long SEED = 42;
-	static final long DIFFERENT_SEED = 101;
+	private static final long SEED = 42;
+	private static final long DIFFERENT_SEED = 101;
 
-	static final int FIRST_INT = -1170105035;
-	static final int SECOND_INT = 234785527;
-	static final int THIRD_INT = -1360544799;
+	private static final int FIRST_INT = -1170105035;
+	private static final int SECOND_INT = 234785527;
+	private static final int THIRD_INT = -1360544799;
 
-	static final int DIFFERENT_FIRST_INT = -1194344215;
-	static final int DIFFERENT_SECOND_INT = 15869780;
-	static final int DIFFERENT_THIRD_INT = 1565603387;
+	private static final int DIFFERENT_FIRST_INT = -1194344215;
+	private static final int DIFFERENT_SECOND_INT = 15869780;
+	private static final int DIFFERENT_THIRD_INT = 1565603387;
 
 	RandomNumberGenerator generator;
 
 	@BeforeEach
-	void setup(){
+	void setUp() {
 		generator = new GeneratorWithRandom(SEED);
 	}
 

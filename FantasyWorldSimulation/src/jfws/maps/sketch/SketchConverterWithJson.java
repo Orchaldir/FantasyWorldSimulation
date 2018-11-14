@@ -29,14 +29,6 @@ public class SketchConverterWithJson implements SketchConverter {
 
 	// exceptions
 
-	private static String createNoPropertyException(String property) {
-		return String.format("Map does not contain property %s!", property);
-	}
-
-	private static String createWrongFormatException(String property) {
-		return String.format("Property %s has a wrong format!", property);
-	}
-
 	public static final String NOT_A_JSON_OBJECT = "Not a json object!";
 	public static final String INVALID_MAP_SIZE = "Invalid map size!";
 	public static final String NO_VERSION = createNoPropertyException(VERSION);
@@ -52,6 +44,7 @@ public class SketchConverterWithJson implements SketchConverter {
 	public static final String WRONG_TERRAIN_TYPE_ROW_FORMAT = "Wrong terrain type row format!";
 	public static final String NOT_USED_TERRAIN_TYPE = "Contains not used terrain type!";
 
+	// members
 	private final FileUtils fileUtils;
 	private final TerrainTypeManager terrainTypeManager;
 
@@ -64,6 +57,14 @@ public class SketchConverterWithJson implements SketchConverter {
 	// json
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 	private final JsonParser parser = new JsonParser();
+
+	private static String createNoPropertyException(String property) {
+		return String.format("Map does not contain property %s!", property);
+	}
+
+	private static String createWrongFormatException(String property) {
+		return String.format("Property %s has a wrong format!", property);
+	}
 
 	public SketchConverterWithJson(FileUtils fileUtils, TerrainTypeManager terrainTypeManager) {
 		this.fileUtils = fileUtils;

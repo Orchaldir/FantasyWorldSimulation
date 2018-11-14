@@ -17,18 +17,11 @@ import static org.mockito.Mockito.*;
 
 class CommandHistoryTest {
 
-	public class CommandHistoryForTesting extends CommandHistory {
-
-		public List<Command> getCommands() {
-			return Collections.unmodifiableList(history);
-		}
-	}
-
 	private Command command0, command1, command2;
 	private CommandHistoryForTesting commandHistory;
 
 	@BeforeEach
-	public void setup() {
+	public void setUp() {
 		command0 = Mockito.mock(Command.class);
 		command1 = Mockito.mock(Command.class);
 		command2 = Mockito.mock(Command.class);
@@ -364,5 +357,12 @@ class CommandHistoryTest {
 		assertFalse(commandHistory.canReExecute());
 
 		assertThat(commandHistory.getCommands(), contains(command0, command2));
+	}
+
+	public class CommandHistoryForTesting extends CommandHistory {
+
+		public List<Command> getCommands() {
+			return Collections.unmodifiableList(history);
+		}
 	}
 }

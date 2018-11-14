@@ -18,7 +18,7 @@ class ColorSelectorMapTest {
 	private ColorSelectorMap<Integer> colorSelectorMap;
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
 		colorSelector0 = Mockito.mock(ColorSelector.class);
 		colorSelector1 = Mockito.mock(ColorSelector.class);
 		colorSelector2 = Mockito.mock(ColorSelector.class);

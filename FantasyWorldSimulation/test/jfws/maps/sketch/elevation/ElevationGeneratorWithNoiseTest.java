@@ -15,7 +15,7 @@ class ElevationGeneratorWithNoiseTest extends ElevationGeneratorTest {
 	private RandomNumberGenerator randomNumberGenerator;
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
 		randomNumberGenerator = Mockito.mock(RandomNumberGenerator.class);
 		generator = new ElevationGeneratorWithNoise(randomNumberGenerator);
 	}

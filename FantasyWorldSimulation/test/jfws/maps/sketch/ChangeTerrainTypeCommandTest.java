@@ -19,7 +19,7 @@ class ChangeTerrainTypeCommandTest extends SketchMapTest {
 	private ChangeTerrainTypeCommand command;
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 		command = new ChangeTerrainTypeCommand(sketchMap, INDEX, TERRAIN_TYPE_B);
 	}

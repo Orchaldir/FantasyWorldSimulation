@@ -26,7 +26,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	private TerrainTypeManager manager;
 
 	@BeforeEach
-	void  setup() {
+	void  setUp() {
 		fileUtils = Mockito.mock(FileUtils.class);
 		converter = Mockito.mock(TerrainTypeConverter.class);
 		manager = new TerrainTypeManager(fileUtils, converter);

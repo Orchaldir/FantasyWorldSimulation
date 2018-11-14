@@ -19,7 +19,7 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	private TerrainTypeConverterWithJson converter;
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
 		converter = new TerrainTypeConverterWithJson();
 	}
 

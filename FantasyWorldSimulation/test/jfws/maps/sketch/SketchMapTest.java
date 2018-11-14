@@ -27,7 +27,7 @@ class SketchMapTest {
 	}
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 	}
 

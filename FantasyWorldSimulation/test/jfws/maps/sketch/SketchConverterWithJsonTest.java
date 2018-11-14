@@ -25,7 +25,7 @@ class SketchConverterWithJsonTest {
 	private SketchConverterWithJson converter;
 
 	@BeforeEach
-	void setup() {
+	void setUp() {
 		manager = new TerrainTypeManager(null, null);
 		converter = new SketchConverterWithJson(null, manager);
 	}
