@@ -34,11 +34,15 @@ public class MapRenderer {
 		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
 		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;
 
+		log.info("tryRender(): clear");
 		renderer.clear(0, 0, toCellMapper.getWidth(), toCellMapper.getHeight());
+		log.info("tryRender(): scale");
 		renderer.setScale(worldToScreenFactor);
 
 		for(int row = 0; row < map.getHeight(); row++) {
 			double originY = toCellMapper.getCellOriginY(row);
+
+			log.info("tryRender(): row={}", row);
 
 			for(int column = 0; column < map.getWidth(); column++) {
 				double originX = toCellMapper.getCellOriginX(column);
@@ -47,6 +51,8 @@ public class MapRenderer {
 				renderer.renderRectangle(originX, originY, resolutionX, resolutionY);
 			}
 		}
+
+		log.info("tryRender(): revert scale");
 
 		renderer.setScale(1.0 / worldToScreenFactor);
 	}

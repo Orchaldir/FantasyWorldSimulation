@@ -159,7 +159,7 @@ public class MapEditorController {
 
 				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 				break;
-			case SKETCH_MAP:
+			default:
 				mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);
 				break;
 		}

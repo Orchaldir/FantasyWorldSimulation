@@ -21,7 +21,7 @@ class GeneratorWithRandomTest {
 	private static final int DIFFERENT_SECOND_INT = 15869780;
 	private static final int DIFFERENT_THIRD_INT = 1565603387;
 
-	RandomNumberGenerator generator;
+	private RandomNumberGenerator generator;
 
 	@BeforeEach
 	void setUp() {

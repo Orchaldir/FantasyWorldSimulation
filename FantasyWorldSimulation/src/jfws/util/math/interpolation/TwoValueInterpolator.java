@@ -9,5 +9,5 @@ public abstract class TwoValueInterpolator implements Interpolator1d {
 		return interpolate(p[START], p[END], factor);
 	}
 
-	abstract double interpolate(double start, double end, double factor);
+	public abstract double interpolate(double start, double end, double factor);
 }
