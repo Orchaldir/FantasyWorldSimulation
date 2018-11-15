@@ -18,7 +18,7 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	private TerrainTypeConverterWithJson converter;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		converter = new TerrainTypeConverterWithJson();
 	}
 
@@ -41,7 +41,7 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	}
 
 	@Test
-	void test() {
+	public void test() {
 		String json = converter.save(Arrays.asList(TERRAIN_TYPE_A, TERRAIN_TYPE_B, TERRAIN_TYPE_C));
 		List<TerrainType> types = converter.load(json);
 
@@ -73,7 +73,7 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	}
 
 	@Test
-	void testTerrainType() {
+	public void testTerrainType() {
 		String json = converter.saveTerrainType(TERRAIN_TYPE_A);
 		Optional<TerrainType> optionalType = converter.loadTerrainType(json);
 
@@ -86,56 +86,56 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	// load()
 
 	@Test
-	void testLoadEmptyString() {
+	public void testLoadEmptyString() {
 		List<TerrainType> types = converter.load("");
 
 		assertTrue(types.isEmpty());
 	}
 
 	@Test
-	void testLoadWrongFormat() {
+	public void testLoadWrongFormat() {
 		List<TerrainType> types = converter.load("not json!");
 
 		assertTrue(types.isEmpty());
 	}
 
 	@Test
-	void testLoadNull() {
+	public void testLoadNull() {
 		assertThrows(NullPointerException.class, () -> converter.load(null));
 	}
 
 	// loadTerrainType()
 
 	@Test
-	void testLoadTerrainTypeEmptyString() {
+	public void testLoadTerrainTypeEmptyString() {
 		Optional<TerrainType> optionalType = converter.loadTerrainType("");
 
 		assertFalse(optionalType.isPresent());
 	}
 
 	@Test
-	void testLoadTerrainTypeWrongFormat() {
+	public void testLoadTerrainTypeWrongFormat() {
 		Optional<TerrainType> optionalType = converter.loadTerrainType("not json!");
 
 		assertFalse(optionalType.isPresent());
 	}
 
 	@Test
-	void testLoadTerrainTypeWithoutName() {
+	public void testLoadTerrainTypeWithoutName() {
 		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"color\": {\"red\": 255,\"green\": 0,\"blue\": 0}}");
 
 		assertFalse(optionalType.isPresent());
 	}
 
 	@Test
-	void testLoadTerrainTypeWithoutColor() {
+	public void testLoadTerrainTypeWithoutColor() {
 		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\"}");
 
 		assertTerrainType(optionalType, NAME_B, NullTerrainType.DEFAULT_COLOR, 0, 0);
 	}
 
 	@Test
-	void testLoadTerrainTypeNull() {
+	public void testLoadTerrainTypeNull() {
 		assertThrows(NullPointerException.class, () -> converter.loadTerrainType(null));
 	}
 

@@ -20,7 +20,7 @@ class BiTwoValueInterpolatorTest {
 	public static final double RESULT_3 = 6.0;
 
 	@Test
-	void testCreateBiCosineInterpolator() {
+	public void testCreateBiCosineInterpolator() {
 		BiTwoValueInterpolator interpolator = BiTwoValueInterpolator.createBiCosineInterpolator();
 
 		assertNotNull(interpolator);
@@ -29,7 +29,7 @@ class BiTwoValueInterpolatorTest {
 	}
 
 	@Test
-	void testCreateBilinearInterpolator() {
+	public void testCreateBilinearInterpolator() {
 		BiTwoValueInterpolator interpolator = BiTwoValueInterpolator.createBilinearInterpolator();
 
 		assertNotNull(interpolator);
@@ -38,7 +38,7 @@ class BiTwoValueInterpolatorTest {
 	}
 
 	@Test
-	void testInterpolate() {
+	public void testInterpolate() {
 		double[][] values = {{0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,12,14,15}};
 		TwoValueInterpolator twoValueInterpolator = Mockito.mock(TwoValueInterpolator.class);
 

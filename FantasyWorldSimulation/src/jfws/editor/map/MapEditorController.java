@@ -331,7 +331,7 @@ public class MapEditorController {
 				viewRegionMapItem.setDisable(true);
 				viewSketchMapItem.setDisable(false);
 				break;
-			case SKETCH_MAP:
+			default:
 				mapRenderer.setBorderBetweenCells(5);
 				renderStyleComboBox.setDisable(false);
 				viewRegionMapItem.setDisable(false);

@@ -16,7 +16,7 @@ public abstract class TwoValueInterpolatorTest {
 	protected TwoValueInterpolator interpolator;
 	protected double[] values = new double[Interpolator1d.ARRAY_SIZE];
 
-	protected void testInterpolation(double factor, double result)  {
+	protected void testInterpolation(double factor, double result) {
 		assertThat(interpolator.interpolate(START, END, factor), is(closeTo(result, DELTA)));
 
 		fillValues();
@@ -24,7 +24,7 @@ public abstract class TwoValueInterpolatorTest {
 		testArrayInterpolation(factor, result);
 	}
 
-	protected void testArrayInterpolation(double factor, double result)  {
+	protected void testArrayInterpolation(double factor, double result) {
 		assertThat(interpolator.interpolate(values, factor), is(closeTo(result, DELTA)));
 	}
 
@@ -40,17 +40,17 @@ public abstract class TwoValueInterpolatorTest {
 	}
 
 	@Test
-	void testGetStart() {
+	public void testGetStart() {
 		testInterpolation(0.0, START);
 	}
 
 	@Test
-	void testGetEnd() {
+	public void testGetEnd() {
 		testInterpolation(1.0, END);
 	}
 
 	@Test
-	void testFirstValueHasNoEffect() {
+	public void testFirstValueHasNoEffect() {
 		fillValues(-1, 0);
 		testArrayInterpolation(0.5, MIDDLE);
 
@@ -59,7 +59,7 @@ public abstract class TwoValueInterpolatorTest {
 	}
 
 	@Test
-	void testLastValueHasNoEffect() {
+	public void testLastValueHasNoEffect() {
 		fillValues(0, -1);
 		testArrayInterpolation(0.5, MIDDLE);
 

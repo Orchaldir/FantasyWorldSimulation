@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 class CosineInterpolatorTest extends TwoValueInterpolatorTest {
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		interpolator = new CosineInterpolator();
 	}
 
 	@Test
-	void test() {
+	public void test() {
 		testInterpolation(0.25, 4.2929);
 		testInterpolation(0.5, MIDDLE);
 		testInterpolation(0.75, 5.7071);

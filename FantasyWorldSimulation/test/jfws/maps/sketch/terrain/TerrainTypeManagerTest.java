@@ -24,7 +24,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	private TerrainTypeManager manager;
 
 	@BeforeEach
-	void  setUp() {
+	public void setUp() {
 		fileUtils = mock(FileUtils.class);
 		converter = mock(TerrainTypeConverter.class);
 		manager = new TerrainTypeManager(fileUtils, converter);
@@ -33,7 +33,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	// add & get
 
 	@Test
-	void testAddAndGetTerrainTypes() {
+	public void testAddAndGetTerrainTypes() {
 		manager.add(TERRAIN_TYPE_A);
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
@@ -46,7 +46,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testGetUnknownTerrainType() {
+	public void testGetUnknownTerrainType() {
 		TerrainType type = manager.getOrDefault(NAME_A);
 
 		assertThat(type, is(notNullValue()));
@@ -55,7 +55,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testGetUnknownTerrainTypeTwice() {
+	public void testGetUnknownTerrainTypeTwice() {
 		TerrainType type0 = manager.getOrDefault(NAME_A);
 		TerrainType type1 = manager.getOrDefault(NAME_A);
 
@@ -68,12 +68,12 @@ class TerrainTypeManagerTest extends SharedTestData {
 	// getNames()
 
 	@Test
-	void testGetNamesEmpty() {
+	public void testGetNamesEmpty() {
 		assertTrue(manager.getNames().isEmpty());
 	}
 
 	@Test
-	void testGetNames() {
+	public void testGetNames() {
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
 
@@ -83,12 +83,12 @@ class TerrainTypeManagerTest extends SharedTestData {
 	// getNamesForGroup()
 
 	@Test
-	void testGetNamesForGroupEmpty() {
+	public void testGetNamesForGroupEmpty() {
 		assertTrue(manager.getNamesForGroup(GROUP).isEmpty());
 	}
 
 	@Test
-	void testGetNamesForGroup() {
+	public void testGetNamesForGroup() {
 		manager.add(TERRAIN_TYPE_A);
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
@@ -100,12 +100,12 @@ class TerrainTypeManagerTest extends SharedTestData {
 	// getGroups()
 
 	@Test
-	void testGetGroupsEmpty() {
+	public void testGetGroupsEmpty() {
 		assertTrue(manager.getGroups().isEmpty());
 	}
 
 	@Test
-	void testGetNoGroups() {
+	public void testGetNoGroups() {
 		manager.add(TERRAIN_TYPE_A);
 		manager.add(TERRAIN_TYPE_B);
 
@@ -113,7 +113,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testGetGroups() {
+	public void testGetGroups() {
 		manager.add(TERRAIN_TYPE_A);
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
@@ -124,7 +124,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	// load()
 
 	@Test
-	void testLoad() throws IOException {
+	public void testLoad() throws IOException {
 		File file = new File("test.json");
 
 		when(fileUtils.readWholeFile(file)).thenReturn(MOCKED_JSON);
@@ -143,7 +143,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testLoadWithIOException() throws IOException {
+	public void testLoadWithIOException() throws IOException {
 		File file = new File("test.json");
 
 		when(fileUtils.readWholeFile(file)).thenThrow(new IOException("Test"));
@@ -159,7 +159,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	// save()
 
 	@Test
-	void testSave() throws IOException {
+	public void testSave() throws IOException {
 		File file = new File("test.json");
 
 		manager.add(TERRAIN_TYPE_A);
@@ -175,7 +175,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 	}
 
 	@Test
-	void testSaveWithIOException() throws IOException {
+	public void testSaveWithIOException() throws IOException {
 		File file = new File("test.json");
 
 		manager.add(TERRAIN_TYPE_A);

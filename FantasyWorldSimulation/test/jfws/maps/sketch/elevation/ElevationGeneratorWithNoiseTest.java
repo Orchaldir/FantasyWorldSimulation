@@ -14,13 +14,13 @@ class ElevationGeneratorWithNoiseTest extends ElevationGeneratorTest {
 	private RandomNumberGenerator randomNumberGenerator;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		randomNumberGenerator = mock(RandomNumberGenerator.class);
 		generator = new ElevationGeneratorWithNoise(randomNumberGenerator);
 	}
 
 	@Test
-	void testPrepare() {
+	public void testPrepare() {
 		generator.prepare();
 
 		verify(randomNumberGenerator).restart();
@@ -29,7 +29,7 @@ class ElevationGeneratorWithNoiseTest extends ElevationGeneratorTest {
 	}
 
 	@Test
-	void testGenerate() {
+	public void testGenerate() {
 		when(randomNumberGenerator.getGaussian()).thenReturn(-0.5);
 
 		assertThat(generator.generate(type1), is(equalTo(-40.0)));

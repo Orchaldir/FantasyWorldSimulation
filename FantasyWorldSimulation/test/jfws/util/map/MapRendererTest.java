@@ -10,8 +10,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import static org.mockito.AdditionalMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class MapRendererTest extends SharedTestData {
 
@@ -24,15 +23,15 @@ class MapRendererTest extends SharedTestData {
 	private InOrder orderVerifier;
 
 	@BeforeEach
-	void setUp() {
-		colorSelector = Mockito.mock(ColorSelector.class);
-		renderer = Mockito.mock(Renderer.class);
+	public void setUp() {
+		colorSelector = mock(ColorSelector.class);
+		renderer = mock(Renderer.class);
 		mapRenderer = new MapRenderer(renderer, WORLD_TO_SCREEN_FACTOR, BORDER);
 		orderVerifier = Mockito.inOrder(renderer);
 	}
 
-	@Test()
-	void testRender() throws OutsideMapException {
+	@Test
+	public void testRender() throws OutsideMapException {
 		prepareTestRender();
 
 		mapRenderer.render(MAPPER, colorSelector);

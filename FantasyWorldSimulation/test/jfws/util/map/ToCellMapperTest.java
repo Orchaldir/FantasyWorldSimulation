@@ -11,20 +11,20 @@ class ToCellMapperTest extends SharedTestData {
 	// getCellX()
 
 	@Test
-	void testGetCellX() {
+	public void testGetCellX() {
 		assertThat(MAPPER.getCellX(CENTER_X_0), is(equalTo(0)));
 		assertThat(MAPPER.getCellX(CENTER_X_1), is(equalTo(1)));
 		assertThat(MAPPER.getCellX(CENTER_X_2), is(equalTo(2)));
 	}
 
 	@Test
-	void testGetCellX_MinBorder() {
+	public void testGetCellX_MinBorder() {
 		assertThat(MAPPER.getCellX(ORIGIN_X - 1), is(equalTo(-1)));
 		assertThat(MAPPER.getCellX(ORIGIN_X), is(equalTo(0)));
 	}
 
 	@Test
-	void testGetCellX_MaxBorder() {
+	public void testGetCellX_MaxBorder() {
 		assertThat(MAPPER.getCellX(MAX_X), is(equalTo(WIDTH - 1)));
 		assertThat(MAPPER.getCellX(MAX_X +  1), is(equalTo(WIDTH)));
 	}
@@ -32,20 +32,20 @@ class ToCellMapperTest extends SharedTestData {
 	// getCellY()
 
 	@Test
-	void testGetCellY() {
+	public void testGetCellY() {
 		assertThat(MAPPER.getCellY(CENTER_Y_0), is(equalTo(0)));
 		assertThat(MAPPER.getCellY(CENTER_Y_1), is(equalTo(1)));
 		assertThat(MAPPER.getCellY(CENTER_Y_2), is(equalTo(2)));
 	}
 
 	@Test
-	void testGetCellY_MinBorder() {
+	public void testGetCellY_MinBorder() {
 		assertThat(MAPPER.getCellY(ORIGIN_Y - 1), is(equalTo(-1)));
 		assertThat(MAPPER.getCellY(ORIGIN_Y), is(equalTo(0)));
 	}
 
 	@Test
-	void testGetCellY_MaxBorder() {
+	public void testGetCellY_MaxBorder() {
 		assertThat(MAPPER.getCellY(MAX_Y), is(equalTo(HEIGHT - 1)));
 		assertThat(MAPPER.getCellY(MAX_Y +  1), is(equalTo(HEIGHT)));
 	}

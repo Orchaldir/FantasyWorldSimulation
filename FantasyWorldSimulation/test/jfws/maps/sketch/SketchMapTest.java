@@ -20,19 +20,19 @@ class SketchMapTest {
 
 	protected SketchMap sketchMap;
 
-	void assertCell(int index, TerrainType type, double elevation) throws OutsideMapException {
+	protected void assertCell(int index, TerrainType type, double elevation) throws OutsideMapException {
 		SketchCell cell = sketchMap.getCells().getCell(index);
 		assertThat(cell.getTerrainType(), is(sameInstance(type)));
 		assertThat(cell.getElevation(), is(equalTo(elevation)));
 	}
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 	}
 
 	@Test
-	void testCreate() throws OutsideMapException {
+	public void testCreate() throws OutsideMapException {
 		Map2d<SketchCell> cells = sketchMap.getCells();
 		assertThat(cells, is(notNullValue()));
 		assertThat(cells.getWidth(), is(equalTo(WIDTH)));
@@ -44,7 +44,7 @@ class SketchMapTest {
 	}
 
 	@Test
-	void testGenerateElevation() throws OutsideMapException {
+	public void testGenerateElevation() throws OutsideMapException {
 		sketchMap.getCells().getCell(0).setTerrainType(TERRAIN_TYPE_B);
 		sketchMap.getCells().getCell(1).setTerrainType(TERRAIN_TYPE_C);
 

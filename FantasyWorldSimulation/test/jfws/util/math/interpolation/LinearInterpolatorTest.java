@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 class LinearInterpolatorTest extends TwoValueInterpolatorTest {
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		interpolator = new LinearInterpolator();
 	}
 
 	@Test
-	void test() {
+	public void test() {
 		testInterpolation(0.25, 4.5);
 		testInterpolation(0.5, MIDDLE);
 		testInterpolation(0.75, 5.5);

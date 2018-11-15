@@ -25,7 +25,7 @@ class SketchConverterWithJsonTest {
 	private SketchConverterWithJson converter;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		manager = new TerrainTypeManager(null, null);
 		converter = new SketchConverterWithJson(null, manager);
 	}
@@ -38,34 +38,34 @@ class SketchConverterWithJsonTest {
 	// parseString()
 
 	@Test
-	void testParseStringWithNull() {
+	public void testParseStringWithNull() {
 		assertThrows(IOException.class, () -> converter.parseString(null));
 	}
 
 	@Test
-	void testParseEmptyString() {
+	public void testParseEmptyString() {
 		assertException(IOException.class, () -> converter.parseString(""), NOT_A_JSON_OBJECT);
 	}
 
 	@Test
-	void testParseWrongString() {
+	public void testParseWrongString() {
 		assertException(IOException.class, () -> converter.parseString("abc"), NOT_A_JSON_OBJECT);
 	}
 
 	// version
 
 	@Test
-	void testNoVersion() {
+	public void testNoVersion() {
 		assertException(IOException.class, () -> converter.parseString("{}"), NO_VERSION);
 	}
 
 	@Test
-	void testWrongVersion() {
+	public void testWrongVersion() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":0}"), WRONG_VERSION);
 	}
 
 	@Test
-	void testWrongVersionFormat() {
+	public void testWrongVersionFormat() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":A}"), WRONG_VERSION_FORMAT);
 		assertException(IOException.class, () -> converter.parseString("{\"version\":[1,2]}"), WRONG_VERSION_FORMAT);
 	}
@@ -73,33 +73,33 @@ class SketchConverterWithJsonTest {
 	// map size
 
 	@Test
-	void testNoWidth() {
+	public void testNoWidth() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1}"), NO_SIZE);
 	}
 
 	@Test
-	void testWrongWidthFormat() {
+	public void testWrongWidthFormat() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":A}"), WRONG_SIZE_FORMAT);
 	}
 
 	@Test
-	void testInvalidWidth() {
+	public void testInvalidWidth() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":-1,\"height\":3}"), INVALID_MAP_SIZE);
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":0,\"height\":3}"), INVALID_MAP_SIZE);
 	}
 
 	@Test
-	void tesNoHeight() {
+	public void tesNoHeight() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":1}"), NO_SIZE);
 	}
 
 	@Test
-	void testWrongHeightFormat() {
+	public void testWrongHeightFormat() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":A}"), WRONG_SIZE_FORMAT);
 	}
 
 	@Test
-	void testInvalidHeight() {
+	public void testInvalidHeight() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":3,\"height\":-1}"), INVALID_MAP_SIZE);
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":3,\"height\":0}"), INVALID_MAP_SIZE);
 	}
@@ -107,17 +107,17 @@ class SketchConverterWithJsonTest {
 	// used terrain types
 
 	@Test
-	void testNoUsedTerrainTypes() {
+	public void testNoUsedTerrainTypes() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3}"), NO_USED_TERRAIN_TYPES);
 	}
 
 	@Test
-	void testEmptyUsedTerrainTypes() {
+	public void testEmptyUsedTerrainTypes() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[]}"), NO_USED_TERRAIN_TYPES);
 	}
 
 	@Test
-	void testUsedTerrainTypesNotAnArray() {
+	public void testUsedTerrainTypesNotAnArray() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":3}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":\"text\"}"), WRONG_USED_TERRAIN_TYPES_FORMAT);
 	}
@@ -125,22 +125,22 @@ class SketchConverterWithJsonTest {
 	// terrain type map
 
 	@Test
-	void testNoTerrainTypeMap() {
+	public void testNoTerrainTypeMap() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]}"), NO_TERRAIN_TYPE_MAP);
 	}
 
 	@Test
-	void testTerrainTypeMapIsEmpty() {
+	public void testTerrainTypeMapIsEmpty() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"],\"terrain_type_map\":[]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
 	}
 
 	@Test
-	void testTerrainTypeMapIsNotAnArray() {
+	public void testTerrainTypeMapIsNotAnArray() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"],\"terrain_type_map\":6}"), WRONG_TERRAIN_TYPE_MAP_FORMAT);
 	}
 
 	@Test
-	void testTerrainTypeMapHasWrongNumberOfRows() {
+	public void testTerrainTypeMapHasWrongNumberOfRows() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
 				"\"terrain_type_map\":[\"0,0\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
@@ -148,7 +148,7 @@ class SketchConverterWithJsonTest {
 	}
 
 	@Test
-	void testTerrainTypeMapRowHasWrongSize() {
+	public void testTerrainTypeMapRowHasWrongSize() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
 				"\"terrain_type_map\":[\"0,0\",\"0,0,1\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_MAP_SIZE);
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
@@ -156,19 +156,19 @@ class SketchConverterWithJsonTest {
 	}
 
 	@Test
-	void testTerrainTypeMapRowHasWrongContent() {
+	public void testTerrainTypeMapRowHasWrongContent() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
 				"\"terrain_type_map\":[\"0,0\",\"A,0\",\"0,0\"]}"), WRONG_TERRAIN_TYPE_ROW_FORMAT);
 	}
 
 	@Test
-	void testTerrainTypeMapHasNotUsedTerrainType() {
+	public void testTerrainTypeMapHasNotUsedTerrainType() {
 		assertException(IOException.class, () -> converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
 				"\"terrain_type_map\":[\"0,0\",\"2,0\",\"0,0\"]}"), NOT_USED_TERRAIN_TYPE);
 	}
 
 	@Test
-	void testParseString() throws IOException, OutsideMapException {
+	public void testParseString() throws IOException, OutsideMapException {
 		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
 				"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}");
 
@@ -198,7 +198,7 @@ class SketchConverterWithJsonTest {
 	// test
 
 	@Test
-	void test() throws IOException, OutsideMapException {
+	public void test() throws IOException, OutsideMapException {
 		manager.add(TERRAIN_TYPE_A);
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);

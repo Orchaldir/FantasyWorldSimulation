@@ -12,7 +12,7 @@ class TerrainTypeImplTest extends SharedTestData {
 	// isDefault()
 
 	@Test
-	void testIsDefault() {
+	public void testIsDefault() {
 		assertFalse(TERRAIN_TYPE_A.isDefault());
 		assertFalse(TERRAIN_TYPE_B.isDefault());
 		assertFalse(TERRAIN_TYPE_C.isDefault());
@@ -20,7 +20,7 @@ class TerrainTypeImplTest extends SharedTestData {
 
 
 	@Test
-	void testToString() {
+	public void testToString() {
 		assertThat(TERRAIN_TYPE_A.toString(), is(equalTo("TerrainTypeImpl(name=A)")));
 	}
 }

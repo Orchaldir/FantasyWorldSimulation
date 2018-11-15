@@ -140,6 +140,9 @@ class CommandHistoryTest {
 	@Test
 	public void testUnExecuteWithoutExecutes() {
 		commandHistory.unExecute();
+
+		verify(command0, never()).execute();
+		verify(command0, never()).unExecute();
 	}
 
 	@Test
@@ -260,6 +263,9 @@ class CommandHistoryTest {
 	@Test
 	public void testReExecuteWithoutExecutes() {
 		commandHistory.reExecute();
+
+		verify(command0, never()).execute();
+		verify(command0, never()).unExecute();
 	}
 
 	@Test

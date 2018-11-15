@@ -18,7 +18,7 @@ class ColorSelectorMapTest {
 	private ColorSelectorMap<Integer> colorSelectorMap;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		colorSelector0 = Mockito.mock(ColorSelector.class);
 		colorSelector1 = Mockito.mock(ColorSelector.class);
 		colorSelector2 = Mockito.mock(ColorSelector.class);
@@ -31,19 +31,19 @@ class ColorSelectorMapTest {
 	}
 
 	@Test
-	void testGetDefault() {
+	public void testGetDefault() {
 		assertThat(colorSelectorMap.getDefaultColorSelector(), is(equalTo(colorSelector0)));
 	}
 
 	@Test
-	void testGetWithoutAdd() {
+	public void testGetWithoutAdd() {
 		assertThat(colorSelectorMap.get(NAME0), is(equalTo(colorSelector0)));
 		assertThat(colorSelectorMap.get(NAME1), is(equalTo(colorSelector0)));
 		assertThat(colorSelectorMap.get(NAME2), is(equalTo(colorSelector0)));
 	}
 
 	@Test
-	void test() {
+	public void test() {
 		colorSelectorMap.add(colorSelector1);
 		colorSelectorMap.add(colorSelector2);
 
@@ -55,7 +55,7 @@ class ColorSelectorMapTest {
 	// getNames()
 
 	@Test
-	void testGetNames() {
+	public void testGetNames() {
 		colorSelectorMap.add(colorSelector1);
 		colorSelectorMap.add(colorSelector2);
 

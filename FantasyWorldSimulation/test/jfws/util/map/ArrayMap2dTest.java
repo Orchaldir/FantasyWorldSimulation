@@ -10,22 +10,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class ArrayMap2dTest extends SharedTestData {
 
 	@Test
-	void testGetWidth() {
+	public void testGetWidth() {
 		assertThat(MAP.getWidth(), is(equalTo(WIDTH)));
 	}
 
 	@Test
-	void testGetHeight() {
+	public void testGetHeight() {
 		assertThat(MAP.getHeight(), is(equalTo(HEIGHT)));
 	}
 
 	@Test
-	void testGetSize() {
+	public void testGetSize() {
 		assertThat(MAP.getSize(), is(equalTo(SIZE)));
 	}
 
 	@Test
-	void testGetIndex() {
+	public void testGetIndex() {
 		assertThat(MAP.getIndex(X0, Y0), is(equalTo(INDEX0)));
 		assertThat(MAP.getIndex(X1, Y1), is(equalTo(INDEX1)));
 		assertThat(MAP.getIndex(X2, Y2), is(equalTo(INDEX2)));
@@ -33,7 +33,7 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	void testGetX() {
+	public void testGetX() {
 		assertThat(MAP.getX(INDEX0), is(equalTo(X0)));
 		assertThat(MAP.getX(INDEX1), is(equalTo(X1)));
 		assertThat(MAP.getX(INDEX2), is(equalTo(X2)));
@@ -41,7 +41,7 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	void testGetY() {
+	public void testGetY() {
 		assertThat(MAP.getY(INDEX0), is(equalTo(Y0)));
 		assertThat(MAP.getY(INDEX1), is(equalTo(Y1)));
 		assertThat(MAP.getY(INDEX2), is(equalTo(Y2)));
@@ -51,45 +51,45 @@ class ArrayMap2dTest extends SharedTestData {
 	// isInsideForX()
 
 	@Test
-	void testIsInsideForX() {
+	public void testIsInsideForX() {
 		for(int x = 0; x < WIDTH; x++) {
 			assertTrue(MAP.isInsideForX(x));
 		}
 	}
 
 	@Test
-	void testIsInsideForX_Left() {
+	public void testIsInsideForX_Left() {
 		assertFalse(MAP.isInsideForX(-1));
 	}
 
 	@Test
-	void testIsInsideForX_Right() {
+	public void testIsInsideForX_Right() {
 		assertFalse(MAP.isInsideForX(WIDTH));
 	}
 
 	// isInsideForY()
 
 	@Test
-	void testIsInsideForY() {
+	public void testIsInsideForY() {
 		for(int y = 0; y < HEIGHT; y++) {
 			assertTrue(MAP.isInsideForY(y));
 		}
 	}
 
 	@Test
-	void testIsInsideForY_Below() {
+	public void testIsInsideForY_Below() {
 		assertFalse(MAP.isInsideForY(-1));
 	}
 
 	@Test
-	void testIsInsideForY_Above() {
+	public void testIsInsideForY_Above() {
 		assertFalse(MAP.isInsideForY(HEIGHT));
 	}
 
 	// isInsideForY()
 
 	@Test
-	void testIsInside() {
+	public void testIsInside() {
 		for(int x = 0; x < WIDTH; x++) {
 			for(int y = 0; y < HEIGHT; y++) {
 				assertTrue(MAP.isInside(x, y));
@@ -98,7 +98,7 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	void testIsInside_Corners() {
+	public void testIsInside_Corners() {
 		assertFalse(MAP.isInside(-1, -1));
 		assertFalse(MAP.isInside(-1, HEIGHT));
 		assertFalse(MAP.isInside(WIDTH, -1));
@@ -107,28 +107,28 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	void testIsInside_Left() {
+	public void testIsInside_Left() {
 		for(int y = 0; y < HEIGHT; y++) {
 			assertFalse(MAP.isInside(-1, y));
 		}
 	}
 
 	@Test
-	void testIsInside_Right() {
+	public void testIsInside_Right() {
 		for(int y = 0; y < HEIGHT; y++) {
 			assertFalse(MAP.isInside(WIDTH, y));
 		}
 	}
 
 	@Test
-	void testIsInside_Below() {
+	public void testIsInside_Below() {
 		for(int x = 0; x < WIDTH; x++) {
 			assertFalse(MAP.isInside(x, -1));
 		}
 	}
 
 	@Test
-	void testIsInside_Above() {
+	public void testIsInside_Above() {
 		for(int x = 0; x < WIDTH; x++) {
 			assertFalse(MAP.isInside(x, HEIGHT));
 		}
@@ -137,14 +137,14 @@ class ArrayMap2dTest extends SharedTestData {
 	// isInside()
 
 	@Test
-	void testIsInsideWithIndex() {
+	public void testIsInsideWithIndex() {
 		for(int index = 0; index < SIZE; index++) {
 			assertTrue(MAP.isInside(index));
 		}
 	}
 
 	@Test
-	void testIsInsideWithIndex_Outside() {
+	public void testIsInsideWithIndex_Outside() {
 		assertFalse(MAP.isInside(-1));
 		assertFalse(MAP.isInside(SIZE));
 	}

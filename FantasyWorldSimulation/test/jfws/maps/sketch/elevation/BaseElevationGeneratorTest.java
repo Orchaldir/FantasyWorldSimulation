@@ -10,12 +10,12 @@ import static org.hamcrest.core.IsEqual.equalTo;
 class BaseElevationGeneratorTest extends ElevationGeneratorTest {
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		generator = new BaseElevationGenerator();
 	}
 
 	@Test
-	void testGenerate() {
+	public void testGenerate() {
 		assertThat(generator.generate(type0), is(equalTo(BASE_ELEVATION_0)));
 		assertThat(generator.generate(type1), is(equalTo(BASE_ELEVATION_1)));
 	}
