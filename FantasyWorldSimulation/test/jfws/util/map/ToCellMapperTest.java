@@ -63,8 +63,8 @@ class ToCellMapperTest extends SharedTestData {
 		}
 	}
 
-	@Test()
-	void testGetCell() throws OutsideMapException {
+	@Test
+	public void testGetCell() throws OutsideMapException {
 		for(int cell_y = 0; cell_y < HEIGHT; cell_y++) {
 			for(int cell_x = 0; cell_x < WIDTH; cell_x++) {
 				testGetCell(cell_x, cell_y);
@@ -72,8 +72,8 @@ class ToCellMapperTest extends SharedTestData {
 		}
 	}
 
-	@Test()
-	void testGetCellOutside(){
+	@Test
+	public void testGetCellOutside(){
 		OutsideMapException exception = assertThrows(OutsideMapException.class, () -> MAPPER.getCell(ORIGIN_X - 1, ORIGIN_Y - 1));
 
 		assertThat(exception.getMap(), is(equalTo(MAP)));
@@ -83,22 +83,22 @@ class ToCellMapperTest extends SharedTestData {
 
 	// getWidth()
 
-	@Test()
-	void testGetWidth(){
+	@Test
+	public void testGetWidth(){
 		assertThat(MAPPER.getWidth(), is(closeTo(WIDTH * RESOLUTION_X, ERROR)));
 	}
 
 	// getHeight()
 
-	@Test()
-	void testGetHeight(){
+	@Test
+	public void testGetHeight(){
 		assertThat(MAPPER.getHeight(), is(closeTo(HEIGHT * RESOLUTION_Y, ERROR)));
 	}
 
 	// getCellOriginX()
 
-	@Test()
-	void testGetCellOriginX(){
+	@Test
+	public void testGetCellOriginX(){
 		assertThat(MAPPER.getCellOriginX(0), is(closeTo(ORIGIN_X, ERROR)));
 		assertThat(MAPPER.getCellOriginX(1), is(closeTo(ORIGIN_X + RESOLUTION_X, ERROR)));
 		assertThat(MAPPER.getCellOriginX(2), is(closeTo(ORIGIN_X + RESOLUTION_X * 2, ERROR)));
@@ -107,8 +107,8 @@ class ToCellMapperTest extends SharedTestData {
 
 	// getCellOriginY()
 
-	@Test()
-	void testGetCellOriginY(){
+	@Test
+	public void testGetCellOriginY(){
 		assertThat(MAPPER.getCellOriginY(0), is(closeTo(ORIGIN_Y, ERROR)));
 		assertThat(MAPPER.getCellOriginY(1), is(closeTo(ORIGIN_Y + RESOLUTION_Y, ERROR)));
 		assertThat(MAPPER.getCellOriginY(2), is(closeTo(ORIGIN_Y + RESOLUTION_Y * 2, ERROR)));

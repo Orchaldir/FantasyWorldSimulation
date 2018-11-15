@@ -13,38 +13,38 @@ class NullTerrainTypeTest {
 	private NullTerrainType type = new NullTerrainType(NAME);
 
 	@Test
-	void testGetName() {
+	public void testGetName() {
 		assertThat(type.getName(), is(equalTo(NAME)));
 	}
 
 	@Test
-	void testGetGroup() {
+	public void testGetGroup() {
 		assertThat(type.getGroup(), is(equalTo(NullTerrainType.DEFAULT_GROUP)));
 	}
 
 	@Test
-	void testGetColor() {
+	public void testGetColor() {
 		assertThat(type.getColor(), is(notNullValue()));
 		assertThat(type.getColor(), is(equalTo(NullTerrainType.DEFAULT_COLOR)));
 	}
 
 	@Test
-	void testGetBaseElevation() {
+	public void testGetBaseElevation() {
 		assertThat(type.getBaseElevation(), is(equalTo(NullTerrainType.DEFAULT_BASE_ELEVATION)));
 	}
 
 	@Test
-	void testGetElevationVariation() {
+	public void testGetElevationVariation() {
 		assertThat(type.getElevationVariation(), is(equalTo(NullTerrainType.DEFAULT_ELEVATION_VARIATION)));
 	}
 
 	@Test
-	void testIsDefault() {
+	public void testIsDefault() {
 		assertTrue(type.isDefault());
 	}
 
 	@Test
-	void testToString() {
+	public void testToString() {
 		assertThat(type.toString(), is(equalTo("NullTerrainType(name=name0)")));
 	}
 

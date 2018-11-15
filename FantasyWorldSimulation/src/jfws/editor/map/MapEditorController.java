@@ -72,11 +72,8 @@ public class MapEditorController {
 	private FileChooser fileChooser = new FileChooser();
 	private FileUtils fileUtils = new ApacheFileUtils();
 
-	private CanvasRenderer canvasRenderer;
-
 	private TerrainTypeConverter converter = new TerrainTypeConverterWithJson();
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
-	private final TerrainType defaultTerrainType, mountainTerrainType;
 	private TerrainType selectedTerrainType;
 	private SketchMap sketchMap;
 	private ElevationGenerator elevationGenerator = new ElevationGeneratorWithNoise(new GeneratorWithRandom(42));
@@ -98,9 +95,8 @@ public class MapEditorController {
 		log.info("MapEditorController()");
 
 		terrainTypeManager.load(new File("data/terrain-types.json"));
-		defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
-		mountainTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
-		selectedTerrainType = mountainTerrainType;
+		TerrainType defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
+		selectedTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
 
 		sketchMap = new SketchMap(20, 10, defaultTerrainType);
 
@@ -126,7 +122,7 @@ public class MapEditorController {
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
-		canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
+		CanvasRenderer canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
 		updateHistory();

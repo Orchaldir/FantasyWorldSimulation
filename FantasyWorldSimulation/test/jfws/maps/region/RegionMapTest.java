@@ -38,30 +38,30 @@ class RegionMapTest {
 	}
 
 	@Test
-	void testWidth() {
+	public void testWidth() {
 		assertThat(regionCellMap.getWidth(), is(equalTo(WIDTH)));
 	}
 
 	@Test
-	void testHeight() {
+	public void testHeight() {
 		assertThat(regionCellMap.getHeight(), is(equalTo(HEIGHT)));
 	}
 
 	@Test
-	void testResolution() {
+	public void testResolution() {
 		assertThat(toCellMapper.getResolutionX(), is(equalTo(RESOLUTION)));
 		assertThat(toCellMapper.getResolutionY(), is(equalTo(RESOLUTION)));
 	}
 
 	@Test
-	void testElevation() throws OutsideMapException {
+	public void testElevation() throws OutsideMapException {
 		for(int index = 0; index < regionCellMap.getSize(); index++) {
 			assertThat(regionCellMap.getCell(index).getElevation(), is(equalTo(ElevationCell.DEFAULT_ELEVATION)));
 		}
 	}
 
 	@Test
-	void testFromSketchMap() {
+	public void testFromSketchMap() {
 		regionMap = RegionMap.fromSketchMap(sketchMap, CELLS_PER_SKETCH_CELL);
 		prepare();
 

@@ -24,17 +24,17 @@ class GeneratorWithRandomTest {
 	private RandomNumberGenerator generator;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		generator = new GeneratorWithRandom(SEED);
 	}
 
 	@Test
-	void testGetSeed(){
+	public void testGetSeed(){
 		assertThat(generator.getSeed(), is(equalTo(SEED)));
 	}
 
 	@Test
-	void testRestart(){
+	public void testRestart(){
 		assertThat(generator.getInteger(), is(equalTo(FIRST_INT)));
 		assertThat(generator.getInteger(), is(equalTo(SECOND_INT)));
 		assertThat(generator.getInteger(), is(equalTo(THIRD_INT)));
@@ -47,7 +47,7 @@ class GeneratorWithRandomTest {
 	}
 
 	@Test
-	void testRestartSameSeed(){
+	public void testRestartSameSeed(){
 		assertThat(generator.getInteger(), is(equalTo(FIRST_INT)));
 		assertThat(generator.getInteger(), is(equalTo(SECOND_INT)));
 		assertThat(generator.getInteger(), is(equalTo(THIRD_INT)));
@@ -60,7 +60,7 @@ class GeneratorWithRandomTest {
 	}
 
 	@Test
-	void testRestartWithDifferentSeed(){
+	public void testRestartWithDifferentSeed(){
 		assertThat(generator.getInteger(), is(equalTo(FIRST_INT)));
 		assertThat(generator.getInteger(), is(equalTo(SECOND_INT)));
 		assertThat(generator.getInteger(), is(equalTo(THIRD_INT)));
@@ -75,7 +75,7 @@ class GeneratorWithRandomTest {
 	// getGaussian()
 
 	@Test
-	void testGaussianMeanIsZero(){
+	public void testGaussianMeanIsZero(){
 		int number = 10000;
 		double mean = 0;
 
