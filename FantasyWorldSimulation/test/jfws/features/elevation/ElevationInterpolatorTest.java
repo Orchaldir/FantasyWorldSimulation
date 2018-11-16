@@ -4,7 +4,6 @@ import jfws.util.math.interpolation.Interpolator2d;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -23,9 +22,9 @@ class ElevationInterpolatorTest {
 
 	@BeforeEach
 	public void setUp() {
-		interpolator = Mockito.mock(Interpolator2d.class);
+		interpolator = mock(Interpolator2d.class);
 		elevationInterpolator = new ElevationInterpolator(interpolator);
-		cell = Mockito.mock(ElevationCell.class);
+		cell = mock(ElevationCell.class);
 	}
 
 	@Test

@@ -8,6 +8,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ToCellMapperTest extends SharedTestData {
 
+	// constructor
+
+	@Test
+	public void testConstructorWithOneResolution() {
+		ToCellMapper<Integer> integerToCellMapper = new ToCellMapper<>(MAP, ORIGIN_X, ORIGIN_Y, RESOLUTION_X);
+
+		assertThat(integerToCellMapper.getResolutionX(), is(equalTo(RESOLUTION_X)));
+		assertThat(integerToCellMapper.getResolutionY(), is(equalTo(RESOLUTION_X)));
+	}
+
+	// origin
+
+	@Test
+	public void testGetOriginX() {
+		assertThat(MAPPER.getOriginX(), is(equalTo(ORIGIN_X)));
+	}
+
+	@Test
+	public void testGetOriginY() {
+		assertThat(MAPPER.getOriginY(), is(equalTo(ORIGIN_Y)));
+	}
+
+	// getIndex()
+
+	@Test
+	public void testGetIndex() {
+		assertThat(MAPPER.getIndex(CENTER_X_0, CELL_Y_0), is(equalTo(0)));
+		assertThat(MAPPER.getIndex(CENTER_X_1, CELL_Y_0), is(equalTo(1)));
+		assertThat(MAPPER.getIndex(CENTER_X_2, CELL_Y_0), is(equalTo(2)));
+
+		assertThat(MAPPER.getIndex(CENTER_X_0, CELL_Y_1), is(equalTo(4)));
+		assertThat(MAPPER.getIndex(CENTER_X_1, CELL_Y_1), is(equalTo(5)));
+		assertThat(MAPPER.getIndex(CENTER_X_2, CELL_Y_1), is(equalTo(6)));
+
+		assertThat(MAPPER.getIndex(CENTER_X_0, CELL_Y_2), is(equalTo(8)));
+		assertThat(MAPPER.getIndex(CENTER_X_1, CELL_Y_2), is(equalTo(9)));
+		assertThat(MAPPER.getIndex(CENTER_X_2, CELL_Y_2), is(equalTo(10)));
+	}
+
 	// getCellX()
 
 	@Test
@@ -55,9 +94,9 @@ class ToCellMapperTest extends SharedTestData {
 	private void testGetCell(int cell_x, int cell_y) throws OutsideMapException {
 		int index  = MAP.getIndex(cell_x, cell_y);
 
-		for(int x = ORIGIN_X  + RESOLUTION_X * cell_x; x < ORIGIN_X + RESOLUTION_X * (cell_x + 1); x++) {
+		for(double x = ORIGIN_X  + RESOLUTION_X * cell_x; x < ORIGIN_X + RESOLUTION_X * (cell_x + 1); x++) {
 
-			for(int y = ORIGIN_Y + RESOLUTION_Y * cell_y; y < ORIGIN_Y + RESOLUTION_Y * (cell_y + 1); y++) {
+			for(double y = ORIGIN_Y + RESOLUTION_Y * cell_y; y < ORIGIN_Y + RESOLUTION_Y * (cell_y + 1); y++) {
 				assertThat(MAPPER.getCell(x, y), is(equalTo(index)));
 			}
 		}
