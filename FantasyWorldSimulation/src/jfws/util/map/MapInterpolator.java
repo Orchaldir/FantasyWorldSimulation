@@ -8,6 +8,9 @@ import static jfws.util.math.interpolation.Interpolator1d.ARRAY_SIZE;
 @Slf4j
 public abstract class MapInterpolator<T, U> {
 
+	public static final String TARGET_MAP_IS_SMALLER_EXCEPTION = "Target map is smaller than the source map!";
+	public static final String WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION = "Cell size does not match for width & height!";
+
 	private Interpolator2d interpolator;
 	private final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
 
@@ -15,8 +18,9 @@ public abstract class MapInterpolator<T, U> {
 		this.interpolator = interpolator;
 	}
 
-	public void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap, int cellSize) throws OutsideMapException {
-		log.debug("interpolate(): cellSize={}", cellSize);
+	public void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap) throws OutsideMapException {
+		int cellSize = calculateCellSize(sourceMap, targetMap);
+
 		for(int y = 0; y < sourceMap.getHeight(); y++) {
 			for(int x = 0; x < sourceMap.getWidth(); x++) {
 				prepareSourceValues(sourceMap, x, y);
@@ -24,6 +28,29 @@ public abstract class MapInterpolator<T, U> {
 			}
 		}
 		log.debug("interpolate(): finished");
+	}
+
+	public static <T, U>
+	int calculateCellSize(Map2d<T> sourceMap, Map2d<U> targetMap) {
+		int cellSizeX = targetMap.getWidth() / sourceMap.getWidth();
+
+		if(cellSizeX == 0) {
+			log.error("calculateCellSize(): {} width: source={} target={}",
+					TARGET_MAP_IS_SMALLER_EXCEPTION, sourceMap.getWidth(), targetMap.getWidth());
+			throw new IllegalArgumentException(TARGET_MAP_IS_SMALLER_EXCEPTION);
+		}
+
+		int cellSizeY = targetMap.getHeight() / sourceMap.getHeight();
+
+		if(cellSizeX != cellSizeY) {
+			log.error("calculateCellSize(): {} cellSize: width={} height={}",
+					WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION, cellSizeX, cellSizeY);
+			throw new IllegalArgumentException(WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION);
+		}
+
+		log.info("calculateCellSize(): cellSize={}", cellSizeX);
+
+		return cellSizeX;
 	}
 
 	private void prepareSourceValues(Map2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {

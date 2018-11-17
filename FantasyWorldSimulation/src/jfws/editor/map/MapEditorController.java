@@ -148,7 +148,7 @@ public class MapEditorController {
 		switch (mapToRender) {
 			case REGION_MAP:
 				try {
-					elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap(), CELLS_PER_SKETCH_CELL);
+					elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
 				} catch (OutsideMapException e) {
 					e.printStackTrace();
 				}
