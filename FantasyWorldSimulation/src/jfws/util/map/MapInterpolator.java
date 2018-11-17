@@ -18,7 +18,16 @@ public abstract class MapInterpolator<T, U> {
 		this.interpolator = interpolator;
 	}
 
-	public void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap) throws OutsideMapException {
+	public void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap) {
+		try {
+			tryInterpolate(sourceMap, targetMap);
+		}
+		catch (OutsideMapException e) {
+			log.error("interpolate(): Tried to access cell outside the map! x={} y={}", e.getX(), e.getY());
+		}
+	}
+
+	private void tryInterpolate(Map2d<T> sourceMap, Map2d<U> targetMap) throws OutsideMapException {
 		int cellSize = calculateCellSize(sourceMap, targetMap);
 
 		for(int y = 0; y < sourceMap.getHeight(); y++) {
@@ -27,7 +36,7 @@ public abstract class MapInterpolator<T, U> {
 				interpolateCell(targetMap, x, y, cellSize);
 			}
 		}
-		log.debug("interpolate(): finished");
+		log.debug("tryInterpolate(): finished");
 	}
 
 	public static <T, U>

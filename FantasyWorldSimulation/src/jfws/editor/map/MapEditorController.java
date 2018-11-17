@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationInterpolator;
+import jfws.features.elevation.NoiseToElevationAdder;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.ChangeTerrainTypeCommand;
@@ -31,6 +32,7 @@ import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
+import jfws.util.math.noise.SimplexNoise;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
@@ -85,6 +87,7 @@ public class MapEditorController {
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
+	private NoiseToElevationAdder noiseToElevationAdder = new NoiseToElevationAdder(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise());
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
@@ -147,12 +150,8 @@ public class MapEditorController {
 
 		switch (mapToRender) {
 			case REGION_MAP:
-				try {
-					elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
-				} catch (OutsideMapException e) {
-					e.printStackTrace();
-				}
-
+				elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
+				noiseToElevationAdder.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
 				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 				break;
 			default:
