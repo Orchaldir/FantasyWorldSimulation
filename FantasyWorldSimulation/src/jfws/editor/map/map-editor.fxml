@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -45,6 +46,7 @@
                   <Button fx:id="undoButton" mnemonicParsing="false" onAction="#onUndoClicked" text="Undo" />
                   <Button fx:id="redoButton" mnemonicParsing="false" onAction="#onRedoClicked" text="Redo" />
                   <ComboBox fx:id="renderStyleComboBox" onAction="#onRenderStyleSelected" prefWidth="150.0" />
+                  <Spinner fx:id="hillNoiseSpinner" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="77.0" />
               </items>
             </ToolBar>
          </top>

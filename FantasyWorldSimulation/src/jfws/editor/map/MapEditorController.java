@@ -3,10 +3,7 @@ package jfws.editor.map;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
@@ -69,6 +66,9 @@ public class MapEditorController {
 	private Button undoButton, redoButton;
 
 	@FXML
+	private Spinner<Integer> hillNoiseSpinner;
+
+	@FXML
 	private MenuItem viewRegionMapItem, viewSketchMapItem;
 
 	private FileChooser fileChooser = new FileChooser();
@@ -87,7 +87,7 @@ public class MapEditorController {
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
-	private NoiseToElevationAdder noiseToElevationAdder = new NoiseToElevationAdder(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise());
+	private NoiseToElevationAdder noiseToElevationAdder = new NoiseToElevationAdder(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
@@ -124,6 +124,14 @@ public class MapEditorController {
 
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
+
+		hillNoiseSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, (int)noiseToElevationAdder.getResolution()));
+
+		hillNoiseSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			log.info("onHillNoiseSpinnerChanged(): {} -> {}", oldValue, newValue);
+			noiseToElevationAdder.setResolution(newValue);
+			render();
+		});
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
