@@ -16,5 +16,7 @@ public interface TerrainType {
 
 	double getElevationVariation();
 
+	double getHillNoise();
+
 	boolean isDefault();
 }

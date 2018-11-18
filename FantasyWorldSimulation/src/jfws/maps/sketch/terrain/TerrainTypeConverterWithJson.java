@@ -26,6 +26,7 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 	private final static String BLUE = "blue";
 	private final static String BASE_ELEVATION = "base_elevation";
 	private final static String ELEVATION_VARIATION = "elevation_variation";
+	private final static String HILL_NOISE = "hill_noise";
 
 	@Override
 	public String save(Collection<TerrainType> types) {
@@ -52,6 +53,10 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 
 		jsonObject.addProperty(BASE_ELEVATION, type.getBaseElevation());
 		jsonObject.addProperty(ELEVATION_VARIATION, type.getElevationVariation());
+
+		if(type.getHillNoise() > 0) {
+			jsonObject.addProperty(HILL_NOISE, type.getHillNoise());
+		}
 
 		return jsonObject;
 	}
@@ -116,8 +121,9 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 				Color color = loadColor(jsonObject, name);
 				double baseElevation = loadBaseElevation(jsonObject, name);
 				double elevationVariation = loadElevationVariation(jsonObject, name);
+				double hillNoise = loadHillNoise(jsonObject, name);
 
-				return Optional.of(new TerrainTypeImpl(name, group, color, baseElevation, elevationVariation));
+				return Optional.of(new TerrainTypeImpl(name, group, color, baseElevation, elevationVariation, hillNoise));
 			}
 			else {
 				log.warn("loadTerrainType(): JsonObject has no name!");
@@ -182,6 +188,16 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 		log.warn("loadElevationVariation(): TerrainType {} has no elevation variation!", name);
 
 		return NullTerrainType.DEFAULT_ELEVATION_VARIATION;
+	}
+
+	private double loadHillNoise(JsonObject jsonObject, String name) {
+		JsonElement hillNoiseElement = jsonObject.get(HILL_NOISE);
+
+		if (iDouble(hillNoiseElement)) {
+			return hillNoiseElement.getAsDouble();
+		}
+
+		return NullTerrainType.DEFAULT_HILL_NOISE;
 	}
 
 	private boolean isObject(JsonElement colorElement) {

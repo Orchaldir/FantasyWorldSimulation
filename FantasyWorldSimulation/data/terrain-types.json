@@ -17,7 +17,8 @@
       "blue": 0
     },
     "base_elevation": 40,
-    "elevation_variation": 10
+    "elevation_variation": 10,
+    "hill_noise": 50
   },
   {
     "name": "Low Mountain",

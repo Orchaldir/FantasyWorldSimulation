@@ -16,9 +16,10 @@ public class TerrainTypeImpl implements TerrainType {
 	private final Color color;
 	private final double baseElevation;
 	private final double elevationVariation;
+	private final double hillNoise;
 
-	public TerrainTypeImpl(String name, Color color, double baseElevation, double elevationVariation) {
-		this(name, "", color, baseElevation, elevationVariation);
+	public TerrainTypeImpl(String name, Color color, double baseElevation, double elevationVariation, double hillNoise) {
+		this(name, "", color, baseElevation, elevationVariation, hillNoise);
 	}
 
 	public boolean isDefault() {

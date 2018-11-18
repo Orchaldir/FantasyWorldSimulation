@@ -329,12 +329,14 @@ public class MapEditorController {
 	private void updateViewControls() {
 		switch (mapToRender) {
 			case REGION_MAP:
+				hillNoiseSpinner.setDisable(false);
 				mapRenderer.setBorderBetweenCells(0);
 				renderStyleComboBox.setDisable(true);
 				viewRegionMapItem.setDisable(true);
 				viewSketchMapItem.setDisable(false);
 				break;
 			default:
+				hillNoiseSpinner.setDisable(true);
 				mapRenderer.setBorderBetweenCells(5);
 				renderStyleComboBox.setDisable(false);
 				viewRegionMapItem.setDisable(false);

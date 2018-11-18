@@ -9,8 +9,8 @@ public abstract class ElevationGeneratorTest {
 	protected static final double BASE_ELEVATION_1 = -33.3;
 	protected static final double ELEVATION_VARIATION_1 = 13.4;
 
-	protected TerrainType type0 = new TerrainTypeImpl("", Color.PINK, BASE_ELEVATION_0, 0);
-	protected TerrainType type1 = new TerrainTypeImpl("", Color.PINK, BASE_ELEVATION_1, ELEVATION_VARIATION_1);
+	protected TerrainType type0 = new TerrainTypeImpl("", Color.PINK, BASE_ELEVATION_0, 0, 0);
+	protected TerrainType type1 = new TerrainTypeImpl("", Color.PINK, BASE_ELEVATION_1, ELEVATION_VARIATION_1, 0);
 
 	protected ElevationGenerator generator;
 }

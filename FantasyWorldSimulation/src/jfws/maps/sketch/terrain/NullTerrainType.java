@@ -16,6 +16,7 @@ public class NullTerrainType implements TerrainType {
 	public static final Color DEFAULT_COLOR = Color.PINK;
 	public static final double DEFAULT_BASE_ELEVATION = 0;
 	public static final double DEFAULT_ELEVATION_VARIATION = 0;
+	public static final double DEFAULT_HILL_NOISE = 0;
 
 	private final String name;
 
@@ -42,6 +43,11 @@ public class NullTerrainType implements TerrainType {
 	@Override
 	public double getElevationVariation() {
 		return DEFAULT_ELEVATION_VARIATION;
+	}
+
+	@Override
+	public double getHillNoise() {
+		return DEFAULT_HILL_NOISE;
 	}
 
 	public boolean isDefault() {

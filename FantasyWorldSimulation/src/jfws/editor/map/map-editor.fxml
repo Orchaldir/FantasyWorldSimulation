@@ -46,7 +46,7 @@
                   <Button fx:id="undoButton" mnemonicParsing="false" onAction="#onUndoClicked" text="Undo" />
                   <Button fx:id="redoButton" mnemonicParsing="false" onAction="#onRedoClicked" text="Redo" />
                   <ComboBox fx:id="renderStyleComboBox" onAction="#onRenderStyleSelected" prefWidth="150.0" />
-                  <Spinner fx:id="hillNoiseSpinner" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="77.0" />
+                  <Spinner fx:id="hillNoiseSpinner" editable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="77.0" />
               </items>
             </ToolBar>
          </top>

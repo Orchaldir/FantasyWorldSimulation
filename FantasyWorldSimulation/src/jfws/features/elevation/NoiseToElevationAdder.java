@@ -26,7 +26,7 @@ public class NoiseToElevationAdder<U extends ElevationCell>
 
 	@Override
 	public double getSourceValue(SketchCell sourceCell) {
-		return 55.0;
+		return sourceCell.getTerrainType().getHillNoise();
 	}
 
 	@Override

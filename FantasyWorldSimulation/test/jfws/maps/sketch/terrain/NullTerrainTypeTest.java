@@ -39,6 +39,11 @@ class NullTerrainTypeTest {
 	}
 
 	@Test
+	public void testGetHillNoise() {
+		assertThat(type.getHillNoise(), is(equalTo(NullTerrainType.DEFAULT_HILL_NOISE)));
+	}
+
+	@Test
 	public void testIsDefault() {
 		assertTrue(type.isDefault());
 	}
