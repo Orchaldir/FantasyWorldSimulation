@@ -197,6 +197,8 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 			return hillNoiseElement.getAsDouble();
 		}
 
+		log.debug("loadHillNoise(): TerrainType {} has no hill noise.", name);
+
 		return NullTerrainType.DEFAULT_HILL_NOISE;
 	}
 

@@ -29,7 +29,8 @@
       "blue": 0.75
     },
     "base_elevation": 200,
-    "elevation_variation": 50
+    "elevation_variation": 50,
+    "hill_noise": 50
   },
   {
     "name": "Medium Mountain",
@@ -40,7 +41,8 @@
       "blue": 0.5
     },
     "base_elevation": 500,
-    "elevation_variation": 100
+    "elevation_variation": 100,
+    "hill_noise": 50
   },
   {
     "name": "High Mountain",
@@ -51,7 +53,8 @@
       "blue": 0.25
     },
     "base_elevation": 800,
-    "elevation_variation": 100
+    "elevation_variation": 100,
+    "hill_noise": 50
   },
   {
     "name": "Shallow Ocean",
