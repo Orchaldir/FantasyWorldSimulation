@@ -19,9 +19,20 @@ package jfws.util.math.noise;
 
 public class SimplexNoise implements Noise {
 
-	private static Grad grad3[] = {new Grad(1, 1, 0), new Grad(-1, 1, 0), new Grad(1, -1, 0), new Grad(-1, -1, 0),
-			new Grad(1, 0, 1), new Grad(-1, 0, 1), new Grad(1, 0, -1), new Grad(-1, 0, -1),
-			new Grad(0, 1, 1), new Grad(0, -1, 1), new Grad(0, 1, -1), new Grad(0, -1, -1)};
+	private static Grad grad3[] = {
+			new Grad(1, 1, 0),
+			new Grad(-1, 1, 0),
+			new Grad(1, -1, 0),
+			new Grad(-1, -1, 0),
+			new Grad(1, 0, 1),
+			new Grad(-1, 0, 1),
+			new Grad(1, 0, -1),
+			new Grad(-1, 0, -1),
+			new Grad(0, 1, 1),
+			new Grad(0, -1, 1),
+			new Grad(0, 1, -1),
+			new Grad(0, -1, -1)
+	};
 
 	private static short p[] = {151, 160, 137, 91, 90, 15,
 			131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
@@ -38,11 +49,13 @@ public class SimplexNoise implements Noise {
 			138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180};
 
 	// To remove the need for index wrapping, double the permutation table length
-	private static short perm[] = new short[512];
-	private static short permMod12[] = new short[512];
+	private static int P_SIZE = p.length;
+	private static int PERM_SIZE = P_SIZE * 2;
+	private static short[] perm = new short[PERM_SIZE];
+	private static short[] permMod12 = new short[PERM_SIZE];
 
 	static {
-		for (int i = 0; i < 512; i++) {
+		for (int i = 0; i < PERM_SIZE; i++) {
 			perm[i] = p[i & 255];
 			permMod12[i] = (short) (perm[i] % 12);
 		}
@@ -53,7 +66,7 @@ public class SimplexNoise implements Noise {
 	private static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
 
 	// This method is a *lot* faster than using (int)Math.floor(x)
-	private static int fastfloor(double x) {
+	private static int fastFloor(double x) {
 		int xi = (int) x;
 		return x < xi ? xi - 1 : xi;
 	}
@@ -69,8 +82,8 @@ public class SimplexNoise implements Noise {
 
 		// Skew the input space to determine which simplex cell we're in
 		double s = (xin + yin) * F2; // Hairy factor for 2D
-		int i = fastfloor(xin + s);
-		int j = fastfloor(yin + s);
+		int i = fastFloor(xin + s);
+		int j = fastFloor(yin + s);
 		double t = (i + j) * G2;
 		double X0 = i - t; // Unskew the cell origin back to (x,y) space
 		double Y0 = j - t;
@@ -144,19 +157,12 @@ public class SimplexNoise implements Noise {
 	// Inner class to speed upp gradient computations
 	// (array access is a lot slower than member access)
 	private static class Grad {
-		private double x, y, z, w;
+		private double x, y, z;
 
 		Grad(double x, double y, double z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
-		}
-
-		Grad(double x, double y, double z, double w) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			this.w = w;
 		}
 	}
 }

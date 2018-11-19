@@ -34,7 +34,7 @@ public class ChangeTerrainTypeCommand implements Command {
 			oldTerrainType = cell.getTerrainType();
 			cell.setTerrainType(newTerrainType);
 		} catch (OutsideMapException e) {
-			log.error("execute(): ", e);
+			log.warn("execute(): Tried to access cell outside the map! x={} y={}", e.getX(), e.getY());
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ChangeTerrainTypeCommand implements Command {
 			SketchCell cell = map.getCells().getCell(index);
 			cell.setTerrainType(oldTerrainType);
 		} catch (OutsideMapException e) {
-			log.error("unExecute(): ", e);
+			log.error("unExecute(): Tried to access cell outside the map! x={} y={}", e.getX(), e.getY());
 		}
 	}
 }

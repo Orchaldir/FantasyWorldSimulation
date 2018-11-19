@@ -26,6 +26,12 @@ class SketchMapTest {
 		assertThat(cell.getElevation(), is(equalTo(elevation)));
 	}
 
+	protected void assertCells(TerrainType type, double elevation) throws OutsideMapException {
+		for(int i = 0; i < SIZE; i++) {
+			assertCell(i, type, elevation);
+		}
+	}
+
 	@BeforeEach
 	public void setUp() {
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
@@ -38,9 +44,7 @@ class SketchMapTest {
 		assertThat(cells.getWidth(), is(equalTo(WIDTH)));
 		assertThat(cells.getHeight(), is(equalTo(HEIGHT)));
 
-		for(int i = 0; i < SIZE; i++) {
-			assertCell(i, TERRAIN_TYPE_A, ElevationCell.DEFAULT_ELEVATION);
-		}
+		assertCells(TERRAIN_TYPE_A, ElevationCell.DEFAULT_ELEVATION);
 	}
 
 	@Test

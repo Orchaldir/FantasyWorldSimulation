@@ -27,12 +27,12 @@ class TerrainColorSelectorTest {
 	}
 
 	@Test
-	void testGetName() {
+	public void testGetName() {
 		assertThat(colorSelector.getName(), is(equalTo(TerrainColorSelector.NAME)));
 	}
 
 	@Test
-	void testSelect() {
+	public void testSelect() {
 		when(sketchCell.getTerrainType()).thenReturn(terrainType);
 		when(terrainType.getColor()).thenReturn(COLOR);
 

@@ -38,20 +38,26 @@ class ChangeTerrainTypeCommandTest extends SketchMapTest {
 	}
 
 	@Test
+	public void testExecuteOutsideMap() throws OutsideMapException {
+		command = new ChangeTerrainTypeCommand(sketchMap, 100, TERRAIN_TYPE_B);
+		command.execute();
+
+		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+	}
+
+	@Test
 	public void testUnExecute() throws OutsideMapException {
 		command.execute();
 		command.unExecute();
 
-		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
-		assertCell(INDEX, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);
 	}
 
 	@Test
 	public void testUnExecuteWithoutExecute() throws OutsideMapException {
 		assertThrows(IllegalStateException.class, () -> command.unExecute());
 
-		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
-		assertCell(INDEX, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);
 	}
 
 }
