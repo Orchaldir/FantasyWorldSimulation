@@ -1,4 +1,6 @@
 language: java
-before_script: cd FantasyWorldSimulation
 jdk:
   - oraclejdk9
+before_script: cd FantasyWorldSimulation
+after_success:
+  - mvn clean test jacoco:report coveralls:report
