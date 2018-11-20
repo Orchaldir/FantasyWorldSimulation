@@ -2,5 +2,6 @@ language: java
 jdk:
   - oraclejdk9
 before_script: cd FantasyWorldSimulation
+script: "mvn cobertura:cobertura"
 after_success:
-  - mvn clean test jacoco:report coveralls:report
+  - bash <(curl -s https://codecov.io/bash)
