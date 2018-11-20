@@ -31,5 +31,6 @@
     <orderEntry type="library" name="org.slf4j:slf4j-simple:1.7.25" level="project" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.io:2.4" level="project" />
     <orderEntry type="library" name="org.apache.maven.plugins:maven-surefire-plugin:2.22.1" level="project" />
+    <orderEntry type="library" name="org.eluder.coveralls:coveralls-maven-plugin:4.3.0" level="project" />
   </component>
 </module>
