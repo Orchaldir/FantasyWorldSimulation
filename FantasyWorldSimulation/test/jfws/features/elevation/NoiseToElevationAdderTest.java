@@ -1,9 +1,6 @@
 package jfws.features.elevation;
 
-import javafx.scene.paint.Color;
 import jfws.maps.sketch.SketchCell;
-import jfws.maps.sketch.terrain.TerrainType;
-import jfws.maps.sketch.terrain.TerrainTypeImpl;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +13,9 @@ import static org.mockito.Mockito.*;
 
 class NoiseToElevationAdderTest {
 
-	public static final double ELEVATION0 = 1.5;
+	public static final double ELEVATION = 1.5;
 
-	public static final double HILL_NOISE0 = 3.3;
-	public static final double HILL_NOISE1 = 44.8;
+	public static final double HILL_NOISE = 3.3;
 
 	public static final double RESOLUTION0 = 2.0;
 	public static final double RESOLUTION1 = 0.5;
@@ -27,31 +23,32 @@ class NoiseToElevationAdderTest {
 	public static final double NOISE_FACTOR = 5.0;
 	public static final double NOISE_VALUE = 4.0;
 
-	private static final TerrainType TERRAIN_TYPE0 = new TerrainTypeImpl("0", Color.BLUE, 0, 0, HILL_NOISE0);
-	private static final TerrainType TERRAIN_TYPE1 = new TerrainTypeImpl("1", Color.GREEN, 0, 0, HILL_NOISE1);
 	public static final int TARGET_X = 3;
 	public static final int TARGET_Y = 24;
+	public static final int INDEX = 3;
 
-	private SketchCell cellA;
-	private SketchCell cellB;
+	private SketchCell cell;
 	private Interpolator2d interpolator;
 	private Noise noise;
-	private NoiseToElevationAdder<SketchCell> noiseToElevationAdder;
+	private NoiseToElevationAdder<SketchCell,SketchCell> noiseToElevationAdder;
 
 	@BeforeEach
 	public void setUp() {
-		cellA = new SketchCell(TERRAIN_TYPE0, ELEVATION0);
-		cellB = new SketchCell(TERRAIN_TYPE1, 0);
+		cell = mock(SketchCell.class);
 
 		interpolator = mock(Interpolator2d.class);
 		noise = mock(Noise.class);
 
-		noiseToElevationAdder = new NoiseToElevationAdder<>(interpolator, noise, RESOLUTION0);
+		noiseToElevationAdder = new NoiseToElevationAdder<>(interpolator, noise, RESOLUTION0, INDEX);
 	}
 
 	private void verifyNoCall() {
-		verify(interpolator, never()).interpolate(any(), anyDouble(), anyDouble());
+		verifyNoCallToInterpolate();
 		verify(noise, never()).calculateNoise(anyDouble(), anyDouble());
+	}
+
+	private void verifyNoCallToInterpolate() {
+		verify(interpolator, never()).interpolate(any(), anyDouble(), anyDouble());
 	}
 
 	@Test
@@ -72,9 +69,13 @@ class NoiseToElevationAdderTest {
 
 	@Test
 	public void testGetSourceValue() {
-		assertThat(noiseToElevationAdder.getSourceValue(cellA), is(equalTo(HILL_NOISE0)));
-		assertThat(noiseToElevationAdder.getSourceValue(cellB), is(equalTo(HILL_NOISE1)));
+		when(cell.getNoiseAmplitude(INDEX)).thenReturn(HILL_NOISE);
 
+		assertThat(noiseToElevationAdder.getSourceValue(cell), is(equalTo(HILL_NOISE)));
+
+		verify(cell, never()).getElevation();
+		verify(cell, never()).setElevation(anyDouble());
+		verify(cell).getNoiseAmplitude(INDEX);
 		verifyNoCall();
 	}
 
@@ -82,13 +83,15 @@ class NoiseToElevationAdderTest {
 
 	@Test
 	public void testSetTargetValue() {
+		when(cell.getElevation()).thenReturn(ELEVATION);
 		when(noise.calculateNoise(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);
 
-		noiseToElevationAdder.setTargetValue(cellA, TARGET_X, TARGET_Y, NOISE_FACTOR);
+		noiseToElevationAdder.setTargetValue(cell, TARGET_X, TARGET_Y, NOISE_FACTOR);
 
-		assertThat(cellA.getElevation(), is(equalTo(ELEVATION0 + NOISE_VALUE * NOISE_FACTOR)));
-
-		verify(interpolator, never()).interpolate(any(), anyDouble(), anyDouble());
+		verifyNoCallToInterpolate();
+		verify(cell, never()).getNoiseAmplitude(anyInt());
+		verify(cell).getElevation();
+		verify(cell).setElevation(ELEVATION + NOISE_VALUE * NOISE_FACTOR);
 		verify(noise).calculateNoise(eq(TARGET_X / RESOLUTION0), eq(TARGET_Y / RESOLUTION0));
 	}
 

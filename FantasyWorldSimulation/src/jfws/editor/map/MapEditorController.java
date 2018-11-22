@@ -87,7 +87,7 @@ public class MapEditorController {
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
-	private NoiseToElevationAdder noiseToElevationAdder = new NoiseToElevationAdder(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0);
+	private NoiseToElevationAdder noiseToElevationAdder = new NoiseToElevationAdder(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
