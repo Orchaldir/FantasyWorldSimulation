@@ -98,7 +98,7 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	public void testIsInside_Corners() {
+	public void testIsInsideWithCorners() {
 		assertFalse(MAP.isInside(-1, -1));
 		assertFalse(MAP.isInside(-1, HEIGHT));
 		assertFalse(MAP.isInside(WIDTH, -1));
@@ -107,28 +107,28 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	public void testIsInside_Left() {
+	public void testIsInsideWithLeftOfMap() {
 		for(int y = 0; y < HEIGHT; y++) {
 			assertFalse(MAP.isInside(-1, y));
 		}
 	}
 
 	@Test
-	public void testIsInside_Right() {
+	public void testIsInsideWithRightOfMap() {
 		for(int y = 0; y < HEIGHT; y++) {
 			assertFalse(MAP.isInside(WIDTH, y));
 		}
 	}
 
 	@Test
-	public void testIsInside_Below() {
+	public void testIsInsideWithBelowMap() {
 		for(int x = 0; x < WIDTH; x++) {
 			assertFalse(MAP.isInside(x, -1));
 		}
 	}
 
 	@Test
-	public void testIsInside_Above() {
+	public void testIsInsideWithAboveMape() {
 		for(int x = 0; x < WIDTH; x++) {
 			assertFalse(MAP.isInside(x, HEIGHT));
 		}
@@ -144,7 +144,7 @@ class ArrayMap2dTest extends SharedTestData {
 	}
 
 	@Test
-	public void testIsInsideWithIndex_Outside() {
+	public void testIsInsideWithOutsideIndex() {
 		assertFalse(MAP.isInside(-1));
 		assertFalse(MAP.isInside(SIZE));
 	}
