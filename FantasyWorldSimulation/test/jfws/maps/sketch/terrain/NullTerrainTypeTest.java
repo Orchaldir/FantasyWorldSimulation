@@ -39,8 +39,10 @@ class NullTerrainTypeTest {
 	}
 
 	@Test
-	public void testGetHillNoise() {
-		assertThat(type.getHillNoise(), is(equalTo(NullTerrainType.DEFAULT_HILL_NOISE)));
+	public void testGetNoiseAmplitude() {
+		for(int index = 0; index < 10; index++) {
+			assertThat(type.getNoiseAmplitude(index), is(equalTo(NullTerrainType.DEFAULT_NOISE_AMPLITUDE)));
+		}
 	}
 
 	@Test

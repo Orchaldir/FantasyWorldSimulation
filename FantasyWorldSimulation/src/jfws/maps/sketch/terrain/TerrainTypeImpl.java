@@ -1,12 +1,14 @@
 package jfws.maps.sketch.terrain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import javafx.scene.paint.Color;
 import lombok.ToString;
 
 @AllArgsConstructor
+@Builder
 @Getter
 @ToString(of = {"name"})
 public class TerrainTypeImpl implements TerrainType {
@@ -16,13 +18,14 @@ public class TerrainTypeImpl implements TerrainType {
 	private final Color color;
 	private final double baseElevation;
 	private final double elevationVariation;
-	private final double hillNoise;
-
-	public TerrainTypeImpl(String name, Color color, double baseElevation, double elevationVariation, double hillNoise) {
-		this(name, "", color, baseElevation, elevationVariation, hillNoise);
-	}
+	private final Double[] noiseAmplitudes;
 
 	public boolean isDefault() {
 		return false;
+	}
+
+	@Override
+	public double getNoiseAmplitude(int index) {
+		return noiseAmplitudes[index];
 	}
 }

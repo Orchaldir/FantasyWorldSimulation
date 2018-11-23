@@ -210,6 +210,7 @@ public class MapEditorController {
 				 sketchConverter.save(file, sketchMap);
 			} catch (IOException e) {
 				e.printStackTrace();
+				log.error("onSaveMap(): ", e);
 			}
 		}
 		else {

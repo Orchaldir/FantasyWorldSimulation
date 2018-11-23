@@ -16,6 +16,6 @@ public class SketchCell implements ElevationCell, NoiseAmplitudeStorage {
 
 	@Override
 	public double getNoiseAmplitude(int index) {
-		return terrainType.getHillNoise();
+		return terrainType.getNoiseAmplitude(index);
 	}
 }

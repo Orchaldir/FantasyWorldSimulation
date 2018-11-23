@@ -1,8 +1,9 @@
 package jfws.maps.sketch.terrain;
 
 import javafx.scene.paint.Color;
+import jfws.features.elevation.NoiseAmplitudeStorage;
 
-public interface TerrainType {
+public interface TerrainType extends NoiseAmplitudeStorage {
 
 	String NO_GROUP = "";
 
@@ -15,8 +16,6 @@ public interface TerrainType {
 	double getBaseElevation();
 
 	double getElevationVariation();
-
-	double getHillNoise();
 
 	boolean isDefault();
 }
