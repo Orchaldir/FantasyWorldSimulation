@@ -1,7 +1,8 @@
 package jfws.maps.sketch.terrain;
 
+import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface TerrainTypeConverter {
@@ -9,6 +10,6 @@ public interface TerrainTypeConverter {
 	String save(Collection<TerrainType> types);
 	String saveTerrainType(TerrainType type);
 
-	List<TerrainType> load(String text);
+	Map<String,TerrainType> load(String text) throws IOException;
 	Optional<TerrainType> loadTerrainType(String text);
 }

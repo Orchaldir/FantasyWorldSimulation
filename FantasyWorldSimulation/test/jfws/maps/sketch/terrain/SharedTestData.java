@@ -2,8 +2,7 @@ package jfws.maps.sketch.terrain;
 
 import javafx.scene.paint.Color;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 
@@ -27,5 +26,8 @@ public class SharedTestData {
 	public static final TerrainType TERRAIN_TYPE_C = TerrainTypeImpl.builder().
 			name(NAME_C).group(GROUP).color(Color.BLUE).baseElevation(-1).noiseAmplitudes(NOISE_AMPLITUDES).build();
 
-	public static final List<TerrainType> ALL_TYPES = Arrays.asList(TERRAIN_TYPE_A, TERRAIN_TYPE_B, TERRAIN_TYPE_C);
+	public static final Map<String,TerrainType> ALL_TYPES = Map.of(
+			NAME_A, TERRAIN_TYPE_A,
+			NAME_B, TERRAIN_TYPE_B,
+			NAME_C, TERRAIN_TYPE_C);
 }

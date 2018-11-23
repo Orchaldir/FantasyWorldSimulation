@@ -6,8 +6,9 @@ import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static jfws.maps.sketch.terrain.NullTerrainType.*;
@@ -61,17 +62,16 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws IOException {
 		String json = converter.save(Arrays.asList(TERRAIN_TYPE_A, TERRAIN_TYPE_B, TERRAIN_TYPE_C));
-		List<TerrainType> types = converter.load(json);
+		Map<String,TerrainType> types = converter.load(json);
 
 		assertThat(types, is(notNullValue()));
 		assertThat(types.size(), is(equalTo(3)));
 
-		assertThat(types, containsInAnyOrder(
-				getTerrainTypeMatcher(TERRAIN_TYPE_A),
-				getTerrainTypeMatcher(TERRAIN_TYPE_B),
-				getTerrainTypeMatcher(TERRAIN_TYPE_C)));
+		assertThat(types, hasEntry(equalTo(NAME_A), getTerrainTypeMatcher(TERRAIN_TYPE_A)));
+		assertThat(types, hasEntry(equalTo(NAME_B), getTerrainTypeMatcher(TERRAIN_TYPE_B)));
+		assertThat(types, hasEntry(equalTo(NAME_C), getTerrainTypeMatcher(TERRAIN_TYPE_C)));
 	}
 
 	@Test
@@ -85,15 +85,15 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	// load()
 
 	@Test
-	public void testLoadEmptyString() {
-		List<TerrainType> types = converter.load("");
+	public void testLoadEmptyString() throws IOException {
+		Map<String,TerrainType> types = converter.load("");
 
 		assertTrue(types.isEmpty());
 	}
 
 	@Test
-	public void testLoadWrongFormat() {
-		List<TerrainType> types = converter.load("not json!");
+	public void testLoadWrongFormat() throws IOException {
+		Map<String,TerrainType> types = converter.load("not json!");
 
 		assertTrue(types.isEmpty());
 	}
@@ -101,6 +101,11 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	@Test
 	public void testLoadNull() {
 		assertThrows(NullPointerException.class, () -> converter.load(null));
+	}
+
+	@Test
+	public void testLoadWithDuplicateName() {
+		assertThrows(IOException.class, () -> converter.load("[{\"name\":\"A\", \"group\":\"G0\"},{\"name\":\"A\", \"group\":\"G1\"}]"));
 	}
 
 	// loadTerrainType()

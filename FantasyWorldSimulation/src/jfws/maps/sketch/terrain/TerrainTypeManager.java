@@ -58,11 +58,11 @@ public class TerrainTypeManager {
 	public void load(File file) {
 		try {
 			String text = fileUtils.readWholeFile(file);
-			List<TerrainType> terrainTypes = converter.load(text);
+			Map<String,TerrainType> terrainTypes = converter.load(text);
 
 			log.info("load(): file={} N={}", file.getPath(), terrainTypes.size());
 
-			for(TerrainType terrainType : terrainTypes) {
+			for(TerrainType terrainType : terrainTypes.values()) {
 				add(terrainType);
 			}
 		} catch (IOException e) {

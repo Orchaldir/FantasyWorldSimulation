@@ -4,10 +4,8 @@ import com.google.gson.*;
 import javafx.scene.paint.Color;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 
@@ -80,8 +78,8 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 	}
 
 	@Override
-	public List<TerrainType> load(String text) {
-		List<TerrainType> types = new ArrayList<>();
+	public Map<String,TerrainType> load(String text) throws IOException {
+		Map<String,TerrainType> types = new HashMap<>();
 
 		try {
 			JsonElement element = parser.parse(text);
@@ -90,7 +88,18 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 				JsonArray jsonArray = element.getAsJsonArray();
 
 				for(int i = 0; i < jsonArray.size(); i++) {
-					loadTerrainType(jsonArray.get(i)).ifPresent(type -> types.add(type));
+					Optional<TerrainType> optionalTerrainType = loadTerrainType(jsonArray.get(i));
+
+					if(optionalTerrainType.isPresent()) {
+						TerrainType terrainType = optionalTerrainType.get();
+
+						if(types.containsKey(terrainType.getName())) {
+							log.error("load(): Name {} exists multiple times!", terrainType.getName());
+							throw new IOException(String.format("Name %s exists multiple times!", terrainType.getName()));
+						}
+
+						types.put(terrainType.getName(), terrainType);
+					}
 				}
 			}
 			else {
