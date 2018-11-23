@@ -2,6 +2,7 @@ package jfws.maps.sketch.terrain;
 
 import javafx.scene.paint.Color;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +42,16 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 		assertThat(type.getElevationVariation(), is(equalTo(elevationVariation)));
 	}
 
+	private Matcher<TerrainType> getTerrainTypeMatcher(TerrainType type) {
+		return allOf(
+				hasProperty("name", is(equalTo(type.getName()))),
+				hasProperty("group", is(equalTo(type.getGroup()))),
+				hasProperty("color", is(equalTo(type.getColor()))),
+				hasProperty("baseElevation", is(equalTo(type.getBaseElevation()))),
+				hasProperty("elevationVariation", is(equalTo(type.getElevationVariation())))
+		);
+	}
+
 	@Test
 	public void test() {
 		String json = converter.save(Arrays.asList(TERRAIN_TYPE_A, TERRAIN_TYPE_B, TERRAIN_TYPE_C));
@@ -51,27 +61,9 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 		assertThat(types.size(), is(equalTo(3)));
 
 		assertThat(types, containsInAnyOrder(
-				allOf(
-					hasProperty("name", is(NAME_A)),
-					hasProperty("group", is(NO_GROUP)),
-					hasProperty("color", is(equalTo(TERRAIN_TYPE_A.getColor()))),
-					hasProperty("baseElevation", is(equalTo(TERRAIN_TYPE_A.getBaseElevation()))),
-					hasProperty("elevationVariation", is(equalTo(TERRAIN_TYPE_A.getElevationVariation())))
-				),
-				allOf(
-					hasProperty("name", is(NAME_B)),
-					hasProperty("group", is(NO_GROUP)),
-					hasProperty("color", is(equalTo(TERRAIN_TYPE_B.getColor()))),
-					hasProperty("baseElevation", is(equalTo(TERRAIN_TYPE_B.getBaseElevation()))),
-					hasProperty("elevationVariation", is(equalTo(TERRAIN_TYPE_B.getElevationVariation())))
-				),
-				allOf(
-					hasProperty("name", is(NAME_C)),
-					hasProperty("group", is(GROUP)),
-					hasProperty("color", is(equalTo(TERRAIN_TYPE_C.getColor()))),
-					hasProperty("baseElevation", is(equalTo(TERRAIN_TYPE_C.getBaseElevation()))),
-					hasProperty("elevationVariation", is(equalTo(TERRAIN_TYPE_C.getElevationVariation())))
-				)));
+				getTerrainTypeMatcher(TERRAIN_TYPE_A),
+				getTerrainTypeMatcher(TERRAIN_TYPE_B),
+				getTerrainTypeMatcher(TERRAIN_TYPE_C)));
 	}
 
 	@Test
