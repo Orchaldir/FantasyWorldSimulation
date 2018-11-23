@@ -14,6 +14,9 @@ public class SharedTestData {
 
 	public static final String GROUP = "G0";
 
+	public static final double BASE_ELEVATION = 111.1;
+	public static final double ELEVATION_VARIATION = 2.5;
+
 	public static final Double[] NOISE_AMPLITUDES = { 0.0};
 
 	public static final TerrainType TERRAIN_TYPE_A = TerrainTypeImpl.builder().

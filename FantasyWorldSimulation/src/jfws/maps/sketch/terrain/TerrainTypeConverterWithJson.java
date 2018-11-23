@@ -161,7 +161,13 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 			double green = readColorValue(colorObject, GREEN_PROPERTY);
 			double blue = readColorValue(colorObject, BLUE_PROPERTY);
 
-			return new Color(red, green, blue, 1.0);
+			try {
+				return new Color(red, green, blue, 1.0);
+			}
+			catch(IllegalArgumentException e) {
+				log.warn("loadColor(): TerrainType {} has an invalid color: {}", name, e.getMessage());
+				return NullTerrainType.DEFAULT_COLOR;
+			}
 		}
 
 		log.warn("loadColor(): TerrainType {} has no color!", name);
