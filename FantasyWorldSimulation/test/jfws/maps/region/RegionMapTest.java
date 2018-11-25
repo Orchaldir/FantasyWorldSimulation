@@ -2,7 +2,7 @@ package jfws.maps.region;
 
 import jfws.features.elevation.ElevationCell;
 import jfws.maps.sketch.SketchMap;
-import jfws.util.map.Map2d;
+import jfws.util.map.CellMap2d;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ class RegionMapTest {
 
 	private SketchMap sketchMap;
 	private RegionMap regionMap;
-	private Map2d<RegionCell> regionCellMap;
+	private CellMap2d<RegionCell> regionCellMap;
 	private ToCellMapper<RegionCell> toCellMapper;
 
 	@BeforeEach
@@ -33,7 +33,7 @@ class RegionMapTest {
 	}
 
 	private void prepare() {
-		regionCellMap = regionMap.getRegionCellMap();
+		regionCellMap = regionMap.getCellMap();
 		toCellMapper = regionMap.getToCellMapper();
 	}
 

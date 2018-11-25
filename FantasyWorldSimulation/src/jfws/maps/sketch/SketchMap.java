@@ -2,8 +2,8 @@ package jfws.maps.sketch;
 
 import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.terrain.TerrainType;
-import jfws.util.map.ArrayMap2d;
-import jfws.util.map.Map2d;
+import jfws.util.map.ArrayCellMap2D;
+import jfws.util.map.CellMap2d;
 import jfws.util.map.ToCellMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class SketchMap {
 	public static final double SKETCH_TO_WORLD = 100.0;
 
 	@Getter
-	private final Map2d<SketchCell> cells;
+	private final CellMap2d<SketchCell> cellMap;
 
 	@Getter
 	private final ToCellMapper<SketchCell> toCellMapper;
@@ -33,19 +33,19 @@ public class SketchMap {
 			cellArray[i] = new SketchCell(defaultType, DEFAULT_ELEVATION);
 		}
 
-		cells = new ArrayMap2d<>(width, height, cellArray);
-		toCellMapper = new ToCellMapper<>(cells, SKETCH_TO_WORLD);
+		cellMap = new ArrayCellMap2D<>(width, height, cellArray);
+		toCellMapper = new ToCellMapper<>(cellMap, SKETCH_TO_WORLD);
 	}
 
-	public SketchMap(Map2d<SketchCell> cells) {
-		log.info("SketchMap(): cells={}", cells.getSize());
-		this.cells = cells;
-		toCellMapper = new ToCellMapper<>(cells, SKETCH_TO_WORLD);
+	public SketchMap(CellMap2d<SketchCell> cellMap) {
+		log.info("SketchMap(): cells={}", cellMap.getSize());
+		this.cellMap = cellMap;
+		toCellMapper = new ToCellMapper<>(cellMap, SKETCH_TO_WORLD);
 	}
 
 	public void generateElevation(ElevationGenerator generator) {
 		log.debug("generateElevation()");
 		generator.prepare();
-		cells.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
+		cellMap.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
 	}
 }

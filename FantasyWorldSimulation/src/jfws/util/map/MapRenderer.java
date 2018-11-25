@@ -30,7 +30,7 @@ public class MapRenderer {
 	}
 
 	private <T> void tryRender(ToCellMapper<T> toCellMapper, ColorSelector<T> colorSelector) throws OutsideMapException {
-		Map2d<T> map = toCellMapper.getMap();
+		CellMap2d<T> map = toCellMapper.getMap();
 		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
 		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;
 

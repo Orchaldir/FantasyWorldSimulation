@@ -22,16 +22,16 @@ class MapInterpolatorTest {
 	public static final int TARGET_HEIGHT = SOURCE_HEIGHT * TARGET_CELL_SIZE;
 	public static final int TARGET_SIZE = TARGET_WIDTH * TARGET_HEIGHT;
 
-	private Map2d<Double> sourceMap;
-	private Map2d<Double> targetMap;
+	private CellMap2d<Double> sourceMap;
+	private CellMap2d<Double> targetMap;
 
 	@BeforeEach
 	public void setUp() {
 		Double[] sourceArray = new Double[SOURCE_SIZE];
-		sourceMap = new ArrayMap2d<>(SOURCE_WIDTH, SOURCE_HEIGHT, sourceArray);
+		sourceMap = new ArrayCellMap2D<>(SOURCE_WIDTH, SOURCE_HEIGHT, sourceArray);
 
 		Double[] targetArray = new Double[TARGET_SIZE];
-		targetMap = new ArrayMap2d<>(TARGET_WIDTH, TARGET_HEIGHT, targetArray);
+		targetMap = new ArrayCellMap2D<>(TARGET_WIDTH, TARGET_HEIGHT, targetArray);
 	}
 
 	// calculateCellSize()
@@ -53,7 +53,7 @@ class MapInterpolatorTest {
 	public void testCalculateCellSizeWithWidthAndHeightToNotMatch() {
 		int newHeight = TARGET_HEIGHT + 5;
 		Double[] array = new Double[TARGET_WIDTH * newHeight];
-		Map2d<Double> map = new ArrayMap2d<>(TARGET_WIDTH, newHeight, array);
+		CellMap2d<Double> map = new ArrayCellMap2D<>(TARGET_WIDTH, newHeight, array);
 
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> MapInterpolator.calculateCellSize(sourceMap, map));

@@ -4,8 +4,8 @@ import com.google.gson.*;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.io.FileUtils;
-import jfws.util.map.ArrayMap2d;
-import jfws.util.map.Map2d;
+import jfws.util.map.ArrayCellMap2D;
+import jfws.util.map.CellMap2d;
 import jfws.util.map.OutsideMapException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -114,7 +114,7 @@ public class SketchConverterWithJson implements SketchConverter {
 
 		parseUsedTerrainTypes(jsonObject);
 
-		ArrayMap2d<SketchCell> cellMap = parseTerrainTypeMap(jsonObject);
+		ArrayCellMap2D<SketchCell> cellMap = parseTerrainTypeMap(jsonObject);
 
 		return new SketchMap(cellMap);
 	}
@@ -197,7 +197,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		log.info("parseUsedTerrainTypes(): Contains {} terrain types.", idToTerrainTypeMap.size());
 	}
 
-	private ArrayMap2d<SketchCell> parseTerrainTypeMap(JsonObject jsonObject) throws IOException {
+	private ArrayCellMap2D<SketchCell> parseTerrainTypeMap(JsonObject jsonObject) throws IOException {
 		if(!jsonObject.has(TERRAIN_TYPE_MAP)) {
 			throwException(NO_TERRAIN_TYPE_MAP);
 		}
@@ -216,7 +216,7 @@ public class SketchConverterWithJson implements SketchConverter {
 
 		int size = width * height;
 		SketchCell[] cellArray = new SketchCell[size];
-		ArrayMap2d<SketchCell> cellMap = new ArrayMap2d<>(width, height, cellArray);
+		ArrayCellMap2D<SketchCell> cellMap = new ArrayCellMap2D<>(width, height, cellArray);
 
 		for(int y = 0; y < height; y++) {
 			parseTerrainTypeRow(jsonArray, cellArray, cellMap, y);
@@ -225,7 +225,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		return cellMap;
 	}
 
-	private void parseTerrainTypeRow(JsonArray jsonArray, SketchCell[] cellArray, ArrayMap2d<SketchCell> cellMap, int y) throws IOException {
+	private void parseTerrainTypeRow(JsonArray jsonArray, SketchCell[] cellArray, ArrayCellMap2D<SketchCell> cellMap, int y) throws IOException {
 		JsonElement element = jsonArray.get(y);
 		String rowString = element.getAsString();
 		String[] rowParts = rowString.split(TERRAIN_TYPE_ROW_SEPARATOR);
@@ -273,7 +273,7 @@ public class SketchConverterWithJson implements SketchConverter {
 	}
 
 	protected String convertToJson(SketchMap map) throws IOException {
-		Map2d<SketchCell> cells = map.getCells();
+		CellMap2d<SketchCell> cells = map.getCellMap();
 
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty(VERSION, SketchMap.VERSION);
@@ -291,7 +291,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		return gson.toJson(jsonObject);
 	}
 
-	private void saveUsedTerrainTypes(JsonObject jsonObject, Map2d<SketchCell> cells) {
+	private void saveUsedTerrainTypes(JsonObject jsonObject, CellMap2d<SketchCell> cells) {
 		terrainTypeToIdMap.clear();
 
 		JsonArray jsonArray = new JsonArray();
@@ -313,7 +313,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		jsonObject.add(USED_TERRAIN_TYPES, jsonArray);
 	}
 
-	private void saveTerrainTypeMap(JsonObject jsonObject, Map2d<SketchCell> cells) throws OutsideMapException {
+	private void saveTerrainTypeMap(JsonObject jsonObject, CellMap2d<SketchCell> cells) throws OutsideMapException {
 		JsonArray rowsArray = new JsonArray();
 
 		for(int y = 0; y < cells.getHeight(); y++) {

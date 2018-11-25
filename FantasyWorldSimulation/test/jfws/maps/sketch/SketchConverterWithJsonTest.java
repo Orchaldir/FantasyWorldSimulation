@@ -2,7 +2,7 @@ package jfws.maps.sketch;
 
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
-import jfws.util.map.Map2d;
+import jfws.util.map.CellMap2d;
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -174,7 +174,7 @@ class SketchConverterWithJsonTest {
 
 		assertNotNull(sketchMap);
 
-		Map2d<SketchCell> cells = sketchMap.getCells();
+		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
 
 		assertNotNull(cells);
 		assertThat(cells.getWidth(), is(2));
@@ -184,7 +184,7 @@ class SketchConverterWithJsonTest {
 		TerrainType terrainTypeB = manager.getOrDefault("B");
 
 		for(int i = 0; i < cells.getSize(); i++) {
-			SketchCell cell = sketchMap.getCells().getCell(i);
+			SketchCell cell = sketchMap.getCellMap().getCell(i);
 
 			if(i == 3) {
 				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeB)));
@@ -204,7 +204,7 @@ class SketchConverterWithJsonTest {
 		manager.add(TERRAIN_TYPE_C);
 
 		SketchMap sketchMap =  new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
-		Map2d<SketchCell> cellMap = sketchMap.getCells();
+		CellMap2d<SketchCell> cellMap = sketchMap.getCellMap();
 
 		cellMap.getCell(1, 0).setTerrainType(TERRAIN_TYPE_B);
 		cellMap.getCell(2, 0).setTerrainType(TERRAIN_TYPE_C);
@@ -217,7 +217,7 @@ class SketchConverterWithJsonTest {
 		assertNotNull(loadedSketchMap);
 		assertThat(loadedSketchMap, is(not(sketchMap)));
 
-		cellMap = loadedSketchMap.getCells();
+		cellMap = loadedSketchMap.getCellMap();
 
 		assertThat(cellMap.getWidth(), is(WIDTH));
 		assertThat(cellMap.getHeight(), is(HEIGHT));

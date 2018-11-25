@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayMap2dTest extends SharedTestData {
+class ArrayCellMap2DTest extends SharedTestData {
 
 	@Test
 	public void testGetWidth() {

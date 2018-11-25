@@ -18,7 +18,7 @@ public abstract class MapInterpolator<T, U> {
 		this.interpolator = interpolator;
 	}
 
-	public void interpolate(Map2d<T> sourceMap, Map2d<U> targetMap) {
+	public void interpolate(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) {
 		try {
 			tryInterpolate(sourceMap, targetMap);
 		}
@@ -27,7 +27,7 @@ public abstract class MapInterpolator<T, U> {
 		}
 	}
 
-	private void tryInterpolate(Map2d<T> sourceMap, Map2d<U> targetMap) throws OutsideMapException {
+	private void tryInterpolate(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) throws OutsideMapException {
 		int cellSize = calculateCellSize(sourceMap, targetMap);
 
 		for(int y = 0; y < sourceMap.getHeight(); y++) {
@@ -40,7 +40,7 @@ public abstract class MapInterpolator<T, U> {
 	}
 
 	public static <T, U>
-	int calculateCellSize(Map2d<T> sourceMap, Map2d<U> targetMap) {
+	int calculateCellSize(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) {
 		int cellSizeX = targetMap.getWidth() / sourceMap.getWidth();
 
 		if(cellSizeX == 0) {
@@ -62,7 +62,7 @@ public abstract class MapInterpolator<T, U> {
 		return cellSizeX;
 	}
 
-	private void prepareSourceValues(Map2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
+	private void prepareSourceValues(CellMap2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
 		for(int y = 0; y < ARRAY_SIZE; y++) {
 			for(int x = 0; x < ARRAY_SIZE; x++) {
 				sourceValues[x][y] = getSourceValue(sourceMap, sourceX+x-1, sourceY+y-1);
@@ -70,7 +70,7 @@ public abstract class MapInterpolator<T, U> {
 		}
 	}
 
-	private double getSourceValue(Map2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
+	private double getSourceValue(CellMap2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
 		int limitedX = Math.min(Math.max(0, sourceX), sourceMap.getWidth()-1);
 		int limitedY = Math.min(Math.max(0, sourceY), sourceMap.getHeight()-1);
 
@@ -79,7 +79,7 @@ public abstract class MapInterpolator<T, U> {
 
 	public abstract double getSourceValue(T sourceCell);
 
-	private void interpolateCell(Map2d<U> targetMap, int sourceX, int sourceY, int cellSize) throws OutsideMapException {
+	private void interpolateCell(CellMap2d<U> targetMap, int sourceX, int sourceY, int cellSize) throws OutsideMapException {
 		for(int cellY = 0; cellY < cellSize; cellY++) {
 			int targetY = getTargetIndex(sourceY, cellSize, cellY);
 

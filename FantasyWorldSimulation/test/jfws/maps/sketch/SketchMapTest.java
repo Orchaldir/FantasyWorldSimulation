@@ -3,7 +3,7 @@ package jfws.maps.sketch;
 import jfws.features.elevation.ElevationCell;
 import jfws.maps.sketch.elevation.BaseElevationGenerator;
 import jfws.maps.sketch.terrain.TerrainType;
-import jfws.util.map.Map2d;
+import jfws.util.map.CellMap2d;
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ class SketchMapTest {
 	protected SketchMap sketchMap;
 
 	protected void assertCell(int index, TerrainType type, double elevation) throws OutsideMapException {
-		SketchCell cell = sketchMap.getCells().getCell(index);
+		SketchCell cell = sketchMap.getCellMap().getCell(index);
 		assertThat(cell.getTerrainType(), is(sameInstance(type)));
 		assertThat(cell.getElevation(), is(equalTo(elevation)));
 	}
@@ -39,7 +39,7 @@ class SketchMapTest {
 
 	@Test
 	public void testCreate() throws OutsideMapException {
-		Map2d<SketchCell> cells = sketchMap.getCells();
+		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
 		assertThat(cells, is(notNullValue()));
 		assertThat(cells.getWidth(), is(equalTo(WIDTH)));
 		assertThat(cells.getHeight(), is(equalTo(HEIGHT)));
@@ -49,8 +49,8 @@ class SketchMapTest {
 
 	@Test
 	public void testGenerateElevation() throws OutsideMapException {
-		sketchMap.getCells().getCell(0).setTerrainType(TERRAIN_TYPE_B);
-		sketchMap.getCells().getCell(1).setTerrainType(TERRAIN_TYPE_C);
+		sketchMap.getCellMap().getCell(0).setTerrainType(TERRAIN_TYPE_B);
+		sketchMap.getCellMap().getCell(1).setTerrainType(TERRAIN_TYPE_C);
 
 		sketchMap.generateElevation(new BaseElevationGenerator());
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ArrayMap2d<T> implements Map2d<T> {
+public class ArrayCellMap2D<T> implements CellMap2d<T> {
 	@Getter
 	private final int width;
 	@Getter
@@ -14,7 +14,7 @@ public class ArrayMap2d<T> implements Map2d<T> {
 	private final int size;
 	private final T[] cells;
 
-	public ArrayMap2d(int width, int height, T[] cells) {
+	public ArrayCellMap2D(int width, int height, T[] cells) {
 		this.width = width;
 		this.height = height;
 		this.size = width * height;

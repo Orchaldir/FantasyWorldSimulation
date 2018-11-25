@@ -7,19 +7,19 @@ import lombok.Data;
 @Data
 public class ToCellMapper<T> {
 
-	private final Map2d<T> map;
+	private final CellMap2d<T> map;
 	private final double originX, originY;
 	private final double resolutionX, resolutionY;
 
-	public ToCellMapper(Map2d<T> map, double originX, double originY, double resolution) {
+	public ToCellMapper(CellMap2d<T> map, double originX, double originY, double resolution) {
 		this(map, originX, originY, resolution, resolution);
 	}
 
-	public ToCellMapper(Map2d<T> map, double resolutionX, double resolutionY) {
+	public ToCellMapper(CellMap2d<T> map, double resolutionX, double resolutionY) {
 		this(map, 0, 0, resolutionX, resolutionY);
 	}
 
-	public ToCellMapper(Map2d<T> map, double resolution) {
+	public ToCellMapper(CellMap2d<T> map, double resolution) {
 		this(map, resolution, resolution);
 	}
 

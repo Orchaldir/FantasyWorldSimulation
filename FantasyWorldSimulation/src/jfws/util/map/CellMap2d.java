@@ -2,7 +2,7 @@ package jfws.util.map;
 
 import java.util.Collection;
 
-public interface Map2d<T> {
+public interface CellMap2d<T> {
 
 	int getWidth();
 	int getHeight();
