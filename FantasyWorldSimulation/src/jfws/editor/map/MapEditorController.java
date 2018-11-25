@@ -159,7 +159,7 @@ public class MapEditorController {
 		switch (mapToRender) {
 			case REGION_MAP:
 				elevationInterpolator.interpolate(sketchMap.getCellMap(), regionMap.getCellMap());
-				elevationNoise.interpolate(sketchMap.getCellMap(), regionMap.getCellMap());
+				elevationNoise.add(regionMap);
 				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 				break;
 			default:
@@ -186,6 +186,7 @@ public class MapEditorController {
 
 			try {
 				sketchMap = sketchConverter.load(file);
+				regionMap = RegionMap.fromSketchMap(sketchMap, CELLS_PER_SKETCH_CELL);
 				render();
 			} catch (IOException e) {
 				Alert alert = new Alert(ERROR);

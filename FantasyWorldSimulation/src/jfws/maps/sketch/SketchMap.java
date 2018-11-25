@@ -4,14 +4,17 @@ import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.util.map.ArrayCellMap2D;
 import jfws.util.map.CellMap2d;
+import jfws.util.map.Map2d;
 import jfws.util.map.ToCellMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
+
 import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
 
 @Slf4j
-public class SketchMap {
+public class SketchMap implements Map2d<SketchCell> {
 
 	public static final int VERSION = 1;
 	public static final double SKETCH_TO_WORLD = 100.0;
@@ -47,5 +50,10 @@ public class SketchMap {
 		log.debug("generateElevation()");
 		generator.prepare();
 		cellMap.getCells().forEach(c -> c.setElevation(generator.generate(c.getTerrainType())));
+	}
+
+	@Override
+	public <U> Optional<Map2d<U>> getParentMap() {
+		return Optional.empty();
 	}
 }

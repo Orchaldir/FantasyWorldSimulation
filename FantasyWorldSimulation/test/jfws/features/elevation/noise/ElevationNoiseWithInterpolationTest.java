@@ -1,6 +1,7 @@
 package jfws.features.elevation.noise;
 
 import jfws.maps.sketch.SketchCell;
+import jfws.maps.sketch.SketchMap;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class ElevationNoiseWithInterpolationTest {
@@ -102,6 +104,14 @@ class ElevationNoiseWithInterpolationTest {
 		verify(cell).getElevation();
 		verify(cell).setElevation(ELEVATION + NOISE_VALUE * NOISE_FACTOR);
 		verify(noise).calculateNoise(eq(TARGET_X / RESOLUTION0), eq(TARGET_Y / RESOLUTION0));
+	}
+
+	// add()
+
+	@Test
+	public void testAddWithoutParent() {
+		SketchMap map = new SketchMap(1, 2, null);
+		assertThrows(IllegalArgumentException.class, () -> elevationNoise.add(map));
 	}
 
 }

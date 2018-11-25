@@ -38,6 +38,11 @@ class SketchMapTest {
 	}
 
 	@Test
+	public void testGetParentMap() {
+		assertThat(sketchMap.getParentMap().isPresent(), is(false));
+	}
+
+	@Test
 	public void testCreate() throws OutsideMapException {
 		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
 		assertThat(cells, is(notNullValue()));

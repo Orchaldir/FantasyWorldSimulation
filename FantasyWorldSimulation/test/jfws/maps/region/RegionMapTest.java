@@ -54,6 +54,11 @@ class RegionMapTest {
 	}
 
 	@Test
+	public void testGetParentMap() {
+		assertThat(regionMap.getParentMap().isPresent(), is(false));
+	}
+
+	@Test
 	public void testElevation() throws OutsideMapException {
 		for(int index = 0; index < regionCellMap.getSize(); index++) {
 			assertThat(regionCellMap.getCell(index).getElevation(), is(equalTo(ElevationCell.DEFAULT_ELEVATION)));
@@ -72,6 +77,9 @@ class RegionMapTest {
 
 		assertThat(toCellMapper.getResolutionX(), is(equalTo(resolution)));
 		assertThat(toCellMapper.getResolutionY(), is(equalTo(resolution)));
+
+		assertThat(regionMap.getParentMap().isPresent(), is(true));
+		assertThat(regionMap.getParentMap().get(), is(equalTo(sketchMap)));
 	}
 
 }
