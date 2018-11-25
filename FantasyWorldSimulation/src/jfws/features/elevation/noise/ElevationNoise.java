@@ -5,6 +5,8 @@ import jfws.util.map.Map2d;
 
 public interface ElevationNoise<T extends ElevationCell> {
 
-	void add(Map2d<T> map);
+	String getName();
+
+	void addTo(Map2d<T> map);
 
 }

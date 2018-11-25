@@ -8,6 +8,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationInterpolator;
+import jfws.features.elevation.noise.ElevationNoise;
+import jfws.features.elevation.noise.ElevationNoiseManager;
 import jfws.features.elevation.noise.ElevationNoiseWithInterpolation;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
@@ -87,6 +89,8 @@ public class MapEditorController {
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
+
+	private ElevationNoiseManager<RegionCell> elevationNoiseManager = new ElevationNoiseManager<>();
 	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill", BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
@@ -133,6 +137,8 @@ public class MapEditorController {
 			render();
 		});
 
+		elevationNoiseManager.add(elevationNoise);
+
 		CanvasRenderer canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
@@ -159,7 +165,11 @@ public class MapEditorController {
 		switch (mapToRender) {
 			case REGION_MAP:
 				elevationInterpolator.interpolate(sketchMap.getCellMap(), regionMap.getCellMap());
-				elevationNoise.add(regionMap);
+
+				for(ElevationNoise elevationNoise : elevationNoiseManager.getAll()) {
+					elevationNoise.addTo(regionMap);
+				}
+
 				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 				break;
 			default:

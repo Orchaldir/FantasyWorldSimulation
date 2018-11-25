@@ -111,23 +111,23 @@ class ElevationNoiseWithInterpolationTest {
 		verify(noise).calculateNoise(eq(TARGET_X / RESOLUTION0), eq(TARGET_Y / RESOLUTION0));
 	}
 
-	// add()
+	// addTo()
 
 	@Test
-	public void testAddWithoutParent() {
+	public void testAddToWithoutParent() {
 		Map2d<RegionCell> map = mock(Map2d.class);
 		ElevationNoiseWithInterpolation<SketchCell,RegionCell> elevationNoiseSpy = spy(elevationNoise);
 
 		doReturn(Optional.empty()).when(map).getParentMap();
 
-		assertThrows(IllegalArgumentException.class, () -> elevationNoise.add(map));
+		assertThrows(IllegalArgumentException.class, () -> elevationNoise.addTo(map));
 
 		verify(map, times(1)).getParentMap();
 		verify(elevationNoiseSpy, never()).interpolate(any(), any());
 	}
 
 	@Test
-	public void testAdd() {
+	public void testAddTo() {
 		Map2d<RegionCell> map = mock(Map2d.class);
 		Map2d<SketchMap> parentMap = mock(Map2d.class);
 		ElevationNoiseWithInterpolation<SketchCell,RegionCell> elevationNoiseSpy = spy(elevationNoise);
@@ -135,7 +135,7 @@ class ElevationNoiseWithInterpolationTest {
 		doReturn(Optional.of(parentMap)).when(map).getParentMap();
 		doNothing().when(elevationNoiseSpy).interpolate(any(), any());
 
-		elevationNoiseSpy.add(map);
+		elevationNoiseSpy.addTo(map);
 
 		verify(map, times(1)).getParentMap();
 		verify(parentMap, never()).getParentMap();

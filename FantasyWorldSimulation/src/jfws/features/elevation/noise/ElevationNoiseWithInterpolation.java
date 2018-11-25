@@ -48,17 +48,17 @@ public class ElevationNoiseWithInterpolation<T extends NoiseAmplitudeStorage, U 
 	}
 
 	@Override
-	public void add(Map2d<U> map) {
+	public void addTo(Map2d<U> map) {
 		Optional<Map2d<T>> optionalParentMap = map.getParentMap();
 
 		if(!optionalParentMap.isPresent()) {
-			log.warn("add(): Map has no parent map!");
+			log.warn("addTo(): Map has no parent map!");
 			throw new IllegalArgumentException("Map has no parent map!");
 		}
 
 		Map2d<T> parentMap = optionalParentMap.get();
 
-		log.info("add(): index={}", index);
+		log.info("addTo(): index={}", index);
 
 		interpolate(parentMap.getCellMap(), map.getCellMap());
 	}
