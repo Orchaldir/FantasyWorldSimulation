@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ElevationNoise<T extends NoiseAmplitudeStorage, U extends ElevationCell>
+public class ElevationNoiseWithInterpolation<T extends NoiseAmplitudeStorage, U extends ElevationCell>
 		extends MapInterpolator<T,U> {
 
 	@Getter
@@ -23,7 +23,7 @@ public class ElevationNoise<T extends NoiseAmplitudeStorage, U extends Elevation
 
 	private int index;
 
-	public ElevationNoise(String name, Interpolator2d interpolator, Noise noise, double resolution, int index) {
+	public ElevationNoiseWithInterpolation(String name, Interpolator2d interpolator, Noise noise, double resolution, int index) {
 		super(interpolator);
 		this.name = name;
 		this.noise = noise;

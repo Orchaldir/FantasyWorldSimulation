@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationInterpolator;
-import jfws.features.elevation.noise.ElevationNoise;
+import jfws.features.elevation.noise.ElevationNoiseWithInterpolation;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.ChangeTerrainTypeCommand;
@@ -87,7 +87,7 @@ public class MapEditorController {
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
-	private ElevationNoise elevationNoise = new ElevationNoise("hill", BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
+	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill", BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;

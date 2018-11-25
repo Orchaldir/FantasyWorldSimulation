@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.*;
 
-class ElevationNoiseTest {
+class ElevationNoiseWithInterpolationTest {
 
 	public static final String NAME = "Noise3";
 
@@ -32,7 +32,7 @@ class ElevationNoiseTest {
 	private SketchCell cell;
 	private Interpolator2d interpolator;
 	private Noise noise;
-	private ElevationNoise<SketchCell,SketchCell> elevationNoise;
+	private ElevationNoiseWithInterpolation<SketchCell,SketchCell> elevationNoise;
 
 	@BeforeEach
 	public void setUp() {
@@ -41,7 +41,7 @@ class ElevationNoiseTest {
 		interpolator = mock(Interpolator2d.class);
 		noise = mock(Noise.class);
 
-		elevationNoise = new ElevationNoise<>(NAME, interpolator, noise, RESOLUTION0, INDEX);
+		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, interpolator, noise, RESOLUTION0, INDEX);
 	}
 
 	private void verifyNoCall() {
