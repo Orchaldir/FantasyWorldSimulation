@@ -13,6 +13,8 @@ import static org.mockito.Mockito.*;
 
 class ElevationNoiseTest {
 
+	public static final String NAME = "Noise3";
+
 	public static final double ELEVATION = 1.5;
 
 	public static final double HILL_NOISE = 3.3;
@@ -39,7 +41,7 @@ class ElevationNoiseTest {
 		interpolator = mock(Interpolator2d.class);
 		noise = mock(Noise.class);
 
-		elevationNoise = new ElevationNoise<>(interpolator, noise, RESOLUTION0, INDEX);
+		elevationNoise = new ElevationNoise<>(NAME, interpolator, noise, RESOLUTION0, INDEX);
 	}
 
 	private void verifyNoCall() {
@@ -49,6 +51,13 @@ class ElevationNoiseTest {
 
 	private void verifyNoCallToInterpolate() {
 		verify(interpolator, never()).interpolate(any(), anyDouble(), anyDouble());
+	}
+
+	@Test
+	public void testGetName() {
+		assertThat(elevationNoise.getName(), is(equalTo(NAME)));
+
+		verifyNoCall();
 	}
 
 	@Test
