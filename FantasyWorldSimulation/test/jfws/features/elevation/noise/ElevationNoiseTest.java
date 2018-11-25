@@ -1,4 +1,4 @@
-package jfws.features.elevation;
+package jfws.features.elevation.noise;
 
 import jfws.maps.sketch.SketchCell;
 import jfws.util.math.interpolation.Interpolator2d;
@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.*;
 
-class NoiseToElevationAdderTest {
+class ElevationNoiseTest {
 
 	public static final double ELEVATION = 1.5;
 
@@ -30,7 +30,7 @@ class NoiseToElevationAdderTest {
 	private SketchCell cell;
 	private Interpolator2d interpolator;
 	private Noise noise;
-	private NoiseToElevationAdder<SketchCell,SketchCell> noiseToElevationAdder;
+	private ElevationNoise<SketchCell,SketchCell> elevationNoise;
 
 	@BeforeEach
 	public void setUp() {
@@ -39,7 +39,7 @@ class NoiseToElevationAdderTest {
 		interpolator = mock(Interpolator2d.class);
 		noise = mock(Noise.class);
 
-		noiseToElevationAdder = new NoiseToElevationAdder<>(interpolator, noise, RESOLUTION0, INDEX);
+		elevationNoise = new ElevationNoise<>(interpolator, noise, RESOLUTION0, INDEX);
 	}
 
 	private void verifyNoCall() {
@@ -53,16 +53,16 @@ class NoiseToElevationAdderTest {
 
 	@Test
 	public void testGetResolution() {
-		assertThat(noiseToElevationAdder.getResolution(), is(equalTo(RESOLUTION0)));
+		assertThat(elevationNoise.getResolution(), is(equalTo(RESOLUTION0)));
 
 		verifyNoCall();
 	}
 
 	@Test
 	public void testSetResolution() {
-		noiseToElevationAdder.setResolution(RESOLUTION1);
+		elevationNoise.setResolution(RESOLUTION1);
 
-		assertThat(noiseToElevationAdder.getResolution(), is(equalTo(RESOLUTION1)));
+		assertThat(elevationNoise.getResolution(), is(equalTo(RESOLUTION1)));
 
 		verifyNoCall();
 	}
@@ -71,7 +71,7 @@ class NoiseToElevationAdderTest {
 	public void testGetSourceValue() {
 		when(cell.getNoiseAmplitude(INDEX)).thenReturn(HILL_NOISE);
 
-		assertThat(noiseToElevationAdder.getSourceValue(cell), is(equalTo(HILL_NOISE)));
+		assertThat(elevationNoise.getSourceValue(cell), is(equalTo(HILL_NOISE)));
 
 		verify(cell, never()).getElevation();
 		verify(cell, never()).setElevation(anyDouble());
@@ -86,7 +86,7 @@ class NoiseToElevationAdderTest {
 		when(cell.getElevation()).thenReturn(ELEVATION);
 		when(noise.calculateNoise(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);
 
-		noiseToElevationAdder.setTargetValue(cell, TARGET_X, TARGET_Y, NOISE_FACTOR);
+		elevationNoise.setTargetValue(cell, TARGET_X, TARGET_Y, NOISE_FACTOR);
 
 		verifyNoCallToInterpolate();
 		verify(cell, never()).getNoiseAmplitude(anyInt());

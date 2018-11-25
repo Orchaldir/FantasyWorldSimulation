@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationInterpolator;
-import jfws.features.elevation.NoiseToElevationAdder;
+import jfws.features.elevation.noise.ElevationNoise;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.ChangeTerrainTypeCommand;
@@ -87,7 +87,7 @@ public class MapEditorController {
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
-	private NoiseToElevationAdder noiseToElevationAdder = new NoiseToElevationAdder(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
+	private ElevationNoise elevationNoise = new ElevationNoise(BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
@@ -125,11 +125,11 @@ public class MapEditorController {
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
-		hillNoiseSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, (int)noiseToElevationAdder.getResolution()));
+		hillNoiseSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, (int) elevationNoise.getResolution()));
 
 		hillNoiseSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
 			log.info("onHillNoiseSpinnerChanged(): {} -> {}", oldValue, newValue);
-			noiseToElevationAdder.setResolution(newValue);
+			elevationNoise.setResolution(newValue);
 			render();
 		});
 
@@ -159,7 +159,7 @@ public class MapEditorController {
 		switch (mapToRender) {
 			case REGION_MAP:
 				elevationInterpolator.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
-				noiseToElevationAdder.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
+				elevationNoise.interpolate(sketchMap.getCells(), regionMap.getRegionCellMap());
 				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
 				break;
 			default:

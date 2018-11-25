@@ -1,7 +1,7 @@
 package jfws.maps.sketch.terrain;
 
 import javafx.scene.paint.Color;
-import jfws.features.elevation.NoiseAmplitudeStorage;
+import jfws.features.elevation.noise.NoiseAmplitudeStorage;
 
 public interface TerrainType extends NoiseAmplitudeStorage {
 

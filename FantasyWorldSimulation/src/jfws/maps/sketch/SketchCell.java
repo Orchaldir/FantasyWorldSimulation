@@ -1,7 +1,7 @@
 package jfws.maps.sketch;
 
 import jfws.features.elevation.ElevationCell;
-import jfws.features.elevation.NoiseAmplitudeStorage;
+import jfws.features.elevation.noise.NoiseAmplitudeStorage;
 import jfws.maps.sketch.terrain.TerrainType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

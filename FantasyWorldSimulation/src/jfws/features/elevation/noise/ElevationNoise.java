@@ -1,5 +1,6 @@
-package jfws.features.elevation;
+package jfws.features.elevation.noise;
 
+import jfws.features.elevation.ElevationCell;
 import jfws.util.map.MapInterpolator;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
@@ -8,7 +9,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NoiseToElevationAdder<T extends NoiseAmplitudeStorage, U extends ElevationCell>
+public class ElevationNoise<T extends NoiseAmplitudeStorage, U extends ElevationCell>
 		extends MapInterpolator<T,U> {
 
 	private Noise noise;
@@ -19,7 +20,7 @@ public class NoiseToElevationAdder<T extends NoiseAmplitudeStorage, U extends El
 
 	private int index;
 
-	public NoiseToElevationAdder(Interpolator2d interpolator, Noise noise, double resolution, int index) {
+	public ElevationNoise(Interpolator2d interpolator, Noise noise, double resolution, int index) {
 		super(interpolator);
 		this.noise = noise;
 		this.resolution = resolution;
