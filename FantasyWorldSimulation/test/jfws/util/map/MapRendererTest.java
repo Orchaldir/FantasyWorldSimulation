@@ -9,12 +9,15 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.AdditionalMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class MapRendererTest extends SharedTestData {
 
-	public static final double WORLD_TO_SCREEN_FACTOR = 1.0;
+	public static final double WORLD_TO_SCREEN_FACTOR = 2.0;
 	public static final double BORDER = 1;
 
 	private ColorSelector<Integer> colorSelector;
@@ -28,6 +31,20 @@ class MapRendererTest extends SharedTestData {
 		renderer = mock(Renderer.class);
 		mapRenderer = new MapRenderer(renderer, WORLD_TO_SCREEN_FACTOR, BORDER);
 		orderVerifier = Mockito.inOrder(renderer);
+	}
+
+	@Test
+	public void testBorderBetweenCells() {
+		double border = 33.5;
+
+		mapRenderer.setBorderBetweenCells(border);
+
+		assertThat(mapRenderer.getBorderBetweenCells(), is(equalTo(border)));
+	}
+
+	@Test
+	public void testConvertToWorld() {
+		assertThat(mapRenderer.convertToWorld(46.8), is(equalTo(23.4)));
 	}
 
 	@Test
