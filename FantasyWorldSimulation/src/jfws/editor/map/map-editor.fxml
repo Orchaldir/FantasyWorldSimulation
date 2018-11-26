@@ -26,8 +26,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#onLoadMap" text="Load Map" />
-                  <MenuItem mnemonicParsing="false" onAction="#onSaveMap" text="Save Map" />
+              <MenuItem fx:id="loadMapItem" mnemonicParsing="false" onAction="#onLoadMap" text="Load Map" />
+                  <MenuItem fx:id="saveMapItem" mnemonicParsing="false" onAction="#onSaveMap" text="Save Map" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">

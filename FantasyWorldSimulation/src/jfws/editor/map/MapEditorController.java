@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationInterpolator;
@@ -71,7 +71,16 @@ public class MapEditorController {
 	private Spinner<Integer> hillNoiseSpinner;
 
 	@FXML
-	private MenuItem viewRegionMapItem, viewSketchMapItem;
+	private MenuItem viewRegionMapItem;
+
+	@FXML
+	private MenuItem viewSketchMapItem;
+
+	@FXML
+	private MenuItem loadMapItem;
+
+	@FXML
+	private MenuItem saveMapItem;
 
 	private FileChooser fileChooser = new FileChooser();
 	private FileUtils fileUtils = new ApacheFileUtils();
@@ -141,6 +150,9 @@ public class MapEditorController {
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
+
+		loadMapItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
+		saveMapItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
 		updateHistory();
 		updateViewControls();
@@ -220,13 +232,17 @@ public class MapEditorController {
 			try {
 				 sketchConverter.save(file, sketchMap);
 			} catch (IOException e) {
-				e.printStackTrace();
 				log.error("onSaveMap(): ", e);
 			}
 		}
 		else {
 			log.info("onSaveMap(): No file.");
 		}
+	}
+
+	@FXML
+	public void onReloadTerrainTypes() {
+		log.info("onReloadTerrainTypes()");
 	}
 
 	@FXML
