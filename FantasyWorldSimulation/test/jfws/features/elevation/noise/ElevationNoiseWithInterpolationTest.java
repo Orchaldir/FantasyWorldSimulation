@@ -25,14 +25,11 @@ class ElevationNoiseWithInterpolationTest {
 
 	public static final double HILL_NOISE = 3.3;
 
-	public static final double RESOLUTION0 = 2.0;
-	public static final double RESOLUTION1 = 0.5;
-
 	public static final double NOISE_FACTOR = 5.0;
 	public static final double NOISE_VALUE = 4.0;
 
-	public static final int TARGET_X = 3;
-	public static final int TARGET_Y = 24;
+	public static final double TARGET_X = 3;
+	public static final double TARGET_Y = 24;
 	public static final int INDEX = 3;
 
 	private SketchCell sourceCell;
@@ -49,7 +46,7 @@ class ElevationNoiseWithInterpolationTest {
 		interpolator = mock(Interpolator2d.class);
 		noise = mock(Noise.class);
 
-		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, interpolator, noise, RESOLUTION0, INDEX);
+		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, interpolator, noise, INDEX);
 	}
 
 	private void verifyNoCall() {
@@ -64,22 +61,6 @@ class ElevationNoiseWithInterpolationTest {
 	@Test
 	public void testGetName() {
 		assertThat(elevationNoise.getName(), is(equalTo(NAME)));
-
-		verifyNoCall();
-	}
-
-	@Test
-	public void testGetResolution() {
-		assertThat(elevationNoise.getResolution(), is(equalTo(RESOLUTION0)));
-
-		verifyNoCall();
-	}
-
-	@Test
-	public void testSetResolution() {
-		elevationNoise.setResolution(RESOLUTION1);
-
-		assertThat(elevationNoise.getResolution(), is(equalTo(RESOLUTION1)));
 
 		verifyNoCall();
 	}
@@ -103,12 +84,12 @@ class ElevationNoiseWithInterpolationTest {
 		when(regionCell.getElevation()).thenReturn(ELEVATION);
 		when(noise.calculateNoise(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);
 
-		elevationNoise.setTargetValue(regionCell, TARGET_X, TARGET_Y, NOISE_FACTOR);
+		elevationNoise.setTargetValue(regionCell, (int)TARGET_X, (int)TARGET_Y, NOISE_FACTOR);
 
 		verifyNoCallToInterpolate();
 		verify(regionCell).getElevation();
 		verify(regionCell).setElevation(ELEVATION + NOISE_VALUE * NOISE_FACTOR);
-		verify(noise).calculateNoise(eq(TARGET_X / RESOLUTION0), eq(TARGET_Y / RESOLUTION0));
+		verify(noise).calculateNoise(eq(TARGET_X), eq(TARGET_Y));
 	}
 
 	// addTo()

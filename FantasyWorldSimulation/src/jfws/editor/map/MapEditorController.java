@@ -31,6 +31,7 @@ import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
+import jfws.util.math.noise.ScalableNoise;
 import jfws.util.math.noise.SimplexNoise;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
@@ -100,7 +101,9 @@ public class MapEditorController {
 	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
 
 	private ElevationNoiseManager<RegionCell> elevationNoiseManager = new ElevationNoiseManager<>();
-	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill", BiTwoValueInterpolator.createBilinearInterpolator(), new SimplexNoise(), 50.0, 0);
+	private ScalableNoise scalableNoise = new ScalableNoise(new SimplexNoise(), 50.0);
+	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill",
+			BiTwoValueInterpolator.createBilinearInterpolator(), scalableNoise, 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
@@ -138,11 +141,11 @@ public class MapEditorController {
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
-		hillNoiseSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, (int) elevationNoise.getResolution()));
+		hillNoiseSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, (int) scalableNoise.getResolution()));
 
 		hillNoiseSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
 			log.info("onHillNoiseSpinnerChanged(): {} -> {}", oldValue, newValue);
-			elevationNoise.setResolution(newValue);
+			scalableNoise.setResolution(newValue);
 			render();
 		});
 
@@ -238,11 +241,6 @@ public class MapEditorController {
 		else {
 			log.info("onSaveMap(): No file.");
 		}
-	}
-
-	@FXML
-	public void onReloadTerrainTypes() {
-		log.info("onReloadTerrainTypes()");
 	}
 
 	@FXML

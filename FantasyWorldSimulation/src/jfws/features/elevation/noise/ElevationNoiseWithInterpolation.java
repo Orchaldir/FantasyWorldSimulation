@@ -20,17 +20,12 @@ public class ElevationNoiseWithInterpolation<T extends NoiseAmplitudeStorage, U 
 
 	private Noise noise;
 
-	@Getter
-	@Setter
-	private double resolution;
-
 	private int index;
 
-	public ElevationNoiseWithInterpolation(String name, Interpolator2d interpolator, Noise noise, double resolution, int index) {
+	public ElevationNoiseWithInterpolation(String name, Interpolator2d interpolator, Noise noise, int index) {
 		super(interpolator);
 		this.name = name;
 		this.noise = noise;
-		this.resolution = resolution;
 		this.index = index;
 	}
 
@@ -42,7 +37,7 @@ public class ElevationNoiseWithInterpolation<T extends NoiseAmplitudeStorage, U 
 	@Override
 	public void setTargetValue(U targetCell, int targetX, int targetY, double noiseFactor) {
 		double oldElevation = targetCell.getElevation();
-		double scaledNoise = noise.calculateNoise(targetX / resolution, targetY/ resolution) * noiseFactor;
+		double scaledNoise = noise.calculateNoise(targetX, targetY) * noiseFactor;
 		double newElevation = oldElevation + scaledNoise;
 		targetCell.setElevation(newElevation);
 	}
