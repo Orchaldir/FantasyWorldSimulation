@@ -1,0 +1,28 @@
+
+ifndef::imagesdir[:imagesdir: images/]
+
+= Release Notes
+
+[%header,cols="1,4a"]
+|===
+| Release
+| Notes
+
+| 2018.1.0
+|
+
+.A Sketch Map
+image::sketch-map.png[Sketch Map]
+
+.A Region Map
+image::region-map.jpg[Region Map]
+
+*New:*
+
+* Added <<Sketch Map>> that is drawn by the user.
+* Added <<Region Map>> that is interpolated from a <<Sketch Map>>.
+* Added views that show different data (e.g elevation, terrain type) of the same map.
+* Added loading & saving of maps.
+* Added undo & redo.
+
+|===

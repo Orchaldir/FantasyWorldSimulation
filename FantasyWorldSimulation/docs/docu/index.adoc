@@ -1,6 +1,8 @@
 
 :imagesdir: images/
 
+include::./release-notes.adoc[]
+
 = Maps
 
 include::maps/hierarchy.adoc[]
