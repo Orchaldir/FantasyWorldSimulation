@@ -5,6 +5,8 @@ include::./release-notes.adoc[]
 
 = Maps
 
+IMPORTANT: This is a work in progress.
+
 include::maps/hierarchy.adoc[]
 
 include::maps/coordinate-systems.adoc[]

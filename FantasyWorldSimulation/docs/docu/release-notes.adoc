@@ -25,4 +25,9 @@ image::region-map.jpg[Region Map]
 * Added loading & saving of maps.
 * Added undo & redo.
 
+*Known Issue:*
+
+* https://github.com/Orchaldir/FantasyWorldSimulation/issues/16[#16]:
+First time rendering the Region Map takes too long
+
 |===

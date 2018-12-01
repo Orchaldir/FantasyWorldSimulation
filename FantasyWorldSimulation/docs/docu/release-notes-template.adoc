@@ -1,0 +1,21 @@
+| XXX.X.X
+|
+
+.A Picture
+image::pitcure.png[Pitcure]
+
+*New:*
+
+* tbd
+
+*Improved:*
+
+* tbd
+
+*Fixed:*
+
+* #XXX: tbd
+
+*Known Issue:*
+
+* tbd
