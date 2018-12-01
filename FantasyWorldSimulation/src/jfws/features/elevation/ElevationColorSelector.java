@@ -15,8 +15,11 @@ public class ElevationColorSelector<T extends ElevationCell> implements ColorSel
 	public Color select(T cell) {
 		double elevation = cell.getElevation();
 
-		if(elevation < MIN_ELEVATION || elevation > MAX_ELEVATION) {
-			return Color.PINK;
+		if(elevation < MIN_ELEVATION) {
+			return Color.DARKBLUE;
+		}
+		else if(elevation > MAX_ELEVATION) {
+			return Color.WHITE;
 		}
 		else if(elevation < DEFAULT_ELEVATION) {
 			return interpolate(elevation, MIN_ELEVATION, DEFAULT_ELEVATION - 1, Color.DARKBLUE, Color.CYAN);

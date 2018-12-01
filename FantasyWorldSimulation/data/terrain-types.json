@@ -7,7 +7,8 @@
       "blue": 0.5
     },
     "base_elevation": 10,
-    "elevation_variation": 5
+    "elevation_variation": 5,
+    "hill_noise": 10
   },
   {
     "name": "Hill",
@@ -65,7 +66,8 @@
       "blue": 1.0
     },
     "base_elevation": -50,
-    "elevation_variation": 5
+    "elevation_variation": 5,
+    "hill_noise": 10
   },
   {
     "name": "Ocean",
@@ -76,7 +78,8 @@
       "blue": 1.0
     },
     "base_elevation": -100,
-    "elevation_variation": 10
+    "elevation_variation": 10,
+    "hill_noise": 20
   },
   {
     "name": "Deep Ocean",
@@ -87,6 +90,7 @@
       "blue": 0.75
     },
     "base_elevation": -150,
-    "elevation_variation": 10
+    "elevation_variation": 10,
+    "hill_noise": 50
   }
 ]

@@ -18,11 +18,15 @@ An abstract representation of a region.
 Individual objects like a building or a tree are abstracted away as Forests or Settlements,
 unless they are important enough.
 
+.Sketch Map of test3.json
 image::sketch-map.png[Sketch Map]
 
 ==== Region Map
 A more detailed representation of a region that is generated from a <<Sketch Map>>.
 Individual objects like a building or a tree are represented by individual but abstract objects. 
+
+.Region Map of test3.json
+image::region-map.jpg[Region Map]
 
 .Comparison of the Sketch & Region map
 [%header,cols=3*]

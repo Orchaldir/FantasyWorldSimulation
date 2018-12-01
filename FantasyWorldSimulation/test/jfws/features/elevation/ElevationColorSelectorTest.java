@@ -32,12 +32,12 @@ class ElevationColorSelectorTest {
 
 	@Test
 	public void testTooLow() {
-		assertColor(ElevationCell.MIN_ELEVATION - 100, Color.PINK);
+		assertColor(ElevationCell.MIN_ELEVATION - 100, Color.DARKBLUE);
 	}
 
 	@Test
 	public void testTooHigh() {
-		assertColor(ElevationCell.MAX_ELEVATION + 100, Color.PINK);
+		assertColor(ElevationCell.MAX_ELEVATION + 100, Color.WHITE);
 	}
 
 	@Test
