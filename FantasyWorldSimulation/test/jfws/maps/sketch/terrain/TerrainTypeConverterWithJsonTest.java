@@ -180,11 +180,4 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 		assertThrows(NullPointerException.class, () -> converter.loadTerrainType(null));
 	}
 
-	// saveTerrainType()
-
-	@Test
-	public void testSaveTerrainTypeWithHillNoise() {
-
-	}
-
 }

@@ -1,6 +1,5 @@
 package jfws.maps.sketch.elevation;
 
-import javafx.scene.paint.Color;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeImpl;
 

@@ -1,6 +1,5 @@
 package jfws.util.map;
 
-import jfws.util.math.interpolation.Interpolator2d;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

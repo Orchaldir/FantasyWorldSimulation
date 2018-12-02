@@ -1,13 +1,11 @@
 package jfws.features.elevation.noise;
 
 import jfws.features.elevation.ElevationCell;
-import jfws.util.map.CellInterpolator;
 import jfws.util.map.Map2d;
 import jfws.util.map.MapInterpolator;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
