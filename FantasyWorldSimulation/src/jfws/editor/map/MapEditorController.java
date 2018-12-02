@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
+import jfws.editor.map.tool.ChangeTerrainTypeTool;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationCellInterpolator;
 import jfws.features.elevation.noise.ElevationNoise;
@@ -13,7 +14,6 @@ import jfws.features.elevation.noise.ElevationNoiseManager;
 import jfws.features.elevation.noise.ElevationNoiseWithInterpolation;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
-import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
@@ -29,8 +29,6 @@ import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
 import jfws.util.map.MapInterpolator;
 import jfws.util.map.MapRenderer;
-import jfws.util.map.OutsideMapException;
-import jfws.util.map.ToCellMapper;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
 import jfws.util.math.noise.ScalableNoise;
 import jfws.util.math.noise.SimplexNoise;
@@ -89,7 +87,6 @@ public class MapEditorController {
 
 	private TerrainTypeConverter converter = new TerrainTypeConverterWithJson();
 	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
-	private TerrainType selectedTerrainType;
 	private SketchMap sketchMap;
 	private ElevationGenerator elevationGenerator = new ElevationGeneratorWithNoise(new GeneratorWithRandom(42));
 	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
@@ -111,15 +108,18 @@ public class MapEditorController {
 	private MapRenderer mapRenderer;
 
 	private CommandHistory commandHistory = new CommandHistory();
+	private ChangeTerrainTypeTool changeTerrainTypeTool;
 
 	public MapEditorController() {
 		log.info("MapEditorController()");
 
 		terrainTypeManager.load(new File("data/terrain-types.json"));
 		TerrainType defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
-		selectedTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
+		TerrainType selectedTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
 
 		sketchMap = new SketchMap(20, 10, defaultTerrainType);
+
+		changeTerrainTypeTool = new ChangeTerrainTypeTool(commandHistory, sketchMap, selectedTerrainType);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
@@ -172,7 +172,7 @@ public class MapEditorController {
 		}
 
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(names));
-		terrainTypeComboBox.getSelectionModel().select(selectedTerrainType.getName());
+		terrainTypeComboBox.getSelectionModel().select(changeTerrainTypeTool.getTerrainType().getName());
 	}
 
 	private void render() {
@@ -197,13 +197,6 @@ public class MapEditorController {
 		log.info("render(): Finished");
 	}
 
-	private void selectTerrainType(TerrainType selectedTerrainType) {
-		if(this.selectedTerrainType != selectedTerrainType) {
-			log.info("selectTerrainType(): {} -> {}", this.selectedTerrainType.getName(), selectedTerrainType.getName());
-			this.selectedTerrainType = selectedTerrainType;
-		}
-	}
-
 	@FXML
 	public void onLoadMap() {
 		File file = fileChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
@@ -213,6 +206,7 @@ public class MapEditorController {
 
 			try {
 				sketchMap = sketchConverter.load(file);
+				changeTerrainTypeTool.setSketchMap(sketchMap);
 				regionMap = RegionMap.fromSketchMap(sketchMap, CELLS_PER_SKETCH_CELL);
 				render();
 			} catch (IOException e) {
@@ -250,7 +244,7 @@ public class MapEditorController {
 		String selectedName = terrainTypeComboBox.getSelectionModel().getSelectedItem();
 		TerrainType selectedType = terrainTypeManager.getOrDefault(selectedName);
 		log.info("onTerrainTypeSelected(): terrainType={} isDefault={}", selectedName, selectedType.isDefault());
-		selectTerrainType(selectedType);
+		changeTerrainTypeTool.changeTerrainType(selectedType);
 	}
 
 	@FXML
@@ -303,33 +297,10 @@ public class MapEditorController {
 	private void onMouseEvent(MouseEvent mouseEvent, String text) {
 		double worldX = mapRenderer.convertToWorld(mouseEvent.getX());
 		double worldY = mapRenderer.convertToWorld(mouseEvent.getY());
-		String mousePosText = String.format("Canvas: x=%.0f y=%.0f World: x=%.1f y=%.1f",
-				mouseEvent.getX(), mouseEvent.getY(), worldX, worldY);
 
-		onMouseEvent(text, worldX, worldY, mousePosText);
-	}
-
-	private void onMouseEvent(String text, double worldX, double worldY, String mousePosText) {
-		try {
-			ToCellMapper<SketchCell> toCellMapper = sketchMap.getToCellMapper();
-			SketchCell cell = toCellMapper.getCell(worldX, worldY);
-			int index = toCellMapper.getIndex(worldX, worldY);
-
-			if(cell.getTerrainType() == selectedTerrainType) {
-				log.info("{}(): Cell {} is already {}. {}",
-						text, index, cell.getTerrainType().getName(), mousePosText);
-				return;
-			}
-
-			log.info("{}(): {} oldTerrain={}", text, mousePosText, cell.getTerrainType().getName());
-
-			ChangeTerrainTypeCommand command = new ChangeTerrainTypeCommand(sketchMap, index, selectedTerrainType);
-			commandHistory.execute(command);
-
+		if(changeTerrainTypeTool.use(worldX, worldY)) {
 			updateHistory();
 			render();
-		} catch (OutsideMapException e1) {
-			log.info("{}(): Outside map! {}", text, mousePosText);
 		}
 	}
 
