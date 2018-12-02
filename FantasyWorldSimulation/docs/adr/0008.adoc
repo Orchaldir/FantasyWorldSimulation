@@ -1,0 +1,30 @@
+= ADR 0008 - Use Mutation Testing with Pitest
+
+*Status:* accepted
+
+*Date:* 2018-12-02
+
+== Context and Problem Statement
+
+Code coverage can tell, if a specific line of code was tested.
+It can not say anything about the quality of the testing.
+
+== Decision Outcome
+
+*Chosen option:* pitest
+
+* Run mutation tests from time to time.
+* To run locally:
+** Run tests
+** Build with Maven
+** Run pitest with Maven: `org.pitest:pitest-maven:mutationCoverage`
+
+== Open Points
+
+* Automatically run pitest with CI
+
+== Links
+
+* https://en.wikipedia.org/wiki/Mutation_testing[Wikipedia]
+* https://www.guru99.com/mutation-testing.html[Mutation Testing: Complete Guide]
+* http://pitest.org[pitest.org]
