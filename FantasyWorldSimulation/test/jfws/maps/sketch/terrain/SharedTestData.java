@@ -15,16 +15,18 @@ public class SharedTestData {
 
 	public static final double BASE_ELEVATION = 111.1;
 	public static final double ELEVATION_VARIATION = 2.5;
+	public static final double HILL_NOISE = 5.5;
 
-	public static final Double[] NOISE_AMPLITUDES = { 0.0};
+	public static final Double[] NO_NOISE_AMPLITUDES = { 0.0 };
+	public static final Double[] NOISE_AMPLITUDES = { HILL_NOISE };
 
 	public static final TerrainType TERRAIN_TYPE_A = TerrainTypeImpl.builder().
 			name(NAME_A).group(NO_GROUP).color(Color.RED).baseElevation(1).elevationVariation(2.5).
 			noiseAmplitudes(NOISE_AMPLITUDES).build();
 	public static final TerrainType TERRAIN_TYPE_B = TerrainTypeImpl.builder().
-			name(NAME_B).group(NO_GROUP).color(Color.GREEN).noiseAmplitudes(NOISE_AMPLITUDES).build();
+			name(NAME_B).group(NO_GROUP).color(Color.GREEN).noiseAmplitudes(NO_NOISE_AMPLITUDES).build();
 	public static final TerrainType TERRAIN_TYPE_C = TerrainTypeImpl.builder().
-			name(NAME_C).group(GROUP).color(Color.BLUE).baseElevation(-1).noiseAmplitudes(NOISE_AMPLITUDES).build();
+			name(NAME_C).group(GROUP).color(Color.BLUE).baseElevation(-1).noiseAmplitudes(NO_NOISE_AMPLITUDES).build();
 
 	public static final Map<String,TerrainType> ALL_TYPES = Map.of(
 			NAME_A, TERRAIN_TYPE_A,

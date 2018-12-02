@@ -81,6 +81,15 @@ class ChangeTerrainTypeToolTest {
 		verifyEmptyCommandHistory();
 	}
 
+	@Test
+	public void testChangeTerrainTypeToSame() {
+		tool.changeTerrainType(terrainType0);
+
+		assertThat(tool.getTerrainType(), is(terrainType0));
+
+		verifyEmptyCommandHistory();
+	}
+
 	// use()
 
 	@Test

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.*;
 
+import static jfws.maps.sketch.terrain.TerrainType.HILL_NOISE_INDEX;
 import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class TerrainTypeConverterWithJson implements TerrainTypeConverter {
 	private static final String BASE_ELEVATION_PROPERTY = "base_elevation";
 	private static final String ELEVATION_VARIATION_PROPERTY = "elevation_variation";
 	private static final String HILL_NOISE_PROPERTY = "hill_noise";
-	private static final int HILL_NOISE_INDEX = 0;
+
 
 	@Override
 	public String save(Collection<TerrainType> types) {

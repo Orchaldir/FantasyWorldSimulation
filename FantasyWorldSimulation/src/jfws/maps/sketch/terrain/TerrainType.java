@@ -7,6 +7,8 @@ public interface TerrainType extends NoiseAmplitudeStorage {
 
 	String NO_GROUP = "";
 
+	int HILL_NOISE_INDEX = 0;
+
 	String getName();
 
 	String getGroup();

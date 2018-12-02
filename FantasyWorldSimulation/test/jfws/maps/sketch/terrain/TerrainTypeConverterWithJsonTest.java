@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static jfws.maps.sketch.terrain.NullTerrainType.*;
-import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,6 +71,8 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 		assertThat(types, hasEntry(equalTo(NAME_A), getTerrainTypeMatcher(TERRAIN_TYPE_A)));
 		assertThat(types, hasEntry(equalTo(NAME_B), getTerrainTypeMatcher(TERRAIN_TYPE_B)));
 		assertThat(types, hasEntry(equalTo(NAME_C), getTerrainTypeMatcher(TERRAIN_TYPE_C)));
+
+		assertThat(types.get(NAME_A).getNoiseAmplitude(HILL_NOISE_INDEX), is(equalTo(HILL_NOISE)));
 	}
 
 	@Test
@@ -177,6 +178,13 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 	@Test
 	public void testLoadTerrainTypeNull() {
 		assertThrows(NullPointerException.class, () -> converter.loadTerrainType(null));
+	}
+
+	// saveTerrainType()
+
+	@Test
+	public void testSaveTerrainTypeWithHillNoise() {
+
 	}
 
 }
