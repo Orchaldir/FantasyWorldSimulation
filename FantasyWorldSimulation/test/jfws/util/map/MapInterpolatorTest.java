@@ -2,6 +2,7 @@ package jfws.util.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import static jfws.util.map.MapInterpolator.TARGET_MAP_IS_SMALLER_EXCEPTION;
 import static jfws.util.map.MapInterpolator.WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION;
@@ -9,6 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 class MapInterpolatorTest {
 
@@ -25,6 +28,9 @@ class MapInterpolatorTest {
 	private CellMap2d<Double> sourceMap;
 	private CellMap2d<Double> targetMap;
 
+	private CellInterpolator cellInterpolator;
+	private MapInterpolator mapInterpolator;
+
 	@BeforeEach
 	public void setUp() {
 		Double[] sourceArray = new Double[SOURCE_SIZE];
@@ -32,6 +38,9 @@ class MapInterpolatorTest {
 
 		Double[] targetArray = new Double[TARGET_SIZE];
 		targetMap = new ArrayCellMap2D<>(TARGET_WIDTH, TARGET_HEIGHT, targetArray);
+
+		cellInterpolator = mock(CellInterpolator.class);
+		mapInterpolator = new MapInterpolator(cellInterpolator);
 	}
 
 	// calculateCellSize()
@@ -59,5 +68,23 @@ class MapInterpolatorTest {
 				() -> MapInterpolator.calculateCellSize(sourceMap, map));
 
 		assertThat(exception.getMessage(), is(equalTo(WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION)));
+	}
+
+	// interpolate()
+
+	@Test
+	public void testInterpolate() throws OutsideMapException {
+		InOrder inOrder = inOrder(cellInterpolator);
+
+		mapInterpolator.interpolate(sourceMap, targetMap);
+
+		for(int y = 0; y < SOURCE_HEIGHT; y++) {
+			for (int x = 0; x < SOURCE_WIDTH; x++) {
+				inOrder.verify(cellInterpolator).prepareSourceValues(sourceMap, x, y);
+				inOrder.verify(cellInterpolator).interpolateCell(targetMap, x, y, TARGET_CELL_SIZE);
+			}
+		}
+
+		inOrder.verifyNoMoreInteractions();
 	}
 }
