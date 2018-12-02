@@ -3,14 +3,10 @@ package jfws.features.elevation.noise;
 import jfws.features.elevation.ElevationCell;
 import jfws.util.map.CellInterpolator;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.Map2d;
 import jfws.util.map.OutsideMapException;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 public class ElevationNoiseCellInterpolation<T extends NoiseAmplitudeStorage, U extends ElevationCell>
 		extends CellInterpolator<T,U> {

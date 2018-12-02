@@ -30,7 +30,7 @@ class MapRendererTest extends SharedTestData {
 		colorSelector = mock(ColorSelector.class);
 		renderer = mock(Renderer.class);
 		mapRenderer = new MapRenderer(renderer, WORLD_TO_SCREEN_FACTOR, BORDER);
-		orderVerifier = Mockito.inOrder(renderer);
+		orderVerifier = inOrder(renderer);
 	}
 
 	@Test

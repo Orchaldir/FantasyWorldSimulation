@@ -1,6 +1,5 @@
 package jfws.features.elevation.noise;
 
-import jfws.features.elevation.ElevationCell;
 import jfws.maps.region.RegionCell;
 import jfws.maps.sketch.SketchCell;
 import jfws.util.map.CellMap2d;

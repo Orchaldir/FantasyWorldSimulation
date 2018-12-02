@@ -137,7 +137,7 @@ class CellInterpolatorTest {
 
 		@Override
 		public void setTargetValue(CellMap2d<Double> targetMap, int targetX, int targetY, double targetValue) throws OutsideMapException {
-
+			// Verified with Mockito
 		}
 	}
 

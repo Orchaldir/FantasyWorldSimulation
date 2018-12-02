@@ -78,7 +78,9 @@ public class SimplexNoise implements Noise {
 	@Override
 	public double calculateNoise(double xin, double yin) {
 		// Noise contributions from the three corners
-		double n0, n1, n2;
+		double n0;
+		double n1;
+		double n2;
 
 		// Skew the input space to determine which simplex cell we're in
 		double s = (xin + yin) * F2; // Hairy factor for 2D
@@ -92,7 +94,10 @@ public class SimplexNoise implements Noise {
 
 		// For the 2D case, the simplex shape is an equilateral triangle.
 		// Determine which simplex we are in.
-		int i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
+
+		// Offsets for second (middle) corner of simplex in (i,j) coords
+		int i1;
+		int j1;
 
 		if (x0 > y0) {
 			i1 = 1;

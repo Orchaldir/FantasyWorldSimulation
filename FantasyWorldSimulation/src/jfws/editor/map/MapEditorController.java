@@ -282,7 +282,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onMouseClicked(MouseEvent mouseEvent) {
-		onMouseEvent(mouseEvent,  "onMouseClicked");
+		onMouseEvent(mouseEvent);
 	}
 
 	@FXML
@@ -291,10 +291,10 @@ public class MapEditorController {
 			return;
 		}
 
-		onMouseEvent(mouseEvent, "onMouseDragged");
+		onMouseEvent(mouseEvent);
 	}
 
-	private void onMouseEvent(MouseEvent mouseEvent, String text) {
+	private void onMouseEvent(MouseEvent mouseEvent) {
 		double worldX = mapRenderer.convertToWorld(mouseEvent.getX());
 		double worldY = mapRenderer.convertToWorld(mouseEvent.getY());
 
