@@ -49,6 +49,7 @@ class ElevationNoiseWithInterpolationTest {
 		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, interpolator, noise, INDEX);
 	}
 
+	/*
 	private void verifyNoCall() {
 		verifyNoCallToInterpolate();
 		verify(noise, never()).calculateNoise(anyDouble(), anyDouble());
@@ -122,5 +123,5 @@ class ElevationNoiseWithInterpolationTest {
 		verify(parentMap, never()).getParentMap();
 		verify(elevationNoiseSpy, times(1)).interpolate(any(), any());
 	}
-
+*/
 }

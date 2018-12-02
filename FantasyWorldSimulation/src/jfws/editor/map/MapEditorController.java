@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationColorSelector;
-import jfws.features.elevation.ElevationInterpolator;
+import jfws.features.elevation.ElevationCellInterpolator;
 import jfws.features.elevation.noise.ElevationNoise;
 import jfws.features.elevation.noise.ElevationNoiseManager;
 import jfws.features.elevation.noise.ElevationNoiseWithInterpolation;
@@ -27,6 +27,7 @@ import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.command.CommandHistory;
 import jfws.util.io.ApacheFileUtils;
 import jfws.util.io.FileUtils;
+import jfws.util.map.MapInterpolator;
 import jfws.util.map.MapRenderer;
 import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
@@ -98,7 +99,8 @@ public class MapEditorController {
 
 	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
-	private ElevationInterpolator elevationInterpolator = new ElevationInterpolator(BiTwoValueInterpolator.createBiCosineInterpolator());
+	private MapInterpolator elevationInterpolator = ElevationCellInterpolator.createMapInterpolator(
+			BiTwoValueInterpolator.createBiCosineInterpolator());
 
 	private ElevationNoiseManager<RegionCell> elevationNoiseManager = new ElevationNoiseManager<>();
 	private ScalableNoise scalableNoise = new ScalableNoise(new SimplexNoise(), 50.0);
