@@ -31,8 +31,18 @@ class ElevationColorSelectorTest {
 	}
 
 	@Test
+	public void testMin() {
+		assertColor(ElevationCell.MIN_ELEVATION, Color.DARKBLUE);
+	}
+
+	@Test
 	public void testTooLow() {
-		assertColor(ElevationCell.MIN_ELEVATION - 100, Color.DARKBLUE);
+		assertColor(ElevationCell.MIN_ELEVATION - 100, Color.DARKBLUE.darker());
+	}
+
+	@Test
+	public void testMax() {
+		assertColor(ElevationCell.MAX_ELEVATION, Color.LIGHTGREY);
 	}
 
 	@Test
@@ -42,12 +52,16 @@ class ElevationColorSelectorTest {
 
 	@Test
 	public void test() {
-		assertColor(ElevationCell.MIN_ELEVATION, Color.DARKBLUE);
 		assertColor(ElevationCell.DEFAULT_ELEVATION - 1, Color.CYAN);
 		assertColor(ElevationCell.DEFAULT_ELEVATION, Color.LIGHTGREEN);
 		assertColor(ElevationCell.HILL_ELEVATION - 1, Color.DARKGREEN);
 		assertColor(ElevationCell.HILL_ELEVATION, Color.GREY);
-		assertColor(ElevationCell.MAX_ELEVATION, Color.WHITE);
+	}
+
+	@Test
+	public void testInterpolation() {
+		assertThat(colorSelector.interpolate(11.0, 10.0, 12.0, Color.BLACK, Color.WHITE),
+				is(equalTo(new Color(0.5, 0.5, 0.5,  1.0))));
 	}
 
 }
