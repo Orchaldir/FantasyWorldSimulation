@@ -11,7 +11,7 @@ import static jfws.util.math.interpolation.Interpolator1d.ARRAY_SIZE;
 public abstract class CellInterpolator<T, U> {
 
 	private Interpolator2d interpolator;
-	private final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
+	protected final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
 
 	public void prepareSourceValues(CellMap2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
 		for(int y = 0; y < ARRAY_SIZE; y++) {
