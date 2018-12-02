@@ -10,7 +10,8 @@ import static org.mockito.Mockito.*;
 
 class ScalableNoiseTest {
 
-	public static final double RESOLUTION = 10.5;
+	public static final double RESOLUTION0 = 10.5;
+	public static final double RESOLUTION1 = 2.3;
 	public static final double X = 1.0;
 	public static final double Y = 2.0;
 	public static final double RESULT = 5.0;
@@ -21,20 +22,26 @@ class ScalableNoiseTest {
 	@BeforeEach
 	public void setUp() {
 		noise = mock(Noise.class);
-		scalableNoise = new ScalableNoise(noise, RESOLUTION);
+		scalableNoise = new ScalableNoise(noise, RESOLUTION0);
 	}
 
 	@Test
 	public void testGetResolution() {
-		assertThat(scalableNoise.getResolution(), is(equalTo(RESOLUTION)));
+		assertThat(scalableNoise.getResolution(), is(equalTo(RESOLUTION0)));
+	}
+
+	@Test
+	public void testSetResolution() {
+		scalableNoise.setResolution(RESOLUTION1);
+		assertThat(scalableNoise.getResolution(), is(equalTo(RESOLUTION1)));
 	}
 
 	@Test
 	public void testCalculateNoise() {
-		when(noise.calculateNoise(X/RESOLUTION, Y/RESOLUTION)).thenReturn(RESULT);
+		when(noise.calculateNoise(X/ RESOLUTION0, Y/ RESOLUTION0)).thenReturn(RESULT);
 
 		assertThat(scalableNoise.calculateNoise(X, Y), is(equalTo(RESULT)));
 
-		verify(noise, times(1)).calculateNoise(X/RESOLUTION, Y/RESOLUTION);
+		verify(noise, times(1)).calculateNoise(X/ RESOLUTION0, Y/ RESOLUTION0);
 	}
 }
