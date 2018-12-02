@@ -4,6 +4,8 @@ import jfws.maps.region.RegionCell;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchMap;
 import jfws.util.map.Map2d;
+import jfws.util.map.MapInterpolator;
+import jfws.util.map.OutsideMapException;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -21,107 +24,75 @@ class ElevationNoiseWithInterpolationTest {
 
 	public static final String NAME = "Noise3";
 
-	public static final double ELEVATION = 1.5;
-
-	public static final double HILL_NOISE = 3.3;
-
-	public static final double NOISE_FACTOR = 5.0;
-	public static final double NOISE_VALUE = 4.0;
-
-	public static final double TARGET_X = 3;
-	public static final double TARGET_Y = 24;
-	public static final int INDEX = 3;
-
-	private SketchCell sourceCell;
-	private RegionCell regionCell;
-	private Interpolator2d interpolator;
-	private Noise noise;
+	private ElevationNoiseCellInterpolation cellInterpolation;
+	private MapInterpolator mapInterpolator;
 	private ElevationNoiseWithInterpolation<SketchCell,RegionCell> elevationNoise;
 
 	@BeforeEach
 	public void setUp() {
-		sourceCell = mock(SketchCell.class);
-		regionCell = mock(RegionCell.class);
+		cellInterpolation = mock(ElevationNoiseCellInterpolation.class);
+		mapInterpolator = mock(MapInterpolator.class);
 
-		interpolator = mock(Interpolator2d.class);
-		noise = mock(Noise.class);
-
-		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, interpolator, noise, INDEX);
+		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, cellInterpolation, mapInterpolator);
 	}
 
-	/*
-	private void verifyNoCall() {
+	private void verifyNoCall() throws OutsideMapException {
 		verifyNoCallToInterpolate();
-		verify(noise, never()).calculateNoise(anyDouble(), anyDouble());
+		verify(cellInterpolation, never()).getSourceValue(any());
+		verify(cellInterpolation, never()).setTargetValue(any(), anyInt(), anyInt(), anyDouble());
 	}
 
 	private void verifyNoCallToInterpolate() {
-		verify(interpolator, never()).interpolate(any(), anyDouble(), anyDouble());
+		verify(mapInterpolator, never()).interpolate(any(), any());
+		verify(mapInterpolator, never()).calculateCellSize(any(), any());
 	}
 
 	@Test
-	public void testGetName() {
+	public void testConstructor() {
+		Interpolator2d interpolator = mock(Interpolator2d.class);
+		Noise noise = mock(Noise.class);
+		int index = 55;
+
+		ElevationNoiseWithInterpolation interpolation = new ElevationNoiseWithInterpolation(NAME, interpolator, noise, index);
+
+		assertThat(interpolation.getName(), is(equalTo(NAME)));
+		assertThat(interpolation.getCellInterpolation().getIndex(), is(equalTo(index)));
+		assertThat(interpolation.getCellInterpolation().getNoise(), is(equalTo(noise)));
+		assertNotNull(interpolation.getMapInterpolator());
+	}
+
+	@Test
+	public void testGetName() throws OutsideMapException {
 		assertThat(elevationNoise.getName(), is(equalTo(NAME)));
 
 		verifyNoCall();
 	}
 
-	@Test
-	public void testGetSourceValue() {
-		when(sourceCell.getNoiseAmplitude(INDEX)).thenReturn(HILL_NOISE);
-
-		assertThat(elevationNoise.getSourceValue(sourceCell), is(equalTo(HILL_NOISE)));
-
-		verify(sourceCell, never()).getElevation();
-		verify(sourceCell, never()).setElevation(anyDouble());
-		verify(sourceCell).getNoiseAmplitude(INDEX);
-		verifyNoCall();
-	}
-
-	// setTargetValue()
-
-	@Test
-	public void testSetTargetValue() {
-		when(regionCell.getElevation()).thenReturn(ELEVATION);
-		when(noise.calculateNoise(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);
-
-		elevationNoise.setTargetValue(regionCell, (int)TARGET_X, (int)TARGET_Y, NOISE_FACTOR);
-
-		verifyNoCallToInterpolate();
-		verify(regionCell).getElevation();
-		verify(regionCell).setElevation(ELEVATION + NOISE_VALUE * NOISE_FACTOR);
-		verify(noise).calculateNoise(eq(TARGET_X), eq(TARGET_Y));
-	}
-
 	// addTo()
 
 	@Test
-	public void testAddToWithoutParent() {
+	public void testAddToWithoutParent() throws OutsideMapException {
 		Map2d<RegionCell> map = mock(Map2d.class);
-		ElevationNoiseWithInterpolation<SketchCell,RegionCell> elevationNoiseSpy = spy(elevationNoise);
 
 		doReturn(Optional.empty()).when(map).getParentMap();
 
 		assertThrows(IllegalArgumentException.class, () -> elevationNoise.addTo(map));
 
 		verify(map, times(1)).getParentMap();
-		verify(elevationNoiseSpy, never()).interpolate(any(), any());
+		verifyNoCall();
 	}
 
 	@Test
 	public void testAddTo() {
 		Map2d<RegionCell> map = mock(Map2d.class);
 		Map2d<SketchMap> parentMap = mock(Map2d.class);
-		ElevationNoiseWithInterpolation<SketchCell,RegionCell> elevationNoiseSpy = spy(elevationNoise);
 
 		doReturn(Optional.of(parentMap)).when(map).getParentMap();
-		doNothing().when(elevationNoiseSpy).interpolate(any(), any());
 
-		elevationNoiseSpy.addTo(map);
+		elevationNoise.addTo(map);
 
 		verify(map, times(1)).getParentMap();
 		verify(parentMap, never()).getParentMap();
-		verify(elevationNoiseSpy, times(1)).interpolate(any(), any());
+		verify(mapInterpolator, times(1)).interpolate(any(), any());
 	}
-*/
 }

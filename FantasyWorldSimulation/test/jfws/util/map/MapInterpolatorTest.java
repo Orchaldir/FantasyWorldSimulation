@@ -47,13 +47,13 @@ class MapInterpolatorTest {
 
 	@Test
 	public void testCalculateCellSize() {
-		assertThat(MapInterpolator.calculateCellSize(sourceMap, targetMap), is(equalTo(TARGET_CELL_SIZE)));
+		assertThat(mapInterpolator.calculateCellSize(sourceMap, targetMap), is(equalTo(TARGET_CELL_SIZE)));
 	}
 
 	@Test
 	public void testCalculateCellSizeWithSourceLargerThanTarget() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> MapInterpolator.calculateCellSize(targetMap, sourceMap));
+				() -> mapInterpolator.calculateCellSize(targetMap, sourceMap));
 
 		assertThat(exception.getMessage(), is(equalTo(TARGET_MAP_IS_SMALLER_EXCEPTION)));
 	}
@@ -65,7 +65,7 @@ class MapInterpolatorTest {
 		CellMap2d<Double> map = new ArrayCellMap2D<>(TARGET_WIDTH, newHeight, array);
 
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> MapInterpolator.calculateCellSize(sourceMap, map));
+				() -> mapInterpolator.calculateCellSize(sourceMap, map));
 
 		assertThat(exception.getMessage(), is(equalTo(WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION)));
 	}

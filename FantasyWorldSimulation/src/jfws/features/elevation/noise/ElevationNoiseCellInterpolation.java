@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ElevationNoiseCellInterpolation<T extends NoiseAmplitudeStorage, U extends ElevationCell>
 		extends CellInterpolator<T,U> {
 
+	@Getter
 	private Noise noise;
 
 	@Getter

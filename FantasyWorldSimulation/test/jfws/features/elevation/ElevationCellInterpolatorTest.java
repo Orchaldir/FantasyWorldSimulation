@@ -1,6 +1,7 @@
 package jfws.features.elevation;
 
 import jfws.util.map.CellMap2d;
+import jfws.util.map.MapInterpolator;
 import jfws.util.map.OutsideMapException;
 import jfws.util.math.interpolation.Interpolator2d;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.*;
 
@@ -31,6 +34,14 @@ class ElevationCellInterpolatorTest {
 		elevationInterpolator = new ElevationCellInterpolator(interpolator);
 		cell = mock(ElevationCell.class);
 		cellMap = mock(CellMap2d.class);
+	}
+
+	@Test
+	public void testCreateMapInterpolator() {
+		MapInterpolator mapInterpolator = ElevationCellInterpolator.createMapInterpolator(interpolator);
+
+		assertNotNull(interpolator);
+		assertThat(mapInterpolator.getCellInterpolator(), is(instanceOf(ElevationCellInterpolator.class)));
 	}
 
 	@Test

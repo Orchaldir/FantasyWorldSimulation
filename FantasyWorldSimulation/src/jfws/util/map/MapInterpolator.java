@@ -2,6 +2,7 @@ package jfws.util.map;
 
 import jfws.util.math.interpolation.Interpolator2d;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import static jfws.util.math.interpolation.Interpolator1d.ARRAY_SIZE;
@@ -13,6 +14,7 @@ public class MapInterpolator<T, U> {
 	public static final String TARGET_MAP_IS_SMALLER_EXCEPTION = "Target map is smaller than the source map!";
 	public static final String WIDTH_AND_HEIGHT_DO_NOT_MATCH_EXCEPTION = "Cell size does not match for width & height!";
 
+	@Getter
 	private CellInterpolator<T,U> cellInterpolator;
 	private final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
 
@@ -38,8 +40,7 @@ public class MapInterpolator<T, U> {
 		log.debug("tryInterpolate(): finished");
 	}
 
-	public static <T, U>
-	int calculateCellSize(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) {
+	public int calculateCellSize(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) {
 		int cellSizeX = targetMap.getWidth() / sourceMap.getWidth();
 
 		if(cellSizeX == 0) {

@@ -19,13 +19,23 @@ public class ElevationNoiseWithInterpolation<T extends NoiseAmplitudeStorage, U 
 	@Getter
 	private final String name;
 
+	@Getter
 	private ElevationNoiseCellInterpolation cellInterpolation;
+
+	@Getter
 	private MapInterpolator mapInterpolator;
 
 	public ElevationNoiseWithInterpolation(String name, Interpolator2d interpolator, Noise noise, int index) {
 		this.name = name;
 		cellInterpolation = new ElevationNoiseCellInterpolation(interpolator, noise, index);
 		mapInterpolator =  new MapInterpolator(cellInterpolation);
+	}
+
+	public ElevationNoiseWithInterpolation(String name, ElevationNoiseCellInterpolation cellInterpolation,
+										   MapInterpolator mapInterpolator) {
+		this.name = name;
+		this.cellInterpolation = cellInterpolation;
+		this.mapInterpolator =  mapInterpolator;
 	}
 
 	@Override
