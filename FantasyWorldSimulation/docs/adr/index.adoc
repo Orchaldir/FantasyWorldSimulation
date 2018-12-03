@@ -7,4 +7,4 @@
 * link:0005.adoc[ADR 0005 - Use SLF4J for logging]
 * link:0006.adoc[ADR 0006 - Using AsciiDoc for documentation]
 * link:0007.adoc[ADR 0007 - Version Number]
-* link:0007.adoc[ADR 0008 - Use Mutation Testing with Pitest]
+* link:0008.adoc[ADR 0008 - Use Mutation Testing with Pitest]

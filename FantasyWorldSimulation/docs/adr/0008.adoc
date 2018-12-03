@@ -19,6 +19,8 @@ It can not say anything about the quality of the testing.
 ** Build with Maven
 ** Run pitest with Maven: `org.pitest:pitest-maven:mutationCoverage`
 
+image::images/pitest.png[Pit Test result]
+
 == Open Points
 
 * Automatically run pitest with CI
