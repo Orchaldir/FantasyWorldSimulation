@@ -6,27 +6,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
-import jfws.editor.map.tool.ChangeTerrainTypeTool;
-import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.ElevationCellInterpolator;
+import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.elevation.noise.ElevationNoise;
 import jfws.features.elevation.noise.ElevationNoiseManager;
 import jfws.features.elevation.noise.ElevationNoiseWithInterpolation;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.SketchCell;
-import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
 import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.elevation.ElevationGeneratorWithNoise;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
-import jfws.maps.sketch.terrain.TerrainType;
-import jfws.maps.sketch.terrain.TerrainTypeConverter;
-import jfws.maps.sketch.terrain.TerrainTypeConverterWithJson;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
-import jfws.util.command.CommandHistory;
-import jfws.util.io.ApacheFileUtils;
-import jfws.util.io.FileUtils;
 import jfws.util.map.MapInterpolator;
 import jfws.util.map.MapRenderer;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
@@ -51,7 +43,6 @@ public class MapEditorController {
 
 	public static final double WORLD_TO_SCREEN = 0.5;
 	public static final int BORDER_BETWEEN_CELLS = 0;
-	public static final int CELLS_PER_SKETCH_CELL = 50;
 
 	enum MapType {
 		SKETCH_MAP,
@@ -68,9 +59,6 @@ public class MapEditorController {
 	private Button undoButton, redoButton;
 
 	@FXML
-	private Spinner<Integer> hillNoiseSpinner;
-
-	@FXML
 	private MenuItem viewRegionMapItem;
 
 	@FXML
@@ -83,49 +71,36 @@ public class MapEditorController {
 	private MenuItem saveMapItem;
 
 	private FileChooser fileChooser = new FileChooser();
-	private FileUtils fileUtils = new ApacheFileUtils();
 
-	private TerrainTypeConverter converter = new TerrainTypeConverterWithJson();
-	private TerrainTypeManager terrainTypeManager = new TerrainTypeManager(fileUtils, converter);
-	private SketchMap sketchMap;
+	private MapStorage mapStorage;
+
 	private ElevationGenerator elevationGenerator = new ElevationGeneratorWithNoise(new GeneratorWithRandom(42));
-	private SketchConverterWithJson sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
 
 	private ColorSelectorMap<SketchCell> colorSelectorMap;
 	private ColorSelector<SketchCell> colorSelectorForSketch;
 
-	private RegionMap regionMap;
 	private ColorSelector<RegionCell> colorSelectorForRegion;
 	private MapInterpolator elevationInterpolator = ElevationCellInterpolator.createMapInterpolator(
 			BiTwoValueInterpolator.createBiCosineInterpolator());
 
 	private ElevationNoiseManager<RegionCell> elevationNoiseManager = new ElevationNoiseManager<>();
-	private ScalableNoise scalableNoise = new ScalableNoise(new SimplexNoise(), 50.0);
 	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill",
-			BiTwoValueInterpolator.createBilinearInterpolator(), scalableNoise, 0);
+			BiTwoValueInterpolator.createBilinearInterpolator(), new ScalableNoise(new SimplexNoise(), 50.0), 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
 
-	private CommandHistory commandHistory = new CommandHistory();
-	private ChangeTerrainTypeTool changeTerrainTypeTool;
-
 	public MapEditorController() {
 		log.info("MapEditorController()");
 
-		terrainTypeManager.load(new File("data/terrain-types.json"));
-		TerrainType defaultTerrainType = terrainTypeManager.getOrDefault("Plain");
-		TerrainType selectedTerrainType = terrainTypeManager.getOrDefault("Medium Mountain");
-
-		sketchMap = new SketchMap(20, 10, defaultTerrainType);
-
-		changeTerrainTypeTool = new ChangeTerrainTypeTool(commandHistory, sketchMap, selectedTerrainType);
+		mapStorage = new MapStorage("data/terrain-types.json", 50);
+		mapStorage.createTool("Hill");
+		mapStorage.createEmptyMap(20,  10, "Plain");
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
 		colorSelectorForSketch = colorSelectorMap.getDefaultColorSelector();
 
-		regionMap = RegionMap.fromSketchMap(sketchMap, CELLS_PER_SKETCH_CELL);
 		colorSelectorForRegion = new ElevationColorSelector<>();
 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
@@ -143,14 +118,6 @@ public class MapEditorController {
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
-		hillNoiseSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, (int) scalableNoise.getResolution()));
-
-		hillNoiseSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-			log.info("onHillNoiseSpinnerChanged(): {} -> {}", oldValue, newValue);
-			scalableNoise.setResolution(newValue);
-			render();
-		});
-
 		elevationNoiseManager.add(elevationNoise);
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
@@ -165,6 +132,7 @@ public class MapEditorController {
 	}
 
 	private void initTerrainTypeComboBox() {
+		TerrainTypeManager terrainTypeManager = mapStorage.getTerrainTypeManager();
 		List<String> names = terrainTypeManager.getNamesForGroup(NO_GROUP);
 
 		for(String group : terrainTypeManager.getGroups()) {
@@ -172,11 +140,14 @@ public class MapEditorController {
 		}
 
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(names));
-		terrainTypeComboBox.getSelectionModel().select(changeTerrainTypeTool.getTerrainType().getName());
+		terrainTypeComboBox.getSelectionModel().select(mapStorage.getChangeTerrainTypeTool().getTerrainType().getName());
 	}
 
 	private void render() {
 		log.info("render()");
+		SketchMap sketchMap = mapStorage.getSketchMap();
+		RegionMap regionMap = mapStorage.getRegionMap();
+
 		sketchMap.generateElevation(elevationGenerator);
 
 		switch (mapToRender) {
@@ -205,9 +176,8 @@ public class MapEditorController {
 			log.info("onLoadMap(): file={}", file.getPath());
 
 			try {
-				sketchMap = sketchConverter.load(file);
-				changeTerrainTypeTool.setSketchMap(sketchMap);
-				regionMap = RegionMap.fromSketchMap(sketchMap, CELLS_PER_SKETCH_CELL);
+				SketchMap sketchMap = mapStorage.getSketchConverter().load(file);
+				mapStorage.setSketchMap(sketchMap);
 				render();
 			} catch (IOException e) {
 				Alert alert = new Alert(ERROR);
@@ -229,7 +199,7 @@ public class MapEditorController {
 			log.info("onSaveMap(): file={}", file.getPath());
 
 			try {
-				 sketchConverter.save(file, sketchMap);
+				mapStorage.getSketchConverter().save(file, mapStorage.getSketchMap());
 			} catch (IOException e) {
 				log.error("onSaveMap(): ", e);
 			}
@@ -242,9 +212,8 @@ public class MapEditorController {
 	@FXML
 	public void onTerrainTypeSelected() {
 		String selectedName = terrainTypeComboBox.getSelectionModel().getSelectedItem();
-		TerrainType selectedType = terrainTypeManager.getOrDefault(selectedName);
-		log.info("onTerrainTypeSelected(): terrainType={} isDefault={}", selectedName, selectedType.isDefault());
-		changeTerrainTypeTool.changeTerrainType(selectedType);
+		log.info("onTerrainTypeSelected(): terrainType={}", selectedName);
+		mapStorage.changeTypeOfTool(selectedName);
 	}
 
 	@FXML
@@ -298,7 +267,7 @@ public class MapEditorController {
 		double worldX = mapRenderer.convertToWorld(mouseEvent.getX());
 		double worldY = mapRenderer.convertToWorld(mouseEvent.getY());
 
-		if(changeTerrainTypeTool.use(worldX, worldY)) {
+		if(mapStorage.getChangeTerrainTypeTool().use(worldX, worldY)) {
 			updateHistory();
 			render();
 		}
@@ -307,7 +276,7 @@ public class MapEditorController {
 	@FXML
 	public void onUndoClicked() {
 		log.info("onUndoClicked()");
-		commandHistory.unExecute();
+		mapStorage.getCommandHistory().unExecute();
 		updateHistory();
 		render();
 	}
@@ -315,27 +284,25 @@ public class MapEditorController {
 	@FXML
 	public void onRedoClicked() {
 		log.info("onRedoClicked()");
-		commandHistory.reExecute();
+		mapStorage.getCommandHistory().reExecute();
 		updateHistory();
 		render();
 	}
 
 	private void updateHistory() {
-		undoButton.setDisable(!commandHistory.canUnExecute());
-		redoButton.setDisable(!commandHistory.canReExecute());
+		undoButton.setDisable(!mapStorage.getCommandHistory().canUnExecute());
+		redoButton.setDisable(!mapStorage.getCommandHistory().canReExecute());
 	}
 
 	private void updateViewControls() {
 		switch (mapToRender) {
 			case REGION_MAP:
-				hillNoiseSpinner.setDisable(false);
 				mapRenderer.setBorderBetweenCells(0);
 				renderStyleComboBox.setDisable(true);
 				viewRegionMapItem.setDisable(true);
 				viewSketchMapItem.setDisable(false);
 				break;
 			default:
-				hillNoiseSpinner.setDisable(true);
 				mapRenderer.setBorderBetweenCells(5);
 				renderStyleComboBox.setDisable(false);
 				viewRegionMapItem.setDisable(false);
