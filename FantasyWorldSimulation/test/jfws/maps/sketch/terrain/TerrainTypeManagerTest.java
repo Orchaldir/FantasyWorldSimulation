@@ -84,7 +84,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 
 	@Test
 	public void testGetNamesForGroupEmpty() {
-		assertTrue(manager.getNamesForGroup(GROUP).isEmpty());
+		assertTrue(manager.getNamesForGroup(GROUP0).isEmpty());
 	}
 
 	@Test
@@ -94,7 +94,24 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_C);
 
 		assertThat(manager.getNamesForGroup(NO_GROUP), containsInAnyOrder(NAME_A, NAME_B));
-		assertThat(manager.getNamesForGroup(GROUP), containsInAnyOrder(NAME_C));
+		assertThat(manager.getNamesForGroup(GROUP0), containsInAnyOrder(NAME_C));
+	}
+
+	// getNamesSortedByGroup()
+
+	@Test
+	public void testGetNameSortedByGroupEmpty() {
+		assertTrue(manager.getNamesSortedByGroup().isEmpty());
+	}
+
+	@Test
+	public void testGetNameSortedByGroup() {
+		manager.add(TERRAIN_TYPE_D);
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_C);
+		manager.add(TERRAIN_TYPE_B);
+
+		assertThat(manager.getNamesSortedByGroup(), contains(NAME_A, NAME_B, NAME_D, NAME_C));
 	}
 
 	// getGroups()
@@ -118,7 +135,7 @@ class TerrainTypeManagerTest extends SharedTestData {
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);
 
-		assertThat(manager.getGroups(), containsInAnyOrder(GROUP));
+		assertThat(manager.getGroups(), containsInAnyOrder(GROUP0));
 	}
 
 	// load()

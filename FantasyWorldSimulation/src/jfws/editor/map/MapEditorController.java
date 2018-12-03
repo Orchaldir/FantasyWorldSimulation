@@ -93,7 +93,8 @@ public class MapEditorController {
 	public MapEditorController() {
 		log.info("MapEditorController()");
 
-		mapStorage = new MapStorage("data/terrain-types.json", 50);
+		mapStorage = new MapStorage(50);
+		mapStorage.getTerrainTypeManager().load(new File("data/terrain-types.json"));
 		mapStorage.createTool("Hill");
 		mapStorage.createEmptyMap(20,  10, "Plain");
 
@@ -132,12 +133,7 @@ public class MapEditorController {
 	}
 
 	private void initTerrainTypeComboBox() {
-		TerrainTypeManager terrainTypeManager = mapStorage.getTerrainTypeManager();
-		List<String> names = terrainTypeManager.getNamesForGroup(NO_GROUP);
-
-		for(String group : terrainTypeManager.getGroups()) {
-			names.addAll(terrainTypeManager.getNamesForGroup(group));
-		}
+		List<String> names = mapStorage.getTerrainTypeManager().getNamesSortedByGroup();
 
 		terrainTypeComboBox.setItems(FXCollections.observableArrayList(names));
 		terrainTypeComboBox.getSelectionModel().select(mapStorage.getChangeTerrainTypeTool().getTerrainType().getName());

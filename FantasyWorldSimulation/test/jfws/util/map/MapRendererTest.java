@@ -67,6 +67,7 @@ class MapRendererTest extends SharedTestData {
 	}
 
 	private void verifyRender() {
+		verifyClear();
 		verifyScale(WORLD_TO_SCREEN_FACTOR);
 		verifyRenderRow(CELL_Y_0);
 		verifyRenderRow(CELL_Y_1);
@@ -75,6 +76,10 @@ class MapRendererTest extends SharedTestData {
 		verifyRenderRow(CELL_Y_4);
 		verifyScale(1.0 / WORLD_TO_SCREEN_FACTOR);
 		orderVerifier.verifyNoMoreInteractions();
+	}
+
+	private void verifyClear() {
+		orderVerifier.verify(renderer).clear(0.0, 0.0,MAP_WIDTH, MAP_HEIGHT);
 	}
 
 	private void verifyScale(double scale) {

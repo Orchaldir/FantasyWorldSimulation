@@ -1,39 +1,26 @@
 package jfws.maps.sketch;
 
 import jfws.features.elevation.ElevationCell;
-import jfws.maps.sketch.elevation.BaseElevationGenerator;
+import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.util.map.CellMap2d;
 import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import static jfws.maps.sketch.terrain.SharedTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
-class SketchMapTest {
+class SketchMapTest extends SharedData {
 
-	public static final int WIDTH = 4;
-	public static final int HEIGHT = 5;
-	public static final int SIZE = WIDTH * HEIGHT;
-
-	protected SketchMap sketchMap;
-
-	protected void assertCell(int index, TerrainType type, double elevation) throws OutsideMapException {
-		SketchCell cell = sketchMap.getCellMap().getCell(index);
-		assertThat(cell.getTerrainType(), is(sameInstance(type)));
-		assertThat(cell.getElevation(), is(equalTo(elevation)));
-	}
-
-	protected void assertCells(TerrainType type, double elevation) throws OutsideMapException {
-		for(int i = 0; i < SIZE; i++) {
-			assertCell(i, type, elevation);
-		}
-	}
+	protected ElevationGenerator elevationGenerator;
 
 	@BeforeEach
 	public void setUp() {
+		elevationGenerator = mock(ElevationGenerator.class);
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 	}
 
@@ -57,9 +44,19 @@ class SketchMapTest {
 		sketchMap.getCellMap().getCell(0).setTerrainType(TERRAIN_TYPE_B);
 		sketchMap.getCellMap().getCell(1).setTerrainType(TERRAIN_TYPE_C);
 
-		sketchMap.generateElevation(new BaseElevationGenerator());
+		when(elevationGenerator.generate(TERRAIN_TYPE_A)).thenReturn(0.0);
+		when(elevationGenerator.generate(TERRAIN_TYPE_B)).thenReturn(100.0);
+		when(elevationGenerator.generate(TERRAIN_TYPE_C)).thenReturn(200.0);
 
-		assertCell(0, TERRAIN_TYPE_B, TERRAIN_TYPE_B.getBaseElevation());
-		assertCell(1, TERRAIN_TYPE_C, TERRAIN_TYPE_C.getBaseElevation());
+		InOrder orderVerifier = inOrder(elevationGenerator);
+
+		sketchMap.generateElevation(elevationGenerator);
+
+		orderVerifier.verify(elevationGenerator).prepare();
+		orderVerifier.verify(elevationGenerator).generate(TERRAIN_TYPE_B);
+		orderVerifier.verify(elevationGenerator).generate(TERRAIN_TYPE_C);
+
+		assertCell(0, TERRAIN_TYPE_B, 100.0);
+		assertCell(1, TERRAIN_TYPE_C, 200.0);
 	}
 }

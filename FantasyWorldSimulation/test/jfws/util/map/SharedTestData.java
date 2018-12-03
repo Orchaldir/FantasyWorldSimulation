@@ -35,8 +35,11 @@ public class SharedTestData {
 	public static final double RESOLUTION_X = 2;
 	public static final double RESOLUTION_Y = 3;
 
-	public static final double MAX_X = ORIGIN_X + WIDTH * RESOLUTION_X - 1;
-	public static final double MAX_Y = ORIGIN_Y + HEIGHT * RESOLUTION_Y - 1;
+	public static final double MAP_WIDTH = WIDTH * RESOLUTION_X;
+	public static final double MAP_HEIGHT = HEIGHT * RESOLUTION_Y;
+
+	public static final double MAX_X = ORIGIN_X + MAP_WIDTH - 1;
+	public static final double MAX_Y = ORIGIN_Y + MAP_HEIGHT - 1;
 
 	public static final double CELL_X_0 = ORIGIN_X;
 	public static final double CELL_X_1 = ORIGIN_X + 1 * RESOLUTION_X;

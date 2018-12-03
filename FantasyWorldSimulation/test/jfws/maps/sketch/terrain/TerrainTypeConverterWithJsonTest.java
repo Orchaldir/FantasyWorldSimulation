@@ -106,7 +106,7 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 
 	@Test
 	public void testLoadWithDuplicateName() {
-		assertThrows(IOException.class, () -> converter.load("[{\"name\":\"A\", \"group\":\"G0\"},{\"name\":\"A\", \"group\":\"G1\"}]"));
+		assertThrows(IOException.class, () -> converter.load("[{\"name\":\"A\", \"group\":\"second\"},{\"name\":\"A\", \"group\":\"G1\"}]"));
 	}
 
 	// loadTerrainType()
@@ -142,37 +142,37 @@ class TerrainTypeConverterWithJsonTest extends SharedTestData {
 
 	@Test
 	public void testLoadTerrainTypeWithoutColor() {
-		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"G0\", \"base_elevation\":111.1, \"elevation_variation\":2.5}");
+		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"second\", \"base_elevation\":111.1, \"elevation_variation\":2.5}");
 
-		assertTerrainType(optionalType, NAME_B, GROUP, DEFAULT_COLOR, BASE_ELEVATION, ELEVATION_VARIATION);
+		assertTerrainType(optionalType, NAME_B, GROUP0, DEFAULT_COLOR, BASE_ELEVATION, ELEVATION_VARIATION);
 	}
 
 	@Test
 	public void testLoadTerrainTypeWithNegativeColorValue() {
-		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"G0\", \"color\": {\"red\": -0.5,\"green\": 0,\"blue\": 0}, \"base_elevation\":111.1, \"elevation_variation\":2.5}");
+		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"second\", \"color\": {\"red\": -0.5,\"green\": 0,\"blue\": 0}, \"base_elevation\":111.1, \"elevation_variation\":2.5}");
 
-		assertTerrainType(optionalType, NAME_B, GROUP, DEFAULT_COLOR, BASE_ELEVATION, ELEVATION_VARIATION);
+		assertTerrainType(optionalType, NAME_B, GROUP0, DEFAULT_COLOR, BASE_ELEVATION, ELEVATION_VARIATION);
 	}
 
 	@Test
 	public void testLoadTerrainTypeWithTooHighColorValue() {
-		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"G0\", \"color\": {\"red\": 255,\"green\": 0,\"blue\": 0}, \"base_elevation\":111.1, \"elevation_variation\":2.5}");
+		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"second\", \"color\": {\"red\": 255,\"green\": 0,\"blue\": 0}, \"base_elevation\":111.1, \"elevation_variation\":2.5}");
 
-		assertTerrainType(optionalType, NAME_B, GROUP, DEFAULT_COLOR, BASE_ELEVATION, ELEVATION_VARIATION);
+		assertTerrainType(optionalType, NAME_B, GROUP0, DEFAULT_COLOR, BASE_ELEVATION, ELEVATION_VARIATION);
 	}
 
 	@Test
 	public void testLoadTerrainTypeWithoutBaseElevation() {
-		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"G0\", \"color\": {\"red\": 1.0,\"green\": 0,\"blue\": 0}, \"elevation_variation\":2.5}");
+		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"second\", \"color\": {\"red\": 1.0,\"green\": 0,\"blue\": 0}, \"elevation_variation\":2.5}");
 
-		assertTerrainType(optionalType, NAME_B, GROUP, Color.RED, DEFAULT_BASE_ELEVATION, ELEVATION_VARIATION);
+		assertTerrainType(optionalType, NAME_B, GROUP0, Color.RED, DEFAULT_BASE_ELEVATION, ELEVATION_VARIATION);
 	}
 
 	@Test
 	public void testLoadTerrainTypeWithoutElevationVariation() {
-		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"G0\", \"color\": {\"red\": 1.0,\"green\": 0,\"blue\": 0}, \"base_elevation\":111.1}");
+		Optional<TerrainType> optionalType = converter.loadTerrainType("{\"name\":\"B\", \"group\":\"second\", \"color\": {\"red\": 1.0,\"green\": 0,\"blue\": 0}, \"base_elevation\":111.1}");
 
-		assertTerrainType(optionalType, NAME_B, GROUP, Color.RED, BASE_ELEVATION, DEFAULT_ELEVATION_VARIATION);
+		assertTerrainType(optionalType, NAME_B, GROUP0, Color.RED, BASE_ELEVATION, DEFAULT_ELEVATION_VARIATION);
 	}
 
 	@Test

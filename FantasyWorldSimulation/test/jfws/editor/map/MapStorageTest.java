@@ -4,6 +4,7 @@ import jfws.editor.map.tool.ChangeTerrainTypeTool;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchConverter;
+import jfws.maps.sketch.SketchConverterWithJson;
 import jfws.maps.sketch.SketchMap;
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeConverter;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,7 +36,8 @@ class MapStorageTest {
 	private SketchConverter sketchConverter;
 	private CommandHistory commandHistory;
 
-	private TerrainType terrainType;
+	private TerrainType terrainType0;
+	private TerrainType terrainType1;
 	private SketchMap sketchMap;
 	private CellMap2d<SketchCell> cellMap;
 	private ToCellMapper<SketchCell> toCellMapper;
@@ -48,7 +51,9 @@ class MapStorageTest {
 		sketchConverter = mock(SketchConverter.class);
 		commandHistory = mock(CommandHistory.class);
 
-		terrainType = mock(TerrainType.class);
+		terrainType0 = mock(TerrainType.class);
+		terrainType1 = mock(TerrainType.class);
+
 		sketchMap = mock(SketchMap.class);
 		cellMap = mock(CellMap2d.class);
 		toCellMapper = mock(ToCellMapper.class);
@@ -66,8 +71,17 @@ class MapStorageTest {
 	}
 
 	@Test
+	public void testConstructor() {
+		mapStorage = new MapStorage(CELLS_PER_SKETCH_CELL);
+
+		assertThat(mapStorage.getCellsPerSketchCell(), is(equalTo(CELLS_PER_SKETCH_CELL)));
+		assertThat(mapStorage.getTerrainTypeConverter(), is(instanceOf(TerrainTypeConverter.class)));
+		assertThat(mapStorage.getSketchConverter(), is(instanceOf(SketchConverterWithJson.class)));
+	}
+
+	@Test
 	public void testCreateEmptyMap() {
-		when(terrainTypeManager.getOrDefault(TYPE_NAME_0)).thenReturn(terrainType);
+		when(terrainTypeManager.getOrDefault(TYPE_NAME_0)).thenReturn(terrainType0);
 
 		mapStorage.createEmptyMap(WIDTH, HEIGHT, TYPE_NAME_0);
 
@@ -93,7 +107,7 @@ class MapStorageTest {
 	public void testCreateTool() {
 		mapStorage.createEmptyMap(WIDTH, HEIGHT, TYPE_NAME_0);
 
-		when(terrainTypeManager.getOrDefault(TYPE_NAME_1)).thenReturn(terrainType);
+		when(terrainTypeManager.getOrDefault(TYPE_NAME_1)).thenReturn(terrainType0);
 
 		mapStorage.createTool(TYPE_NAME_1);
 
@@ -102,7 +116,7 @@ class MapStorageTest {
 		ChangeTerrainTypeTool tool = mapStorage.getChangeTerrainTypeTool();
 
 		assertNotNull(tool);
-		assertThat(tool.getTerrainType(), is(equalTo(terrainType)));
+		assertThat(tool.getTerrainType(), is(equalTo(terrainType0)));
 
 		assertNotNull(tool.getSketchMap());
 		assertThat(tool.getSketchMap(), is(equalTo(mapStorage.getSketchMap())));
@@ -117,12 +131,12 @@ class MapStorageTest {
 
 	@Test
 	public void testChangeTypeOfTool() {
-		when(terrainTypeManager.getOrDefault(TYPE_NAME_0)).thenReturn(terrainType);
+		when(terrainTypeManager.getOrDefault(TYPE_NAME_0)).thenReturn(terrainType0);
 
 		mapStorage.createEmptyMap(WIDTH, HEIGHT, TYPE_NAME_0);
 		mapStorage.createTool(TYPE_NAME_0);
 
-		when(terrainTypeManager.getOrDefault(TYPE_NAME_1)).thenReturn(terrainType);
+		when(terrainTypeManager.getOrDefault(TYPE_NAME_1)).thenReturn(terrainType1);
 
 		mapStorage.changeTypeOfTool(TYPE_NAME_1);
 
@@ -131,7 +145,7 @@ class MapStorageTest {
 		ChangeTerrainTypeTool tool = mapStorage.getChangeTerrainTypeTool();
 
 		assertNotNull(tool);
-		assertThat(tool.getTerrainType(), is(equalTo(terrainType)));
+		assertThat(tool.getTerrainType(), is(equalTo(terrainType1)));
 	}
 
 	// setSketchMap()
@@ -151,7 +165,7 @@ class MapStorageTest {
 
 	@Test
 	public void testSetSketchMapWithTool() {
-		when(terrainTypeManager.getOrDefault(TYPE_NAME_0)).thenReturn(terrainType);
+		when(terrainTypeManager.getOrDefault(TYPE_NAME_0)).thenReturn(terrainType0);
 
 		mapStorage.createEmptyMap(WIDTH, HEIGHT, TYPE_NAME_0);
 		mapStorage.createTool(TYPE_NAME_0);

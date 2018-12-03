@@ -42,12 +42,23 @@ public class TerrainTypeManager {
 				collect(Collectors.toList());
 	}
 
+	public List<String> getNamesSortedByGroup() {
+		List<String> names = getNamesForGroup(NO_GROUP);
+
+		for(String group : getGroups()) {
+			names.addAll(getNamesForGroup(group));
+		}
+
+		return names;
+	}
+
 	public List<String> getGroups() {
 		return terrainTypeMap.values().
 				stream().
 				map(TerrainType::getGroup).
 				filter(g -> !g.equals(NO_GROUP)).
 				distinct().
+				sorted().
 				collect(Collectors.toList());
 	}
 

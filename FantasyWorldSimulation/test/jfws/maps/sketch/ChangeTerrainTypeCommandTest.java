@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
+import static jfws.maps.sketch.SketchMapTest.*;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_A;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_B;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,13 +13,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ChangeTerrainTypeCommandTest extends SketchMapTest {
+class ChangeTerrainTypeCommandTest extends SharedData{
 
 	public static final int INDEX = 1;
 	private ChangeTerrainTypeCommand command;
 
 	@BeforeEach
-	@Override
 	public void setUp() {
 		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
 		command = new ChangeTerrainTypeCommand(sketchMap, INDEX, TERRAIN_TYPE_B);

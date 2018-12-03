@@ -33,7 +33,7 @@ public class MapStorage {
 	private CommandHistory commandHistory;
 	private ChangeTerrainTypeTool changeTerrainTypeTool;
 
-	public MapStorage(String pathName, int cellsPerSketchCell) {
+	public MapStorage(int cellsPerSketchCell) {
 		this.cellsPerSketchCell = cellsPerSketchCell;
 		FileUtils fileUtils = new ApacheFileUtils();
 
@@ -41,8 +41,6 @@ public class MapStorage {
 		terrainTypeManager = new TerrainTypeManager(fileUtils, terrainTypeConverter);
 
 		sketchConverter = new SketchConverterWithJson(fileUtils, terrainTypeManager);
-
-		terrainTypeManager.load(new File(pathName));
 
 		commandHistory = new CommandHistory();
 	}
