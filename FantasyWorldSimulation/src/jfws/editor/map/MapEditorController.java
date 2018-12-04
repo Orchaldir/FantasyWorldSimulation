@@ -20,6 +20,7 @@ import jfws.maps.sketch.SketchMap;
 import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.elevation.ElevationGeneratorWithNoise;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
+import jfws.util.map.ImageRenderer;
 import jfws.util.map.MapInterpolator;
 import jfws.util.map.MapRenderer;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
@@ -55,7 +56,7 @@ public class MapEditorController {
 	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
 
 	@FXML
-	private Canvas sketchMapCanvas;
+	private Canvas mapCanvas;
 
 	@FXML
 	private Button undoButton, redoButton;
@@ -95,6 +96,7 @@ public class MapEditorController {
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;
+	private ImageRenderer imageRenderer = new ImageRenderer();
 
 	public MapEditorController() {
 		log.info("MapEditorController()");
@@ -138,7 +140,7 @@ public class MapEditorController {
 
 		elevationNoiseManager.add(elevationNoise);
 
-		CanvasRenderer canvasRenderer = new CanvasRenderer(sketchMapCanvas.getGraphicsContext2D());
+		CanvasRenderer canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
 		loadMapItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
@@ -172,7 +174,8 @@ public class MapEditorController {
 					elevationNoise.addTo(regionMap);
 				}
 
-				mapRenderer.render(regionMap.getToCellMapper(), colorSelectorForRegion);
+				WritableImage image = imageRenderer.render(regionMap, colorSelectorForRegion);
+				mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0);
 				break;
 			default:
 				mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);
@@ -184,7 +187,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onLoadMap() {
-		File file = mapChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
+		File file = mapChooser.showOpenDialog(mapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onLoadMap(): file={}", file.getPath());
@@ -207,7 +210,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onSaveMap() {
-		File file = mapChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
+		File file = mapChooser.showSaveDialog(mapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onSaveMap(): file={}", file.getPath());
@@ -225,15 +228,15 @@ public class MapEditorController {
 
 	@FXML
 	public void onExportImage() {
-		File file = imageChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
+		File file = imageChooser.showSaveDialog(mapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onExportImage(): file={}", file.getPath());
-			WritableImage image = sketchMapCanvas.snapshot(null, null);
-			BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+			WritableImage image = mapCanvas.snapshot(null, null);
+			BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
 			try {
-				ImageIO.write(bImage, "PNG", file);
+				ImageIO.write(bufferedImage, "PNG", file);
 			} catch (IOException e) {
 				log.error("onExportImage(): ", e);
 			}
