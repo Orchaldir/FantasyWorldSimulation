@@ -1,9 +1,11 @@
 package jfws.editor.map;
 
 import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 import jfws.features.elevation.ElevationCellInterpolator;
@@ -18,7 +20,6 @@ import jfws.maps.sketch.SketchMap;
 import jfws.maps.sketch.elevation.ElevationGenerator;
 import jfws.maps.sketch.elevation.ElevationGeneratorWithNoise;
 import jfws.maps.sketch.rendering.TerrainColorSelector;
-import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.map.MapInterpolator;
 import jfws.util.map.MapRenderer;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
@@ -30,13 +31,14 @@ import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.ColorSelectorMap;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
-import static jfws.maps.sketch.terrain.TerrainType.NO_GROUP;
 
 @Slf4j
 public class MapEditorController {
@@ -70,7 +72,11 @@ public class MapEditorController {
 	@FXML
 	private MenuItem saveMapItem;
 
-	private FileChooser fileChooser = new FileChooser();
+	@FXML
+	private MenuItem exportImageItem;
+
+	private FileChooser mapChooser = new FileChooser();
+	private FileChooser imageChooser = new FileChooser();
 
 	private MapStorage mapStorage;
 
@@ -95,8 +101,8 @@ public class MapEditorController {
 
 		mapStorage = new MapStorage(50);
 		mapStorage.getTerrainTypeManager().load(new File("data/terrain-types.json"));
-		mapStorage.createTool("Hill");
 		mapStorage.createEmptyMap(20,  10, "Plain");
+		mapStorage.createTool("Hill");
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
@@ -104,9 +110,20 @@ public class MapEditorController {
 
 		colorSelectorForRegion = new ElevationColorSelector<>();
 
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
+		addExtension(mapChooser, "JSON", "*.json");
+		setDirectory(mapChooser, "./data/map/");
+
+		addExtension(imageChooser, "PNG", "*.png");
+		setDirectory(imageChooser, ".");
+	}
+
+	private void addExtension(FileChooser fileChooser, String description, String extension) {
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(description, extension);
 		fileChooser.getExtensionFilters().add(extFilter);
-		String currentPath = Paths.get("./data/map/").toAbsolutePath().normalize().toString();
+	}
+
+	private void setDirectory(FileChooser fileChooser, String relativePath) {
+		String currentPath = Paths.get(relativePath).toAbsolutePath().normalize().toString();
 		fileChooser.setInitialDirectory(new File(currentPath));
 	}
 
@@ -126,6 +143,7 @@ public class MapEditorController {
 
 		loadMapItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
 		saveMapItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+		exportImageItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
 
 		updateHistory();
 		updateViewControls();
@@ -166,7 +184,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onLoadMap() {
-		File file = fileChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
+		File file = mapChooser.showOpenDialog(sketchMapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onLoadMap(): file={}", file.getPath());
@@ -189,7 +207,7 @@ public class MapEditorController {
 
 	@FXML
 	public void onSaveMap() {
-		File file = fileChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
+		File file = mapChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
 
 		if (file != null) {
 			log.info("onSaveMap(): file={}", file.getPath());
@@ -202,6 +220,26 @@ public class MapEditorController {
 		}
 		else {
 			log.info("onSaveMap(): No file.");
+		}
+	}
+
+	@FXML
+	public void onExportImage() {
+		File file = imageChooser.showSaveDialog(sketchMapCanvas.getScene().getWindow());
+
+		if (file != null) {
+			log.info("onExportImage(): file={}", file.getPath());
+			WritableImage image = sketchMapCanvas.snapshot(null, null);
+			BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+
+			try {
+				ImageIO.write(bImage, "PNG", file);
+			} catch (IOException e) {
+				log.error("onExportImage(): ", e);
+			}
+		}
+		else {
+			log.info("onExportImage(): No file.");
 		}
 	}
 

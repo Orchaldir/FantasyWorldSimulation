@@ -28,6 +28,7 @@
             <items>
               <MenuItem fx:id="loadMapItem" mnemonicParsing="false" onAction="#onLoadMap" text="Load Map" />
                   <MenuItem fx:id="saveMapItem" mnemonicParsing="false" onAction="#onSaveMap" text="Save Map" />
+                  <MenuItem fx:id="exportImageItem" mnemonicParsing="false" onAction="#onExportImage" text="Export Image" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">
