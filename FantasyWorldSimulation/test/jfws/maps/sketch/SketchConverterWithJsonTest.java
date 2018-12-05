@@ -2,12 +2,13 @@ package jfws.maps.sketch;
 
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.maps.sketch.terrain.TerrainTypeManager;
+import jfws.util.io.FileUtils;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.io.File;
 import java.io.IOException;
 
 import static jfws.maps.sketch.SketchConverterWithJson.*;
@@ -15,24 +16,60 @@ import static jfws.maps.sketch.terrain.SharedTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class SketchConverterWithJsonTest {
 
 	public static final int WIDTH = 3;
 	public static final int HEIGHT = 2;
+	public static final String FILE_CONTENT = "test";
+
+	private FileUtils fileUtils;
+	private File file;
 
 	private TerrainTypeManager manager;
 	private SketchConverterWithJson converter;
+	private SketchMap map;
 
 	@BeforeEach
 	public void setUp() {
+		fileUtils = mock(FileUtils.class);
+		file = mock(File.class);
+
 		manager = new TerrainTypeManager(null, null);
-		converter = new SketchConverterWithJson(null, manager);
+		converter = new SketchConverterWithJson(fileUtils, manager);
+
+		map = mock(SketchMap.class);
 	}
 
 	private <T extends Throwable> void assertException(Class<T> expectedType, Executable executable, String message) {
 		Throwable throwable = assertThrows(expectedType, executable);
 		assertThat(throwable.getMessage(), is(equalTo(message)));
+	}
+
+	// load()
+
+	@Test
+	public void testLoadWithIoException() throws IOException {
+		when(fileUtils.readWholeFile(file)).thenThrow(new IOException());
+
+		assertThrows(IOException.class, () -> converter.load(file));
+
+		verify(fileUtils).readWholeFile(file);
+	}
+
+	@Test
+	public void testLoad() throws IOException {
+		SketchConverterWithJson converterSpy = spy(converter);
+		SketchMap map = mock(SketchMap.class);
+
+		when(fileUtils.readWholeFile(file)).thenReturn(FILE_CONTENT);
+		doReturn(map).when(converterSpy).parseString(FILE_CONTENT);
+
+		assertThat(converterSpy.load(file), is(map));
+
+		verify(fileUtils).readWholeFile(file);
+		verify(converterSpy).parseString(FILE_CONTENT);
 	}
 
 	// parseString()
@@ -50,6 +87,34 @@ class SketchConverterWithJsonTest {
 	@Test
 	public void testParseWrongString() {
 		assertException(IOException.class, () -> converter.parseString("abc"), NOT_A_JSON_OBJECT);
+	}
+
+	@Test
+	public void testParseString() throws IOException {
+		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+				"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}");
+
+		assertNotNull(sketchMap);
+
+		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
+
+		assertNotNull(cells);
+		assertThat(cells.getWidth(), is(2));
+		assertThat(cells.getHeight(), is(3));
+
+		TerrainType terrainTypeA = manager.getOrDefault("A");
+		TerrainType terrainTypeB = manager.getOrDefault("B");
+
+		for(int i = 0; i < cells.getSize(); i++) {
+			SketchCell cell = sketchMap.getCellMap().getCell(i);
+
+			if(i == 3) {
+				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeB)));
+			}
+			else {
+				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeA)));
+			}
+		}
 	}
 
 	// version
@@ -167,32 +232,31 @@ class SketchConverterWithJsonTest {
 				"\"terrain_type_map\":[\"0,0\",\"2,0\",\"0,0\"]}"), NOT_USED_TERRAIN_TYPE);
 	}
 
+	// save()
+
 	@Test
-	public void testParseString() throws IOException {
-		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
-				"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}");
+	public void tesSaveWithIoException() throws IOException {
+		SketchConverterWithJson converterSpy = spy(converter);
 
-		assertNotNull(sketchMap);
+		doReturn(FILE_CONTENT).when(converterSpy).convertToJson(map);
+		doThrow(new IOException()).when(fileUtils).writeWholeFile(file, FILE_CONTENT);
 
-		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
+		assertThrows(IOException.class, () -> converterSpy.save(file, map));
 
-		assertNotNull(cells);
-		assertThat(cells.getWidth(), is(2));
-		assertThat(cells.getHeight(), is(3));
+		verify(converterSpy).convertToJson(map);
+		verify(fileUtils).writeWholeFile(file, FILE_CONTENT);
+	}
 
-		TerrainType terrainTypeA = manager.getOrDefault("A");
-		TerrainType terrainTypeB = manager.getOrDefault("B");
+	@Test
+	public void testSave() throws IOException {
+		SketchConverterWithJson converterSpy = spy(converter);
 
-		for(int i = 0; i < cells.getSize(); i++) {
-			SketchCell cell = sketchMap.getCellMap().getCell(i);
+		doReturn(FILE_CONTENT).when(converterSpy).convertToJson(map);
 
-			if(i == 3) {
-				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeB)));
-			}
-			else {
-				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeA)));
-			}
-		}
+		converterSpy.save(file, map);
+
+		verify(converterSpy).convertToJson(map);
+		verify(fileUtils).writeWholeFile(file, FILE_CONTENT);
 	}
 
 	// test
