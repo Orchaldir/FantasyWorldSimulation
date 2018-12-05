@@ -3,7 +3,6 @@ package jfws.maps.region;
 import jfws.features.elevation.ElevationCell;
 import jfws.maps.sketch.SketchMap;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.OutsideMapException;
 import jfws.util.map.ToCellMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +58,7 @@ class RegionMapTest {
 	}
 
 	@Test
-	public void testElevation() throws OutsideMapException {
+	public void testElevation() {
 		for(int index = 0; index < regionCellMap.getSize(); index++) {
 			assertThat(regionCellMap.getCell(index).getElevation(), is(equalTo(ElevationCell.DEFAULT_ELEVATION)));
 		}

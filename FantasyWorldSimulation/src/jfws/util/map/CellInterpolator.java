@@ -13,7 +13,7 @@ public abstract class CellInterpolator<T, U> {
 	private Interpolator2d interpolator;
 	protected final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
 
-	public void prepareSourceValues(CellMap2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
+	public void prepareSourceValues(CellMap2d<T> sourceMap, int sourceX, int sourceY) {
 		for(int y = 0; y < ARRAY_SIZE; y++) {
 			for(int x = 0; x < ARRAY_SIZE; x++) {
 				sourceValues[x][y] = getSourceValue(sourceMap, sourceX+x-1, sourceY+y-1);
@@ -21,7 +21,7 @@ public abstract class CellInterpolator<T, U> {
 		}
 	}
 
-	private double getSourceValue(CellMap2d<T> sourceMap, int sourceX, int sourceY) throws OutsideMapException {
+	private double getSourceValue(CellMap2d<T> sourceMap, int sourceX, int sourceY) {
 		int limitedX = Math.min(Math.max(0, sourceX), sourceMap.getWidth()-1);
 		int limitedY = Math.min(Math.max(0, sourceY), sourceMap.getHeight()-1);
 
@@ -30,7 +30,7 @@ public abstract class CellInterpolator<T, U> {
 
 	public abstract double getSourceValue(T sourceCell);
 
-	public void interpolateCell(CellMap2d<U> targetMap, int sourceX, int sourceY, int cellSize) throws OutsideMapException {
+	public void interpolateCell(CellMap2d<U> targetMap, int sourceX, int sourceY, int cellSize) {
 		for(int cellY = 0; cellY < cellSize; cellY++) {
 			int targetY = getTargetIndex(sourceY, cellSize, cellY);
 
@@ -42,7 +42,7 @@ public abstract class CellInterpolator<T, U> {
 		}
 	}
 
-	public abstract void setTargetValue(CellMap2d<U> targetMap, int targetX, int targetY, double targetValue) throws OutsideMapException;
+	public abstract void setTargetValue(CellMap2d<U> targetMap, int targetX, int targetY, double targetValue);
 
 	private int getTargetIndex(int sourceIndex, int cellSize, int cellX) {
 		return sourceIndex * cellSize + cellX;

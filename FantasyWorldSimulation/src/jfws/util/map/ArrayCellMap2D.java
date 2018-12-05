@@ -57,7 +57,7 @@ public class ArrayCellMap2D<T> implements CellMap2d<T> {
 	}
 
 	@Override
-	public T getCell(int index) throws OutsideMapException {
+	public T getCell(int index) {
 		if(isInside(index)) {
 			return cells[index];
 		}
@@ -66,7 +66,7 @@ public class ArrayCellMap2D<T> implements CellMap2d<T> {
 	}
 
 	@Override
-	public T getCell(int x, int y) throws OutsideMapException {
+	public T getCell(int x, int y) {
 		if(isInside(x, y)) {
 			return cells[getIndex(x, y)];
 		}

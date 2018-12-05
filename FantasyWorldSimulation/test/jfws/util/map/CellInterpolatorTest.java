@@ -62,7 +62,7 @@ class CellInterpolatorTest {
 	// prepareSourceValues()
 
 	@Test
-	public void testPrepareSourceValues() throws OutsideMapException {
+	public void testPrepareSourceValues() {
 		cellInterpolator.prepareSourceValues(sourceMap, 1, 1);
 
 		double[][] sourceValues = cellInterpolator.getSourceValues();
@@ -74,7 +74,7 @@ class CellInterpolatorTest {
 	}
 
 	@Test
-	public void testPrepareSourceValuesWithMinCorner() throws OutsideMapException {
+	public void testPrepareSourceValuesWithMinCorner() {
 		cellInterpolator.prepareSourceValues(sourceMap, 0, 0);
 
 		double[][] sourceValues = cellInterpolator.getSourceValues();
@@ -86,7 +86,7 @@ class CellInterpolatorTest {
 	}
 
 	@Test
-	public void testPrepareSourceValuesWithMaxCorner() throws OutsideMapException {
+	public void testPrepareSourceValuesWithMaxCorner() {
 		cellInterpolator.prepareSourceValues(sourceMap, 3, 2);
 
 		double[][] sourceValues = cellInterpolator.getSourceValues();
@@ -100,7 +100,7 @@ class CellInterpolatorTest {
 	// interpolateCell()
 
 	@Test
-	public void testInterpolateCell() throws OutsideMapException {
+	public void testInterpolateCell() {
 		double[][] sourceValues = cellInterpolator.getSourceValues();
 
 		when(interpolator.interpolate(sourceValues, 0.0, 0.0)).thenReturn(INTERPOLATED_VALUE_0);
@@ -134,7 +134,7 @@ class CellInterpolatorTest {
 		}
 
 		@Override
-		public void setTargetValue(CellMap2d<Double> targetMap, int targetX, int targetY, double targetValue) throws OutsideMapException {
+		public void setTargetValue(CellMap2d<Double> targetMap, int targetX, int targetY, double targetValue) {
 			// Verified with Mockito
 		}
 	}

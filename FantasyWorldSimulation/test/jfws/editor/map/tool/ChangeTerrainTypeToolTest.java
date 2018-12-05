@@ -93,7 +93,7 @@ class ChangeTerrainTypeToolTest {
 	// use()
 
 	@Test
-	public void testUseOutsideMap() throws OutsideMapException {
+	public void testUseOutsideMap() {
 		when(sketchMap.getToCellMapper()).thenReturn(toCellMapper);
 		when(toCellMapper.getCell(X, Y)).thenThrow(new OutsideMapException(null, 0, 1, 2, false));
 
@@ -103,7 +103,7 @@ class ChangeTerrainTypeToolTest {
 	}
 
 	@Test
-	public void testUseWithSameType() throws OutsideMapException {
+	public void testUseWithSameType() {
 		when(sketchMap.getToCellMapper()).thenReturn(toCellMapper);
 		when(toCellMapper.getCell(X, Y)).thenReturn(cell);
 		when(cell.getTerrainType()).thenReturn(terrainType0);
@@ -114,7 +114,7 @@ class ChangeTerrainTypeToolTest {
 	}
 
 	@Test
-	public void testUse() throws OutsideMapException {
+	public void testUse() {
 		ArgumentCaptor<Command> commandCaptor = ArgumentCaptor.forClass(Command.class);
 
 		when(sketchMap.getToCellMapper()).thenReturn(toCellMapper);

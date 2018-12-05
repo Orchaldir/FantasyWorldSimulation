@@ -42,7 +42,7 @@ class ImageRendererTest {
 	}
 
 	@Test
-	public void testRender() throws OutsideMapException {
+	public void testRender() {
 		when(map.getCellMap()).thenReturn(MAP);
 
 		doAnswer(invocation -> {

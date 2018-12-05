@@ -1,11 +1,9 @@
 package jfws.maps.sketch;
 
-import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
-import static jfws.maps.sketch.SketchMapTest.*;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_A;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_B;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +28,7 @@ class ChangeTerrainTypeCommandTest extends SharedData{
 	}
 
 	@Test
-	public void testExecute() throws OutsideMapException {
+	public void testExecute() {
 		command.execute();
 
 		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
@@ -38,7 +36,7 @@ class ChangeTerrainTypeCommandTest extends SharedData{
 	}
 
 	@Test
-	public void testExecuteOutsideMap() throws OutsideMapException {
+	public void testExecuteOutsideMap() {
 		command = new ChangeTerrainTypeCommand(sketchMap, 100, TERRAIN_TYPE_B);
 		command.execute();
 
@@ -46,7 +44,7 @@ class ChangeTerrainTypeCommandTest extends SharedData{
 	}
 
 	@Test
-	public void testUnExecute() throws OutsideMapException {
+	public void testUnExecute() {
 		command.execute();
 		command.unExecute();
 
@@ -54,7 +52,7 @@ class ChangeTerrainTypeCommandTest extends SharedData{
 	}
 
 	@Test
-	public void testUnExecuteWithoutExecute() throws OutsideMapException {
+	public void testUnExecuteWithoutExecute() {
 		assertThrows(IllegalStateException.class, () -> command.unExecute());
 
 		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);

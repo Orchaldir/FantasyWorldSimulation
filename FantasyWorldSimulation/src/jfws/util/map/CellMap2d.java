@@ -17,8 +17,8 @@ public interface CellMap2d<T> {
 	boolean isInside(int x, int y);
 	boolean isInside(int index);
 
-	T getCell(int index) throws OutsideMapException;
-	T getCell(int x, int y) throws OutsideMapException;
+	T getCell(int index);
+	T getCell(int x, int y);
 
 	Collection<T> getCells();
 }

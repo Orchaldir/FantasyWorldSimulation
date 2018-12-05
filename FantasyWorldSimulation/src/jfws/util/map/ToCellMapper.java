@@ -37,7 +37,7 @@ public class ToCellMapper<T> {
 		return map.getIndex(getCellX(x), getCellY(y));
 	}
 
-	public T getCell(double x, double y) throws OutsideMapException {
+	public T getCell(double x, double y) {
 		return map.getCell(getCellX(x), getCellY(y));
 	}
 

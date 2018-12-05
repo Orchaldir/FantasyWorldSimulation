@@ -73,7 +73,7 @@ class MapInterpolatorTest {
 	// interpolate()
 
 	@Test
-	public void testInterpolate() throws OutsideMapException {
+	public void testInterpolate() {
 		InOrder inOrder = inOrder(cellInterpolator);
 
 		mapInterpolator.interpolate(sourceMap, targetMap);

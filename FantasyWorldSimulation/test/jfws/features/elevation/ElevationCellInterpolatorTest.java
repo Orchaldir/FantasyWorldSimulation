@@ -2,7 +2,6 @@ package jfws.features.elevation;
 
 import jfws.util.map.CellMap2d;
 import jfws.util.map.MapInterpolator;
-import jfws.util.map.OutsideMapException;
 import jfws.util.math.interpolation.Interpolator2d;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +55,7 @@ class ElevationCellInterpolatorTest {
 	}
 
 	@Test
-	public void testSetSourceValue() throws OutsideMapException {
+	public void testSetSourceValue() {
 		when(cellMap.getCell(X, Y)).thenReturn(cell);
 
 		elevationInterpolator.setTargetValue(cellMap, X, Y, NEW_ELEVATION);

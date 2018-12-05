@@ -47,7 +47,7 @@ class MapRendererTest extends SharedTestData {
 	}
 
 	@Test
-	public void testRender() throws OutsideMapException {
+	public void testRender() {
 		prepareTestRender();
 
 		mapRenderer.render(MAPPER, colorSelector);

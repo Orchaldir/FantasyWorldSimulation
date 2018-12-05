@@ -5,7 +5,6 @@ import jfws.maps.sketch.SketchCell;
 import jfws.maps.sketch.SketchMap;
 import jfws.util.map.Map2d;
 import jfws.util.map.MapInterpolator;
-import jfws.util.map.OutsideMapException;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +35,7 @@ class ElevationNoiseWithInterpolationTest {
 		elevationNoise = new ElevationNoiseWithInterpolation<>(NAME, cellInterpolation, mapInterpolator);
 	}
 
-	private void verifyNoCall() throws OutsideMapException {
+	private void verifyNoCall() {
 		verifyNoCallToInterpolate();
 		verify(cellInterpolation, never()).getSourceValue(any());
 		verify(cellInterpolation, never()).setTargetValue(any(), anyInt(), anyInt(), anyDouble());
@@ -62,7 +61,7 @@ class ElevationNoiseWithInterpolationTest {
 	}
 
 	@Test
-	public void testGetName() throws OutsideMapException {
+	public void testGetName() {
 		assertThat(elevationNoise.getName(), is(equalTo(NAME)));
 
 		verifyNoCall();
@@ -71,7 +70,7 @@ class ElevationNoiseWithInterpolationTest {
 	// addTo()
 
 	@Test
-	public void testAddToWithoutParent() throws OutsideMapException {
+	public void testAddToWithoutParent() {
 		Map2d<RegionCell> map = mock(Map2d.class);
 
 		doReturn(Optional.empty()).when(map).getParentMap();

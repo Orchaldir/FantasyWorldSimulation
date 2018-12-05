@@ -168,7 +168,7 @@ class SketchConverterWithJsonTest {
 	}
 
 	@Test
-	public void testParseString() throws IOException, OutsideMapException {
+	public void testParseString() throws IOException {
 		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
 				"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}");
 
@@ -198,7 +198,7 @@ class SketchConverterWithJsonTest {
 	// test
 
 	@Test
-	public void test() throws IOException, OutsideMapException {
+	public void test() throws IOException {
 		manager.add(TERRAIN_TYPE_A);
 		manager.add(TERRAIN_TYPE_B);
 		manager.add(TERRAIN_TYPE_C);

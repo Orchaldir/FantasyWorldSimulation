@@ -152,7 +152,7 @@ class ArrayCellMap2DTest extends SharedTestData {
 	// getCell()
 
 	@Test
-	public void testGetCell() throws OutsideMapException {
+	public void testGetCell() {
 		int i = 0;
 
 		for(int y = 0; y < HEIGHT; y++) {

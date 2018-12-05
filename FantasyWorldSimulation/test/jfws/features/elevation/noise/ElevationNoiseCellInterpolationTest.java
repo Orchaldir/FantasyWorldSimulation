@@ -3,7 +3,6 @@ package jfws.features.elevation.noise;
 import jfws.maps.region.RegionCell;
 import jfws.maps.sketch.SketchCell;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.OutsideMapException;
 import jfws.util.math.interpolation.Interpolator2d;
 import jfws.util.math.noise.Noise;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +75,7 @@ class ElevationNoiseCellInterpolationTest {
 	// setTargetValue()
 
 	@Test
-	public void testSetTargetValue() throws OutsideMapException {
+	public void testSetTargetValue() {
 		when(regionMap.getCell((int)TARGET_X, (int)TARGET_Y)).thenReturn(regionCell);
 		when(regionCell.getElevation()).thenReturn(ELEVATION);
 		when(noise.calculateNoise(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);

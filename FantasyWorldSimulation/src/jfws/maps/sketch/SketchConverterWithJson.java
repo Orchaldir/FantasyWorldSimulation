@@ -6,7 +6,6 @@ import jfws.maps.sketch.terrain.TerrainTypeManager;
 import jfws.util.io.FileUtils;
 import jfws.util.map.ArrayCellMap2D;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.OutsideMapException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -281,12 +280,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		jsonObject.addProperty(HEIGHT, cells.getHeight());
 
 		saveUsedTerrainTypes(jsonObject, cells);
-
-		try {
-			saveTerrainTypeMap(jsonObject, cells);
-		} catch (OutsideMapException e) {
-			throw new IOException("Outside map!", e);
-		}
+		saveTerrainTypeMap(jsonObject, cells);
 
 		return gson.toJson(jsonObject);
 	}
@@ -313,7 +307,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		jsonObject.add(USED_TERRAIN_TYPES, jsonArray);
 	}
 
-	private void saveTerrainTypeMap(JsonObject jsonObject, CellMap2d<SketchCell> cells) throws OutsideMapException {
+	private void saveTerrainTypeMap(JsonObject jsonObject, CellMap2d<SketchCell> cells) {
 		JsonArray rowsArray = new JsonArray();
 
 		for(int y = 0; y < cells.getHeight(); y++) {

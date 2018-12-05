@@ -18,15 +18,6 @@ public class MapInterpolator<T, U> {
 	private final double[][] sourceValues = new double[ARRAY_SIZE][ARRAY_SIZE];
 
 	public void interpolate(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) {
-		try {
-			tryInterpolate(sourceMap, targetMap);
-		}
-		catch (OutsideMapException e) {
-			log.error("interpolate(): Tried to access cell outside the map! x={} y={}", e.getX(), e.getY());
-		}
-	}
-
-	private void tryInterpolate(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) throws OutsideMapException {
 		int cellSize = calculateCellSize(sourceMap, targetMap);
 
 		for(int y = 0; y < sourceMap.getHeight(); y++) {
@@ -36,7 +27,7 @@ public class MapInterpolator<T, U> {
 			}
 		}
 
-		log.debug("tryInterpolate(): finished");
+		log.debug("interpolate(): finished");
 	}
 
 	public int calculateCellSize(CellMap2d<T> sourceMap, CellMap2d<U> targetMap) {

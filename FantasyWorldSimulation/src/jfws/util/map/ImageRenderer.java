@@ -13,16 +13,6 @@ public class ImageRenderer {
 		CellMap2d<T> cellMap = map.getCellMap();
 		WritableImage writableImage = new WritableImage(cellMap.getWidth(), cellMap.getHeight());
 
-		try {
-			tryRender(writableImage, cellMap, colorSelector);
-		} catch (OutsideMapException e) {
-			log.warn("render(): OutsideMapException");
-		}
-
-		return writableImage;
-	}
-
-	private  <T> void tryRender(WritableImage writableImage, CellMap2d<T> cellMap, ColorSelector<T> colorSelector) throws OutsideMapException {
 		PixelWriter pixelWriter = writableImage.getPixelWriter();
 
 		for(int y = 0; y < cellMap.getHeight(); y++) {
@@ -32,5 +22,7 @@ public class ImageRenderer {
 				pixelWriter.setColor(x, y, color);
 			}
 		}
+
+		return writableImage;
 	}
 }

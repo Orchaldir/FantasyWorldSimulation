@@ -2,9 +2,7 @@ package jfws.maps.sketch;
 
 import jfws.features.elevation.ElevationCell;
 import jfws.maps.sketch.elevation.ElevationGenerator;
-import jfws.maps.sketch.terrain.TerrainType;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -30,7 +28,7 @@ class SketchMapTest extends SharedData {
 	}
 
 	@Test
-	public void testCreate() throws OutsideMapException {
+	public void testCreate() {
 		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
 		assertThat(cells, is(notNullValue()));
 		assertThat(cells.getWidth(), is(equalTo(WIDTH)));
@@ -40,7 +38,7 @@ class SketchMapTest extends SharedData {
 	}
 
 	@Test
-	public void testGenerateElevation() throws OutsideMapException {
+	public void testGenerateElevation() {
 		sketchMap.getCellMap().getCell(0).setTerrainType(TERRAIN_TYPE_B);
 		sketchMap.getCellMap().getCell(1).setTerrainType(TERRAIN_TYPE_C);
 

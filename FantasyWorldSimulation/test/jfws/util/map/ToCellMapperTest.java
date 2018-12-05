@@ -91,7 +91,7 @@ class ToCellMapperTest extends SharedTestData {
 
 	// getCell()
 
-	private void testGetCell(int cell_x, int cell_y) throws OutsideMapException {
+	private void testGetCell(int cell_x, int cell_y) {
 		int index  = MAP.getIndex(cell_x, cell_y);
 
 		for(double x = ORIGIN_X  + RESOLUTION_X * cell_x; x < ORIGIN_X + RESOLUTION_X * (cell_x + 1); x++) {
@@ -103,7 +103,7 @@ class ToCellMapperTest extends SharedTestData {
 	}
 
 	@Test
-	public void testGetCell() throws OutsideMapException {
+	public void testGetCell() {
 		for(int cell_y = 0; cell_y < HEIGHT; cell_y++) {
 			for(int cell_x = 0; cell_x < WIDTH; cell_x++) {
 				testGetCell(cell_x, cell_y);
