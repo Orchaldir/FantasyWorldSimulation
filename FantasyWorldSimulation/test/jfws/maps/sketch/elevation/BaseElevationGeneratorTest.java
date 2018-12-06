@@ -15,6 +15,11 @@ class BaseElevationGeneratorTest extends ElevationGeneratorTest {
 	}
 
 	@Test
+	public void testPrepare() {
+		generator.prepare();
+	}
+
+	@Test
 	public void testGenerate() {
 		assertThat(generator.generate(type0), is(equalTo(BASE_ELEVATION_0)));
 		assertThat(generator.generate(type1), is(equalTo(BASE_ELEVATION_1)));

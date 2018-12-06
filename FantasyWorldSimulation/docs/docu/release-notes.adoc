@@ -8,6 +8,18 @@ ifndef::imagesdir[:imagesdir: images/]
 | Release
 | Notes
 
+| 2018.2.0
+|
+
+*New:*
+
+* Maps can be exported as images.
+
+*Fixed:*
+
+* Fixed https://github.com/Orchaldir/FantasyWorldSimulation/issues/16[#16]:
+  First time rendering the Region Map takes too long
+
 | 2018.1.0
 |
 
