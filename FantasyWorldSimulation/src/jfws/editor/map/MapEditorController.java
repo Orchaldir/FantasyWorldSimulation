@@ -7,12 +7,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
-import javafx.stage.FileChooser;
-import jfws.features.elevation.ElevationCellInterpolator;
-import jfws.features.elevation.ElevationColorSelector;
-import jfws.features.elevation.noise.ElevationNoise;
-import jfws.features.elevation.noise.ElevationNoiseManager;
-import jfws.features.elevation.noise.ElevationNoiseWithInterpolation;
+import javafx.stage.Window;
+import jfws.features.elevation.*;
+import jfws.features.elevation.noise.*;
 import jfws.maps.region.RegionCell;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.SketchCell;
@@ -36,13 +33,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 
-import static javafx.scene.control.Alert.AlertType.ERROR;
-
 @Slf4j
-public class MapEditorController {
+public class MapEditorController implements EditorController {
 
 	public static final double WORLD_TO_SCREEN = 0.5;
 	public static final int BORDER_BETWEEN_CELLS = 0;
@@ -76,10 +70,9 @@ public class MapEditorController {
 	@FXML
 	private MenuItem exportImageItem;
 
-	private FileChooser mapChooser = new FileChooser();
-	private FileChooser imageChooser = new FileChooser();
-
 	private MapStorage mapStorage;
+
+	private MenuBarController menuBarController;
 
 	private ElevationGenerator elevationGenerator = new ElevationGeneratorWithNoise(new GeneratorWithRandom(42));
 
@@ -103,30 +96,16 @@ public class MapEditorController {
 
 		mapStorage = new MapStorage(50);
 		mapStorage.getTerrainTypeManager().load(new File("data/terrain-types.json"));
-		mapStorage.createEmptyMap(20,  10, "Plain");
+		mapStorage.createEmptyMap(20, 10, "Plain");
 		mapStorage.createTool("Hill");
+
+		menuBarController = new MenuBarController(mapStorage, this);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
 		colorSelectorForSketch = colorSelectorMap.getDefaultColorSelector();
 
 		colorSelectorForRegion = new ElevationColorSelector<>();
-
-		addExtension(mapChooser, "JSON", "*.json");
-		setDirectory(mapChooser, "./data/map/");
-
-		addExtension(imageChooser, "PNG", "*.png");
-		setDirectory(imageChooser, ".");
-	}
-
-	private void addExtension(FileChooser fileChooser, String description, String extension) {
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(description, extension);
-		fileChooser.getExtensionFilters().add(extFilter);
-	}
-
-	private void setDirectory(FileChooser fileChooser, String relativePath) {
-		String currentPath = Paths.get(relativePath).toAbsolutePath().normalize().toString();
-		fileChooser.setInitialDirectory(new File(currentPath));
 	}
 
 	@FXML
@@ -159,7 +138,24 @@ public class MapEditorController {
 		terrainTypeComboBox.getSelectionModel().select(mapStorage.getChangeTerrainTypeTool().getTerrainType().getName());
 	}
 
-	private void render() {
+	@Override
+	public BufferedImage getSnapshot() {
+		WritableImage image = mapCanvas.snapshot(null, null);
+		return SwingFXUtils.fromFXImage(image, null);
+	}
+
+	@Override
+	public void saveSnapshot(File file, BufferedImage bufferedImage) throws IOException {
+		ImageIO.write(bufferedImage, "PNG", file);
+	}
+
+	@Override
+	public Window getWindow() {
+		return null;
+	}
+
+	@Override
+	public void render() {
 		log.info("render()");
 		SketchMap sketchMap = mapStorage.getSketchMap();
 		RegionMap regionMap = mapStorage.getRegionMap();
@@ -185,65 +181,27 @@ public class MapEditorController {
 		log.info("render(): Finished");
 	}
 
+	@Override
+	public void showAlert(Alert.AlertType type, String title, String content) {
+		Alert alert = new Alert(type);
+		alert.setTitle(title);
+		alert.setContentText(content);
+		alert.showAndWait();
+	}
+
 	@FXML
 	public void onLoadMap() {
-		File file = mapChooser.showOpenDialog(mapCanvas.getScene().getWindow());
-
-		if (file != null) {
-			log.info("onLoadMap(): file={}", file.getPath());
-
-			try {
-				SketchMap sketchMap = mapStorage.getSketchConverter().load(file);
-				mapStorage.setSketchMap(sketchMap);
-				render();
-			} catch (IOException e) {
-				Alert alert = new Alert(ERROR);
-				alert.setTitle("Map loading failed!");
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
-			}
-		}
-		else {
-			log.info("onLoadMap(): No file.");
-		}
+		menuBarController.loadMap();
 	}
 
 	@FXML
 	public void onSaveMap() {
-		File file = mapChooser.showSaveDialog(mapCanvas.getScene().getWindow());
-
-		if (file != null) {
-			log.info("onSaveMap(): file={}", file.getPath());
-
-			try {
-				mapStorage.getSketchConverter().save(file, mapStorage.getSketchMap());
-			} catch (IOException e) {
-				log.error("onSaveMap(): ", e);
-			}
-		}
-		else {
-			log.info("onSaveMap(): No file.");
-		}
+		menuBarController.saveMap();
 	}
 
 	@FXML
 	public void onExportImage() {
-		File file = imageChooser.showSaveDialog(mapCanvas.getScene().getWindow());
-
-		if (file != null) {
-			log.info("onExportImage(): file={}", file.getPath());
-			WritableImage image = mapCanvas.snapshot(null, null);
-			BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
-
-			try {
-				ImageIO.write(bufferedImage, "PNG", file);
-			} catch (IOException e) {
-				log.error("onExportImage(): ", e);
-			}
-		}
-		else {
-			log.info("onExportImage(): No file.");
-		}
+		menuBarController.exportImage();
 	}
 
 	@FXML
