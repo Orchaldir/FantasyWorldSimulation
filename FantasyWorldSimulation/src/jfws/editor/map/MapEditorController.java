@@ -90,8 +90,6 @@ public class MapEditorController implements EditorController {
 		mapStorage.createEmptyMap(20, 10, "Plain");
 		mapStorage.createTool("Hill");
 
-		menuBarController = new MenuBarController(mapStorage, this, undoItem, redoItem);
-
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
 		colorSelectorForSketch = colorSelectorMap.getDefaultColorSelector();
@@ -103,6 +101,8 @@ public class MapEditorController implements EditorController {
 	private void initialize() {
 		log.info("initialize()");
 
+		menuBarController = new MenuBarController(mapStorage, this, undoItem, redoItem);
+
 		initTerrainTypeComboBox();
 
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
@@ -113,7 +113,7 @@ public class MapEditorController implements EditorController {
 		CanvasRenderer canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
 
-		updateHistory();
+		menuBarController.updateHistory();
 		updateViewControls();
 		render();
 	}
@@ -250,30 +250,19 @@ public class MapEditorController implements EditorController {
 		double worldY = mapRenderer.convertToWorld(mouseEvent.getY());
 
 		if(mapStorage.getChangeTerrainTypeTool().use(worldX, worldY)) {
-			updateHistory();
+			menuBarController.updateHistory();
 			render();
 		}
 	}
 
 	@FXML
 	public void onUndoClicked() {
-		log.info("onUndoClicked()");
-		mapStorage.getCommandHistory().unExecute();
-		updateHistory();
-		render();
+		menuBarController.undo();
 	}
 
 	@FXML
 	public void onRedoClicked() {
-		log.info("onRedoClicked()");
-		mapStorage.getCommandHistory().reExecute();
-		updateHistory();
-		render();
-	}
-
-	private void updateHistory() {
-		undoItem.setDisable(!mapStorage.getCommandHistory().canUnExecute());
-		redoItem.setDisable(!mapStorage.getCommandHistory().canReExecute());
+		menuBarController.redo();
 	}
 
 	private void updateViewControls() {

@@ -1,6 +1,5 @@
 package jfws.editor.map;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import jfws.maps.sketch.SketchMap;

@@ -23,6 +23,10 @@ class SketchConverterWithJsonTest {
 	public static final int WIDTH = 3;
 	public static final int HEIGHT = 2;
 	public static final String FILE_CONTENT = "test";
+	public static final String SKETCH_MAP_TEXT_0 = "{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
+			"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}";
+	public static final String SKETCH_MAP_TEXT_1 = "{\"version\":1,\"width\":1,\"height\":1,\"used_terrain_types\":[\"C\"]," +
+			"\"terrain_type_map\":[\"0\"]}";
 
 	private FileUtils fileUtils;
 	private File file;
@@ -91,36 +95,22 @@ class SketchConverterWithJsonTest {
 
 	@Test
 	public void testParseString() throws IOException {
-		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":2,\"height\":3,\"used_terrain_types\":[\"A\",\"B\"]," +
-				"\"terrain_type_map\":[\"0,0\",\"0,1\",\"0,0\"]}");
+		SketchMap sketchMap = converter.parseString(SKETCH_MAP_TEXT_0);
 
-		assertNotNull(sketchMap);
+		assertSketchMap(sketchMap, 2, 3);
+	}
 
-		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
+	@Test
+	public void testParseStringTwice() throws IOException {
+		converter.parseString(SKETCH_MAP_TEXT_1);
+		SketchMap sketchMap = converter.parseString(SKETCH_MAP_TEXT_0);
 
-		assertNotNull(cells);
-		assertThat(cells.getWidth(), is(2));
-		assertThat(cells.getHeight(), is(3));
-
-		TerrainType terrainTypeA = manager.getOrDefault("A");
-		TerrainType terrainTypeB = manager.getOrDefault("B");
-
-		for(int i = 0; i < cells.getSize(); i++) {
-			SketchCell cell = sketchMap.getCellMap().getCell(i);
-
-			if(i == 3) {
-				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeB)));
-			}
-			else {
-				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeA)));
-			}
-		}
+		assertSketchMap(sketchMap, 2, 3);
 	}
 
 	@Test
 	public void testParseStringWithMinSize() throws IOException {
-		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":1,\"height\":1,\"used_terrain_types\":[\"A\"]," +
-				"\"terrain_type_map\":[\"0\"]}");
+		SketchMap sketchMap = converter.parseString(SKETCH_MAP_TEXT_1);
 
 		assertNotNull(sketchMap);
 
@@ -273,6 +263,32 @@ class SketchConverterWithJsonTest {
 		verify(fileUtils).writeWholeFile(file, FILE_CONTENT);
 	}
 
+	// convertToJson
+
+	@Test
+	public void testConvertToJsonTwice() throws IOException {
+		manager.add(TERRAIN_TYPE_A);
+		manager.add(TERRAIN_TYPE_B);
+
+		SketchMap sketchMap0 =  new SketchMap(1, 1, TERRAIN_TYPE_A);
+		converter.convertToJson(sketchMap0);
+
+		SketchMap sketchMap1 =  new SketchMap(1, 1, TERRAIN_TYPE_B);
+		String text = converter.convertToJson(sketchMap1);
+
+		SketchMap loadedSketchMap = converter.parseString(text);
+
+		assertNotNull(loadedSketchMap);
+		assertThat(loadedSketchMap, is(not(sketchMap1)));
+
+		CellMap2d<SketchCell> cellMap = loadedSketchMap.getCellMap();
+
+		assertThat(cellMap.getWidth(), is(1));
+		assertThat(cellMap.getHeight(), is(1));
+
+		assertThat(cellMap.getCell(0,0).getTerrainType(), is(equalTo(TERRAIN_TYPE_B)));
+	}
+
 	// test
 
 	@Test
@@ -307,5 +323,31 @@ class SketchConverterWithJsonTest {
 		assertThat(cellMap.getCell(0,1).getTerrainType(), is(equalTo(TERRAIN_TYPE_C)));
 		assertThat(cellMap.getCell(1,1).getTerrainType(), is(equalTo(TERRAIN_TYPE_A)));
 		assertThat(cellMap.getCell(2,1).getTerrainType(), is(equalTo(TERRAIN_TYPE_B)));
+	}
+
+	//
+
+	private void assertSketchMap(SketchMap sketchMap, int width, int height) {
+		assertNotNull(sketchMap);
+
+		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
+
+		assertNotNull(cells);
+		assertThat(cells.getWidth(), is(width));
+		assertThat(cells.getHeight(), is(height));
+
+		TerrainType terrainTypeA = manager.getOrDefault("A");
+		TerrainType terrainTypeB = manager.getOrDefault("B");
+
+		for(int i = 0; i < cells.getSize(); i++) {
+			SketchCell cell = sketchMap.getCellMap().getCell(i);
+
+			if(i == 3) {
+				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeB)));
+			}
+			else {
+				assertThat(cell.getTerrainType(), is(equalTo(terrainTypeA)));
+			}
+		}
 	}
 }
