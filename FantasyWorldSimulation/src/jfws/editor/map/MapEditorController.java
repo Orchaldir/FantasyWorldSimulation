@@ -53,22 +53,13 @@ public class MapEditorController implements EditorController {
 	private Canvas mapCanvas;
 
 	@FXML
-	private Button undoButton, redoButton;
+	private MenuItem undoItem, redoItem;
 
 	@FXML
 	private MenuItem viewRegionMapItem;
 
 	@FXML
 	private MenuItem viewSketchMapItem;
-
-	@FXML
-	private MenuItem loadMapItem;
-
-	@FXML
-	private MenuItem saveMapItem;
-
-	@FXML
-	private MenuItem exportImageItem;
 
 	private MapStorage mapStorage;
 
@@ -99,7 +90,7 @@ public class MapEditorController implements EditorController {
 		mapStorage.createEmptyMap(20, 10, "Plain");
 		mapStorage.createTool("Hill");
 
-		menuBarController = new MenuBarController(mapStorage, this);
+		menuBarController = new MenuBarController(mapStorage, this, undoItem, redoItem);
 
 		colorSelectorMap = new ColorSelectorMap<>(new TerrainColorSelector());
 		colorSelectorMap.add(new ElevationColorSelector());
@@ -121,10 +112,6 @@ public class MapEditorController implements EditorController {
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);
-
-		loadMapItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-		saveMapItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-		exportImageItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
 
 		updateHistory();
 		updateViewControls();
@@ -285,8 +272,8 @@ public class MapEditorController implements EditorController {
 	}
 
 	private void updateHistory() {
-		undoButton.setDisable(!mapStorage.getCommandHistory().canUnExecute());
-		redoButton.setDisable(!mapStorage.getCommandHistory().canReExecute());
+		undoItem.setDisable(!mapStorage.getCommandHistory().canUnExecute());
+		redoItem.setDisable(!mapStorage.getCommandHistory().canReExecute());
 	}
 
 	private void updateViewControls() {

@@ -1,18 +1,22 @@
 package jfws.editor.map;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import jfws.maps.sketch.SketchConverter;
 import jfws.maps.sketch.SketchMap;
+import jfws.util.command.Command;
+import jfws.util.command.CommandHistory;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 class MenuBarControllerTest {
@@ -21,8 +25,12 @@ class MenuBarControllerTest {
 	private SketchConverter sketchConverter;
 	private SketchMap sketchMap;
 
+	private CommandHistory commandHistory;
+
 	private EditorController editorController;
 	private Window window;
+	private MenuItem undoItem;
+	private MenuItem redoItem;
 	private BufferedImage bufferedImage;
 
 	private FileChooser mapChooser;
@@ -37,22 +45,29 @@ class MenuBarControllerTest {
 		sketchConverter = mock(SketchConverter.class);
 		sketchMap = mock(SketchMap.class);
 
+		commandHistory = mock(CommandHistory.class);
+
 		editorController = mock(EditorController.class);
 		window = mock(Window.class);
+		undoItem = mock(MenuItem.class);
+		redoItem = mock(MenuItem.class);
 		bufferedImage = mock(BufferedImage.class);
 
 		mapChooser = mock(FileChooser.class);
 		imageChooser = mock(FileChooser.class);
 		file = mock(File.class);
 
-		menuBarController = new MenuBarController(mapStorage, editorController, mapChooser, imageChooser);
+		menuBarController = new MenuBarController(mapStorage, editorController, mapChooser, imageChooser, undoItem, redoItem);
 	}
 
 	// constructor
 
 	@Test
 	public void testConstructor() throws IOException {
-		menuBarController = new MenuBarController(mapStorage, editorController);
+		menuBarController = new MenuBarController(mapStorage, editorController, undoItem, redoItem);
+
+		assertFileChooser(menuBarController.getMapChooser(), MenuBarController.MAP_DESCRIPTION, MenuBarController.MAP_EXTENSION, MenuBarController.MAP_PATH);
+		assertFileChooser(menuBarController.getImageChooser(), MenuBarController.IMAGE_DESCRIPTION, MenuBarController.IMAGE_EXTENSION, MenuBarController.IMAGE_PATH);
 	}
 
 	// loadMap()
@@ -218,6 +233,78 @@ class MenuBarControllerTest {
 		verify(sketchConverter, never()).save(eq(file), eq(sketchMap));
 		verify(editorController, never()).render();
 		verify(editorController, never()).showAlert(any(), anyString(), anyString());
+	}
+
+	// history
+
+	@Test
+	public void testUndo() {
+		when(mapStorage.getCommandHistory()).thenReturn(commandHistory);
+
+		menuBarController.undo();
+
+		verify(mapStorage, atLeastOnce()).getCommandHistory();
+		verify(commandHistory).unExecute();
+		verify(commandHistory, never()).reExecute();
+		verify(commandHistory).canUnExecute();
+		verify(commandHistory).canReExecute();
+		verify(editorController).render();
+	}
+
+	@Test
+	public void testRedo() {
+		when(mapStorage.getCommandHistory()).thenReturn(commandHistory);
+
+		menuBarController.redo();
+
+		verify(mapStorage, atLeastOnce()).getCommandHistory();
+		verify(commandHistory, never()).unExecute();
+		verify(commandHistory).reExecute();
+		verify(commandHistory).canUnExecute();
+		verify(commandHistory).canReExecute();
+		verify(editorController).render();
+	}
+
+	@Test
+	public void testUpdateHistoryWithNoCommand() {
+		testUpdateHistory(false, false);
+	}
+
+	@Test
+	public void testUpdateHistoryWithUndo() {
+		testUpdateHistory(true, false);
+	}
+
+	@Test
+	public void testUpdateHistoryWithRedo() {
+		testUpdateHistory(false, true);
+	}
+
+	@Test
+	public void testUpdateHistoryWithBoth() {
+		testUpdateHistory(true, true);
+	}
+
+	private void testUpdateHistory(boolean canUndo, boolean canRedo) {
+		when(mapStorage.getCommandHistory()).thenReturn(commandHistory);
+		when(commandHistory.canUnExecute()).thenReturn(canUndo);
+		when(commandHistory.canReExecute()).thenReturn(canRedo);
+
+		menuBarController.updateHistory();
+
+		verify(commandHistory).canUnExecute();
+		verify(commandHistory).canReExecute();
+		verify(undoItem).setDisable(!canUndo);
+		verify(redoItem).setDisable(!canRedo);
+	}
+
+	//
+
+	private void assertFileChooser(FileChooser fileChooser, String description, String extension, String relativePath) {
+		assertThat(fileChooser.getExtensionFilters(), hasItem(allOf(
+				hasProperty("description", is(description)),
+				hasProperty("extensions", hasItem(extension))
+		)));
 	}
 
 }

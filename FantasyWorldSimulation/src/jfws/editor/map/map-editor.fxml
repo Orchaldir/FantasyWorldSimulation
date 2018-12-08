@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -25,11 +25,32 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="loadMapItem" mnemonicParsing="false" onAction="#onLoadMap" text="Load Map" />
-                  <MenuItem fx:id="saveMapItem" mnemonicParsing="false" onAction="#onSaveMap" text="Save Map" />
-                  <MenuItem fx:id="exportImageItem" mnemonicParsing="false" onAction="#onExportImage" text="Export Image" />
+              <MenuItem fx:id="loadMapItem" mnemonicParsing="false" onAction="#onLoadMap" text="Load Map">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="saveMapItem" mnemonicParsing="false" onAction="#onSaveMap" text="Save Map">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="exportImageItem" mnemonicParsing="false" onAction="#onExportImage" text="Export Image">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+              <items>
+                <MenuItem fx:id="undoItem" mnemonicParsing="false" onAction="#onUndoClicked" text="Undo">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="redoItem" mnemonicParsing="false" onAction="#onRedoClicked" text="Redo">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Y" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+              </items>
+            </Menu>
             <Menu mnemonicParsing="false" text="View">
               <items>
                 <MenuItem fx:id="viewSketchMapItem" mnemonicParsing="false" onAction="#onViewSketchMap" text="Sketch Map" />
@@ -43,8 +64,6 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <items>
                   <ComboBox fx:id="terrainTypeComboBox" onAction="#onTerrainTypeSelected" prefWidth="150.0" />
-                  <Button fx:id="undoButton" mnemonicParsing="false" onAction="#onUndoClicked" text="Undo" />
-                  <Button fx:id="redoButton" mnemonicParsing="false" onAction="#onRedoClicked" text="Redo" />
                   <ComboBox fx:id="renderStyleComboBox" onAction="#onRenderStyleSelected" prefWidth="150.0" />
               </items>
             </ToolBar>
