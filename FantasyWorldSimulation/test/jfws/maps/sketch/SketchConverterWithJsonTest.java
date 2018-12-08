@@ -117,6 +117,20 @@ class SketchConverterWithJsonTest {
 		}
 	}
 
+	@Test
+	public void testParseStringWithMinSize() throws IOException {
+		SketchMap sketchMap = converter.parseString("{\"version\":1,\"width\":1,\"height\":1,\"used_terrain_types\":[\"A\"]," +
+				"\"terrain_type_map\":[\"0\"]}");
+
+		assertNotNull(sketchMap);
+
+		CellMap2d<SketchCell> cells = sketchMap.getCellMap();
+
+		assertNotNull(cells);
+		assertThat(cells.getWidth(), is(1));
+		assertThat(cells.getHeight(), is(1));
+	}
+
 	// version
 
 	@Test

@@ -21,6 +21,8 @@ import java.io.File;
 @Slf4j
 public class MapStorage {
 
+	private FileUtils fileUtils;
+
 	private TerrainTypeConverter terrainTypeConverter;
 	private TerrainTypeManager terrainTypeManager;
 
@@ -35,7 +37,7 @@ public class MapStorage {
 
 	public MapStorage(int cellsPerSketchCell) {
 		this.cellsPerSketchCell = cellsPerSketchCell;
-		FileUtils fileUtils = new ApacheFileUtils();
+		fileUtils = new ApacheFileUtils();
 
 		terrainTypeConverter = new TerrainTypeConverterWithJson();
 		terrainTypeManager = new TerrainTypeManager(fileUtils, terrainTypeConverter);

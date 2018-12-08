@@ -8,6 +8,7 @@ import jfws.maps.sketch.SketchConverter;
 import jfws.maps.sketch.SketchMap;
 import jfws.util.command.Command;
 import jfws.util.command.CommandHistory;
+import jfws.util.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,10 +22,14 @@ import static org.mockito.Mockito.*;
 
 class MenuBarControllerTest {
 
+	public static final String MAP_PATH = "map_path";
+	public static final String IMAGE_PATH = "image_path";
+
 	private MapStorage mapStorage;
 	private SketchConverter sketchConverter;
 	private SketchMap sketchMap;
 
+	private FileUtils fileUtils;
 	private CommandHistory commandHistory;
 
 	private EditorController editorController;
@@ -45,6 +50,7 @@ class MenuBarControllerTest {
 		sketchConverter = mock(SketchConverter.class);
 		sketchMap = mock(SketchMap.class);
 
+		fileUtils = mock(FileUtils.class);
 		commandHistory = mock(CommandHistory.class);
 
 		editorController = mock(EditorController.class);
@@ -64,10 +70,14 @@ class MenuBarControllerTest {
 
 	@Test
 	public void testConstructor() throws IOException {
+		when(mapStorage.getFileUtils()).thenReturn(fileUtils);
+		when(fileUtils.getAbsolutePath(MenuBarController.MAP_PATH)).thenReturn(MAP_PATH);
+		when(fileUtils.getAbsolutePath(MenuBarController.IMAGE_PATH)).thenReturn(IMAGE_PATH);
+
 		menuBarController = new MenuBarController(mapStorage, editorController, undoItem, redoItem);
 
-		assertFileChooser(menuBarController.getMapChooser(), MenuBarController.MAP_DESCRIPTION, MenuBarController.MAP_EXTENSION, MenuBarController.MAP_PATH);
-		assertFileChooser(menuBarController.getImageChooser(), MenuBarController.IMAGE_DESCRIPTION, MenuBarController.IMAGE_EXTENSION, MenuBarController.IMAGE_PATH);
+		assertFileChooser(menuBarController.getMapChooser(), MenuBarController.MAP_DESCRIPTION, MenuBarController.MAP_EXTENSION, MAP_PATH);
+		assertFileChooser(menuBarController.getImageChooser(), MenuBarController.IMAGE_DESCRIPTION, MenuBarController.IMAGE_EXTENSION, IMAGE_PATH);
 	}
 
 	// loadMap()
@@ -300,11 +310,12 @@ class MenuBarControllerTest {
 
 	//
 
-	private void assertFileChooser(FileChooser fileChooser, String description, String extension, String relativePath) {
+	private void assertFileChooser(FileChooser fileChooser, String description, String extension, String path) {
 		assertThat(fileChooser.getExtensionFilters(), hasItem(allOf(
 				hasProperty("description", is(description)),
 				hasProperty("extensions", hasItem(extension))
 		)));
+		assertThat(fileChooser.getInitialDirectory().getPath(), is(path));
 	}
 
 }

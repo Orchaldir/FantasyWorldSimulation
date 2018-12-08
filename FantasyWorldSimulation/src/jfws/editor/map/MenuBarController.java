@@ -10,14 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
 
 @Slf4j
 public class MenuBarController {
 
-	public static final String MAP_PATH = "./data/map/";
+	public static final String MAP_PATH = "data/map/";
 	public static final String IMAGE_PATH = ".";
 	public static final String MAP_EXTENSION = "*.json";
 	public static final String IMAGE_EXTENSION = "*.png";
@@ -69,7 +68,7 @@ public class MenuBarController {
 	}
 
 	private void setDirectory(FileChooser fileChooser, String relativePath) {
-		String currentPath = Paths.get(relativePath).toAbsolutePath().normalize().toString();
+		String currentPath = mapStorage.getFileUtils().getAbsolutePath(relativePath);
 		fileChooser.setInitialDirectory(new File(currentPath));
 	}
 
