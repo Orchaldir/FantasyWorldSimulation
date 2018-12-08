@@ -17,6 +17,46 @@ class SimplexNoiseTest {
 
 	private SimplexNoise noise = new SimplexNoise();
 
+	// floorFast()
+
+	@Test
+	public void testFloorFastWithInteger() {
+		for(int value = -10; value < 10; value++) {
+			assertThat(SimplexNoise.floorFast(value), is(equalTo(value)));
+		}
+	}
+
+	@Test
+	public void testFloorFastWithPositiveValue() {
+		int integer = 365;
+		double step = 0.01;
+
+		for(double value = 0.0; value < 1.0; value += step) {
+			assertThat(SimplexNoise.floorFast(integer + value), is(equalTo(integer)));
+		}
+	}
+
+	@Test
+	public void testFloorFastWithNegativeValue() {
+		int integer = -8;
+		double step = 0.01;
+
+		for(double value = 0.0; value < 1.0; value += step) {
+			assertThat(SimplexNoise.floorFast(integer + value), is(equalTo(integer)));
+		}
+	}
+
+	// dot()
+
+	@Test
+	public void testDot() {
+		SimplexNoise.Grad grad = new SimplexNoise.Grad(1.0, 2.0, 1000.0);
+
+		assertThat(SimplexNoise.dot(grad, 3.0, 4.0), is(equalTo(11.0)));
+	}
+
+	// calculateNoise()
+
 	@Test
 	public void testCalculateNoiseInInterval() {
 		for(double x = -RANGE; x < RANGE; x++) {
@@ -59,6 +99,11 @@ class SimplexNoiseTest {
 		average /= numbers;
 
 		assertThat(average, is(closeTo(0, ERROR)));
+	}
+
+	@Test
+	public void testCalculateNoise() {
+		assertThat(noise.calculateNoise(1.1, 2.5), is(closeTo(-0.0703, ERROR)));
 	}
 
 }

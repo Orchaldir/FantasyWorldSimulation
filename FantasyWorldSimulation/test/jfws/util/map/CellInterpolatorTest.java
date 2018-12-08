@@ -114,6 +114,12 @@ class CellInterpolatorTest {
 		verify(cellInterpolatorSpy).setTargetValue(targetMap, TARGET_X1, TARGET_Y0, INTERPOLATED_VALUE_1);
 		verify(cellInterpolatorSpy).setTargetValue(targetMap, TARGET_X0, TARGET_Y1, INTERPOLATED_VALUE_2);
 		verify(cellInterpolatorSpy).setTargetValue(targetMap, TARGET_X1, TARGET_Y1, INTERPOLATED_VALUE_3);
+
+		verify(interpolator).interpolate(sourceValues, 0.0, 0.0);
+		verify(interpolator).interpolate(sourceValues, 0.5, 0.0);
+		verify(interpolator).interpolate(sourceValues, 0.0, 0.5);
+		verify(interpolator).interpolate(sourceValues, 0.5, 0.5);
+		verifyNoMoreInteractions(interpolator);
 	}
 
 	//

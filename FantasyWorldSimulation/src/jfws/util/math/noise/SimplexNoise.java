@@ -66,12 +66,12 @@ public class SimplexNoise implements Noise {
 	private static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
 
 	// This method is a *lot* faster than using (int)Math.floor(x)
-	private static int fastFloor(double x) {
+	public static int floorFast(double x) {
 		int xi = (int) x;
 		return x < xi ? xi - 1 : xi;
 	}
 
-	private static double dot(Grad g, double x, double y) {
+	public static double dot(Grad g, double x, double y) {
 		return g.x * x + g.y * y;
 	}
 
@@ -84,8 +84,8 @@ public class SimplexNoise implements Noise {
 
 		// Skew the input space to determine which simplex cell we're in
 		double s = (xin + yin) * F2; // Hairy factor for 2D
-		int i = fastFloor(xin + s);
-		int j = fastFloor(yin + s);
+		int i = floorFast(xin + s);
+		int j = floorFast(yin + s);
 		double t = (i + j) * G2;
 		double X0 = i - t; // Unskew the cell origin back to (x,y) space
 		double Y0 = j - t;
@@ -161,7 +161,7 @@ public class SimplexNoise implements Noise {
 
 	// Inner class to speed upp gradient computations
 	// (array access is a lot slower than member access)
-	private static class Grad {
+	protected static class Grad {
 		private double x, y, z;
 
 		Grad(double x, double y, double z) {
