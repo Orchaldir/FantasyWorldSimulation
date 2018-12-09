@@ -1,18 +1,20 @@
 package jfws.util.math.geometry;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
 public class Point2d {
 
-	private double x;
-	private double y;
+	private final double x;
+	private final double y;
 
 	public double getDistanceTo(Point2d point) {
 		return Math.hypot(point.x - x, point.y - y);
+	}
+
+	public double getDotProduct(Point2d point) {
+		return x * point.x + y * point.y;
 	}
 }
