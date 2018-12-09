@@ -1,7 +1,7 @@
-package jfws.util.math.noise;
+package jfws.util.math.generator.noise;
 
 /*
- * A speed-improved simplex calculateNoise algorithm for 2D, 3D and 4D in Java.
+ * A speed-improved simplex generate algorithm for 2D, 3D and 4D in Java.
  *
  * Based on example code by Stefan Gustavson (stegu@itn.liu.se).
  * Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
@@ -17,7 +17,9 @@ package jfws.util.math.noise;
  *
  */
 
-public class SimplexNoise implements Noise {
+import jfws.util.math.generator.Generator;
+
+public class SimplexNoise implements Generator {
 
 	private static Grad grad3[] = {
 			new Grad(1, 1, 0),
@@ -76,7 +78,7 @@ public class SimplexNoise implements Noise {
 	}
 
 	@Override
-	public double calculateNoise(double xin, double yin) {
+	public double generate(double xin, double yin) {
 		// Noise contributions from the three corners
 		double n0;
 		double n1;

@@ -4,7 +4,7 @@ import jfws.maps.region.RegionCell;
 import jfws.maps.sketch.SketchCell;
 import jfws.util.map.CellMap2d;
 import jfws.util.math.interpolation.Interpolator2d;
-import jfws.util.math.noise.Noise;
+import jfws.util.math.generator.Generator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +31,7 @@ class ElevationNoiseCellInterpolationTest {
 	private CellMap2d<RegionCell> regionMap;
 
 	private Interpolator2d interpolator;
-	private Noise noise;
+	private Generator noise;
 	private ElevationNoiseCellInterpolation<SketchCell,RegionCell> cellInterpolation;
 
 	@BeforeEach
@@ -41,14 +41,14 @@ class ElevationNoiseCellInterpolationTest {
 		regionMap = mock(CellMap2d.class);
 
 		interpolator = mock(Interpolator2d.class);
-		noise = mock(Noise.class);
+		noise = mock(Generator.class);
 
 		cellInterpolation = new ElevationNoiseCellInterpolation<>(interpolator, noise, INDEX);
 	}
 
 	private void verifyNoCall() {
 		verifyNoCallToInterpolate();
-		verify(noise, never()).calculateNoise(anyDouble(), anyDouble());
+		verify(noise, never()).generate(anyDouble(), anyDouble());
 	}
 
 	private void verifyNoCallToInterpolate() {
@@ -78,13 +78,13 @@ class ElevationNoiseCellInterpolationTest {
 	public void testSetTargetValue() {
 		when(regionMap.getCell((int)TARGET_X, (int)TARGET_Y)).thenReturn(regionCell);
 		when(regionCell.getElevation()).thenReturn(ELEVATION);
-		when(noise.calculateNoise(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);
+		when(noise.generate(anyDouble(), anyDouble())).thenReturn(NOISE_VALUE);
 
 		cellInterpolation.setTargetValue(regionMap, (int)TARGET_X, (int)TARGET_Y, NOISE_FACTOR);
 
 		verifyNoCallToInterpolate();
 		verify(regionCell).getElevation();
 		verify(regionCell).setElevation(ELEVATION + NOISE_VALUE * NOISE_FACTOR);
-		verify(noise).calculateNoise(eq(TARGET_X), eq(TARGET_Y));
+		verify(noise).generate(eq(TARGET_X), eq(TARGET_Y));
 	}
 }

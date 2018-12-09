@@ -1,5 +1,6 @@
-package jfws.util.math.noise;
+package jfws.util.math.generator.noise;
 
+import jfws.util.math.generator.noise.SimplexNoise;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.core.AllOf;
 import org.junit.jupiter.api.Test;
@@ -55,13 +56,13 @@ class SimplexNoiseTest {
 		assertThat(SimplexNoise.dot(grad, 3.0, 4.0), is(equalTo(11.0)));
 	}
 
-	// calculateNoise()
+	// generate()
 
 	@Test
 	public void testCalculateNoiseInInterval() {
 		for(double x = -RANGE; x < RANGE; x++) {
 			for(double y = -RANGE; y < RANGE; y++) {
-				double value = noise.calculateNoise(x, y);
+				double value = noise.generate(x, y);
 				assertThat(value, AllOf.allOf(greaterThan(MIN_VALUE), lessThan(MAX_VALUE)));
 			}
 		}
@@ -74,7 +75,7 @@ class SimplexNoiseTest {
 
 		for(double x = -RANGE; x < RANGE; x++) {
 			for(double y = -RANGE; y < RANGE; y++) {
-				double value = noise.calculateNoise(x, y);
+				double value = noise.generate(x, y);
 				min = Math.min(min, value);
 				max = Math.max(max, value);
 			}
@@ -91,7 +92,7 @@ class SimplexNoiseTest {
 
 		for(double x = -RANGE; x < RANGE; x++) {
 			for(double y = -RANGE; y < RANGE; y++) {
-				average += noise.calculateNoise(x, y);
+				average += noise.generate(x, y);
 				numbers++;
 			}
 		}
@@ -103,7 +104,7 @@ class SimplexNoiseTest {
 
 	@Test
 	public void testCalculateNoise() {
-		assertThat(noise.calculateNoise(1.1, 2.5), is(closeTo(-0.0703, ERROR)));
+		assertThat(noise.generate(1.1, 2.5), is(closeTo(-0.0703, ERROR)));
 	}
 
 }

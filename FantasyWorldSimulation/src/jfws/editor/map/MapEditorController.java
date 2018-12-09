@@ -21,8 +21,8 @@ import jfws.util.map.ImageRenderer;
 import jfws.util.map.MapInterpolator;
 import jfws.util.map.MapRenderer;
 import jfws.util.math.interpolation.BiTwoValueInterpolator;
-import jfws.util.math.noise.ScalableNoise;
-import jfws.util.math.noise.SimplexNoise;
+import jfws.util.math.generator.ScaledInput;
+import jfws.util.math.generator.noise.SimplexNoise;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
@@ -76,7 +76,7 @@ public class MapEditorController implements EditorController {
 
 	private ElevationNoiseManager<RegionCell> elevationNoiseManager = new ElevationNoiseManager<>();
 	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill",
-			BiTwoValueInterpolator.createBilinearInterpolator(), new ScalableNoise(new SimplexNoise(), 50.0), 0);
+			BiTwoValueInterpolator.createBilinearInterpolator(), new ScaledInput(new SimplexNoise(), 50.0), 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
 	private MapRenderer mapRenderer;

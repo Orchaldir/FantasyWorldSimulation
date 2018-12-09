@@ -6,7 +6,7 @@ import jfws.maps.sketch.SketchMap;
 import jfws.util.map.Map2d;
 import jfws.util.map.MapInterpolator;
 import jfws.util.math.interpolation.Interpolator2d;
-import jfws.util.math.noise.Noise;
+import jfws.util.math.generator.Generator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ class ElevationNoiseWithInterpolationTest {
 	@Test
 	public void testConstructor() {
 		Interpolator2d interpolator = mock(Interpolator2d.class);
-		Noise noise = mock(Noise.class);
+		Generator noise = mock(Generator.class);
 		int index = 55;
 
 		ElevationNoiseWithInterpolation interpolation = new ElevationNoiseWithInterpolation(NAME, interpolator, noise, index);

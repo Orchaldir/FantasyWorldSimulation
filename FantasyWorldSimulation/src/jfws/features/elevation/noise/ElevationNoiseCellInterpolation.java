@@ -4,19 +4,19 @@ import jfws.features.elevation.ElevationCell;
 import jfws.util.map.CellInterpolator;
 import jfws.util.map.CellMap2d;
 import jfws.util.math.interpolation.Interpolator2d;
-import jfws.util.math.noise.Noise;
+import jfws.util.math.generator.Generator;
 import lombok.Getter;
 
 public class ElevationNoiseCellInterpolation<T extends NoiseAmplitudeStorage, U extends ElevationCell>
 		extends CellInterpolator<T,U> {
 
 	@Getter
-	private Noise noise;
+	private Generator noise;
 
 	@Getter
 	private int index;
 
-	public ElevationNoiseCellInterpolation(Interpolator2d interpolator, Noise noise, int index) {
+	public ElevationNoiseCellInterpolation(Interpolator2d interpolator, Generator noise, int index) {
 		super(interpolator);
 		this.noise = noise;
 		this.index = index;
@@ -32,7 +32,7 @@ public class ElevationNoiseCellInterpolation<T extends NoiseAmplitudeStorage, U 
 		U targetCell = targetMap.getCell(targetX, targetY);
 
 		double oldElevation = targetCell.getElevation();
-		double scaledNoise = noise.calculateNoise(targetX, targetY) * noiseFactor;
+		double scaledNoise = noise.generate(targetX, targetY) * noiseFactor;
 		double newElevation = oldElevation + scaledNoise;
 
 		targetCell.setElevation(newElevation);

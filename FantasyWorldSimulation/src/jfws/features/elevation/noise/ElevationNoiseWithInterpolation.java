@@ -4,7 +4,7 @@ import jfws.features.elevation.ElevationCell;
 import jfws.util.map.Map2d;
 import jfws.util.map.MapInterpolator;
 import jfws.util.math.interpolation.Interpolator2d;
-import jfws.util.math.noise.Noise;
+import jfws.util.math.generator.Generator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ public class ElevationNoiseWithInterpolation<T extends NoiseAmplitudeStorage, U 
 	@Getter
 	private MapInterpolator mapInterpolator;
 
-	public ElevationNoiseWithInterpolation(String name, Interpolator2d interpolator, Noise noise, int index) {
+	public ElevationNoiseWithInterpolation(String name, Interpolator2d interpolator, Generator noise, int index) {
 		this.name = name;
 		cellInterpolation = new ElevationNoiseCellInterpolation(interpolator, noise, index);
 		mapInterpolator =  new MapInterpolator(cellInterpolation);
