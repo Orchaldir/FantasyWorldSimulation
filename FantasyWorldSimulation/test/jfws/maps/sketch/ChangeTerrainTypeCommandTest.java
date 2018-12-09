@@ -1,24 +1,36 @@
 package jfws.maps.sketch;
 
+import jfws.util.map.CellMap2d;
+import jfws.util.map.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
-import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_A;
 import static jfws.maps.sketch.terrain.SharedTestData.TERRAIN_TYPE_B;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-class ChangeTerrainTypeCommandTest extends SharedData{
+class ChangeTerrainTypeCommandTest {
 
 	public static final int INDEX = 1;
+
+	private SketchMap sketchMap;
+	private CellMap2d<SketchCell> cellMap;
+	private SketchCell cell;
+
 	private ChangeTerrainTypeCommand command;
 
 	@BeforeEach
 	public void setUp() {
-		sketchMap = new SketchMap(WIDTH, HEIGHT, TERRAIN_TYPE_A);
+		sketchMap = mock(SketchMap.class);
+		cellMap = mock(CellMap2d.class);
+		cell = mock(SketchCell.class);
+
 		command = new ChangeTerrainTypeCommand(sketchMap, INDEX, TERRAIN_TYPE_B);
 	}
 
@@ -27,35 +39,92 @@ class ChangeTerrainTypeCommandTest extends SharedData{
 		assertThat(command.getName(), is(equalTo(ChangeTerrainTypeCommand.NAME)));
 	}
 
-	@Test
-	public void testExecute() {
-		command.execute();
+	@Nested
+	class TestExecute {
 
-		assertCell(0, TERRAIN_TYPE_A, DEFAULT_ELEVATION);
-		assertCell(INDEX, TERRAIN_TYPE_B, DEFAULT_ELEVATION);
+		@Test
+		public void test() {
+			when(sketchMap.getCellMap()).thenReturn(cellMap);
+			when(cellMap.getCell(INDEX)).thenReturn(cell);
+			when(cell.getTerrainType()).thenReturn(TERRAIN_TYPE_A);
+
+			command.execute();
+
+			verify(sketchMap).getCellMap();
+			verify(cellMap).getCell(INDEX);
+
+			InOrder inOrder = inOrder(cell);
+			inOrder.verify(cell).getTerrainType();
+			inOrder.verify(cell).setTerrainType(TERRAIN_TYPE_B);
+			inOrder.verifyNoMoreInteractions();
+		}
+
+		@Test
+		public void testOutsideMap() {
+			when(sketchMap.getCellMap()).thenReturn(cellMap);
+			when(cellMap.getCell(INDEX)).thenThrow(OutsideMapException.class);
+
+			assertThrows(OutsideMapException.class, () -> command.execute());
+
+			verify(sketchMap).getCellMap();
+			verify(cellMap).getCell(INDEX);
+
+			verifyNoMoreInteractions(cell);
+		}
 	}
 
-	@Test
-	public void testExecuteOutsideMap() {
-		command = new ChangeTerrainTypeCommand(sketchMap, 100, TERRAIN_TYPE_B);
-		command.execute();
+	@Nested
+	class TestUnExecute {
 
-		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);
-	}
+		private void prepare() {
+			when(sketchMap.getCellMap()).thenReturn(cellMap);
+			when(cellMap.getCell(INDEX)).thenReturn(cell);
+			when(cell.getTerrainType()).thenReturn(TERRAIN_TYPE_A);
 
-	@Test
-	public void testUnExecute() {
-		command.execute();
-		command.unExecute();
+			command.execute();
 
-		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);
-	}
+			reset(sketchMap);
+			reset(cellMap);
+			reset(cell);
+		}
 
-	@Test
-	public void testUnExecuteWithoutExecute() {
-		assertThrows(IllegalStateException.class, () -> command.unExecute());
+		@Test
+		public void test() {
+			prepare();
 
-		assertCells(TERRAIN_TYPE_A, DEFAULT_ELEVATION);
+			when(sketchMap.getCellMap()).thenReturn(cellMap);
+			when(cellMap.getCell(INDEX)).thenReturn(cell);
+
+			command.unExecute();
+
+			verify(sketchMap).getCellMap();
+			verify(cellMap).getCell(INDEX);
+			verify(cell).setTerrainType(TERRAIN_TYPE_A);
+		}
+
+		@Test
+		public void testWithoutExecute() {
+			assertThrows(IllegalStateException.class, () -> command.unExecute());
+
+			verifyNoMoreInteractions(sketchMap);
+			verifyNoMoreInteractions(cellMap);
+			verifyNoMoreInteractions(cell);
+		}
+
+		@Test
+		public void testOutsideMap() {
+			prepare();
+
+			when(sketchMap.getCellMap()).thenReturn(cellMap);
+			when(cellMap.getCell(INDEX)).thenThrow(OutsideMapException.class);
+
+			assertThrows(OutsideMapException.class, () -> command.unExecute());
+
+			verify(sketchMap).getCellMap();
+			verify(cellMap).getCell(INDEX);
+
+			verifyNoMoreInteractions(cell);
+		}
 	}
 
 }

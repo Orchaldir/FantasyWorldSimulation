@@ -29,13 +29,10 @@ public class ChangeTerrainTypeCommand implements Command {
 	@Override
 	public void execute() {
 		log.info("execute(): index={} newTerrainType={}", index, newTerrainType);
-		try {
-			SketchCell cell = map.getCellMap().getCell(index);
-			oldTerrainType = cell.getTerrainType();
-			cell.setTerrainType(newTerrainType);
-		} catch (OutsideMapException e) {
-			log.warn("execute(): Tried to access cell outside the map! x={} y={}", e.getX(), e.getY());
-		}
+
+		SketchCell cell = map.getCellMap().getCell(index);
+		oldTerrainType = cell.getTerrainType();
+		cell.setTerrainType(newTerrainType);
 	}
 
 	@Override
@@ -46,11 +43,7 @@ public class ChangeTerrainTypeCommand implements Command {
 
 		log.info("unExecute(): index={} oldTerrainType={}", index, oldTerrainType);
 
-		try {
-			SketchCell cell = map.getCellMap().getCell(index);
-			cell.setTerrainType(oldTerrainType);
-		} catch (OutsideMapException e) {
-			log.error("unExecute(): Tried to access cell outside the map! x={} y={}", e.getX(), e.getY());
-		}
+		SketchCell cell = map.getCellMap().getCell(index);
+		cell.setTerrainType(oldTerrainType);
 	}
 }
