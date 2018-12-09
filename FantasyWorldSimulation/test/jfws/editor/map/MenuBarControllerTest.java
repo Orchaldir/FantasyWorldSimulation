@@ -6,7 +6,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import jfws.maps.sketch.SketchConverter;
 import jfws.maps.sketch.SketchMap;
-import jfws.util.command.Command;
 import jfws.util.command.CommandHistory;
 import jfws.util.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
