@@ -11,10 +11,18 @@ public class Point2d {
 	private final double y;
 
 	public double getDistanceTo(Point2d point) {
-		return Math.hypot(point.x - x, point.y - y);
+		return getDistanceTo(point.x, point.y);
+	}
+
+	public double getDistanceTo(double x, double y) {
+		return Math.hypot(this.x - x, this.y - y);
 	}
 
 	public double getDotProduct(Point2d point) {
-		return x * point.x + y * point.y;
+		return getDotProduct(point.x, point.y);
+	}
+
+	public double getDotProduct(double x, double y) {
+		return x * this.x + y * this.y;
 	}
 }
