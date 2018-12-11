@@ -25,4 +25,20 @@ public class Point2d {
 	public double getDotProduct(double x, double y) {
 		return x * this.x + y * this.y;
 	}
+
+	public double getLength() {
+		return getDistanceTo(0, 0);
+	}
+
+	public Point2d getNormalized() {
+		double length = getLength();
+
+		if(length == 0) {
+			return new Point2d(0, 0);
+		}
+
+		double factor = 1.0 / length;
+
+		return new Point2d(x * factor, y * factor);
+	}
 }
