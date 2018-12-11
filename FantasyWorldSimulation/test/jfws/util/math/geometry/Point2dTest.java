@@ -111,22 +111,22 @@ class Point2dTest {
 	class TestGetLength {
 
 		@Test
-		public void testWithLengthZero() {
+		public void testGetLengthWithZero() {
 			assertLength(ZERO, 0.0);
 		}
 
 		@Test
-		public void testUnitX() {
+		public void testGetLengthWithUnitX() {
 			assertLength(UNIT_X, 1.0);
 		}
 
 		@Test
-		public void testUnitY() {
+		public void testGetLengthWithUnitY() {
 			assertLength(UNIT_Y, 1.0);
 		}
 
 		@Test
-		public void testDiff() {
+		public void testGetLengthWithDiff() {
 			assertLength(DIFF, 5.0);
 		}
 	}
@@ -135,17 +135,17 @@ class Point2dTest {
 	class TestGetNormalized {
 
 		@Test
-		public void testWithLengthZero() {
+		public void testGetNormalizedZero() {
 			assertPoint(ZERO.getNormalized(), 0, 0);
 		}
 
 		@Test
-		public void testUnitX() {
+		public void testGetNormalizedUnitX() {
 			assertPoint(UNIT_X.getNormalized(), 1, 0);
 		}
 
 		@Test
-		public void testUnitY() {
+		public void testGetNormalizedUnitY() {
 			assertPoint(UNIT_Y.getNormalized(), 0, 1);
 		}
 	}
