@@ -14,8 +14,12 @@ public class GradientTest {
 
 	protected static final double CENTER_X = 1.0;
 	protected static final double CENTER_Y = 2.0;
-	protected static final double DIAG_BEHIND_X = CENTER_X - DIFF_SMALL;
-	protected static final double DIAG_BEHIND_Y = CENTER_Y - DIFF_LARGE;
+	protected static final double BEHIND_HALF_X = CENTER_X - DIFF_SMALL;
+	protected static final double BEHIND_HALF_Y = CENTER_Y - DIFF_LARGE;
+	protected static final double BEHIND_MAX_X = BEHIND_HALF_X - DIFF_SMALL;
+	protected static final double BEHIND_MAX_Y = BEHIND_HALF_Y - DIFF_LARGE;
+	protected static final double BEHIND_BEYOND_X = BEHIND_MAX_X - DIFF_SMALL;
+	protected static final double BEHIND_BEYOND_Y = BEHIND_MAX_Y - DIFF_LARGE;
 	protected static final double DIAG_HALF_X = CENTER_X + DIFF_SMALL;
 	protected static final double DIAG_HALF_Y = CENTER_Y + DIFF_LARGE;
 	protected static final double DIAG_MAX_X = DIAG_HALF_X + DIFF_SMALL;

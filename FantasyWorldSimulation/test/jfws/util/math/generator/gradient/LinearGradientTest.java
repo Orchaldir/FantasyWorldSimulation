@@ -43,7 +43,7 @@ class LinearGradientTest extends GradientTest {
 
 	@Test
 	public void testGenerateBehind() {
-		assertThat(linearGradient.generate(DIAG_BEHIND_X, DIAG_BEHIND_Y), is(equalTo(VALUE_AT_CENTER)));
+		assertThat(linearGradient.generate(BEHIND_HALF_X, BEHIND_HALF_Y), is(equalTo(VALUE_AT_CENTER)));
 
 		verifyZeroInteractions(interpolator);
 	}
