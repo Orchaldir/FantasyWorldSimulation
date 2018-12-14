@@ -43,7 +43,7 @@ class ChangeTerrainTypeCommandTest {
 	class TestExecute {
 
 		@Test
-		public void test() {
+		public void testExecute() {
 			when(sketchMap.getCellMap()).thenReturn(cellMap);
 			when(cellMap.getCell(INDEX)).thenReturn(cell);
 			when(cell.getTerrainType()).thenReturn(TERRAIN_TYPE_A);
@@ -60,7 +60,7 @@ class ChangeTerrainTypeCommandTest {
 		}
 
 		@Test
-		public void testOutsideMap() {
+		public void testExecuteOutsideMap() {
 			when(sketchMap.getCellMap()).thenReturn(cellMap);
 			when(cellMap.getCell(INDEX)).thenThrow(OutsideMapException.class);
 
@@ -89,7 +89,7 @@ class ChangeTerrainTypeCommandTest {
 		}
 
 		@Test
-		public void test() {
+		public void testUnExecute() {
 			prepare();
 
 			when(sketchMap.getCellMap()).thenReturn(cellMap);
@@ -112,7 +112,7 @@ class ChangeTerrainTypeCommandTest {
 		}
 
 		@Test
-		public void testOutsideMap() {
+		public void testUnExecuteOutsideMap() {
 			prepare();
 
 			when(sketchMap.getCellMap()).thenReturn(cellMap);
