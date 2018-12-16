@@ -6,8 +6,8 @@
       "green": 1.0,
       "blue": 0.5
     },
-    "base_elevation": 10,
-    "elevation_variation": 5,
+    "base_elevation": 15,
+    "elevation_variation": 0,
     "hill_noise": 10
   },
   {
@@ -17,8 +17,8 @@
       "green": 0.75,
       "blue": 0
     },
-    "base_elevation": 40,
-    "elevation_variation": 10,
+    "base_elevation": 55,
+    "elevation_variation": 0,
     "hill_noise": 50
   },
   {
@@ -31,7 +31,7 @@
     },
     "base_elevation": 200,
     "elevation_variation": 50,
-    "hill_noise": 50
+    "hill_noise": 100
   },
   {
     "name": "Medium Mountain",
@@ -43,7 +43,7 @@
     },
     "base_elevation": 500,
     "elevation_variation": 100,
-    "hill_noise": 50
+    "hill_noise": 150
   },
   {
     "name": "High Mountain",
@@ -55,7 +55,7 @@
     },
     "base_elevation": 800,
     "elevation_variation": 100,
-    "hill_noise": 50
+    "hill_noise": 200
   },
   {
     "name": "Shallow Ocean",
