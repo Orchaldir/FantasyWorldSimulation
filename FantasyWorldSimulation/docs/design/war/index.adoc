@@ -1,7 +1,15 @@
 = War
 
-.Classes for War
-[plantuml, diagram-classes]
+== Class Diagrams
+
+.Overview
+[plantuml, class-diagram-overview]
 ....
-!include classes.puml
+!include class-diagrams/overview.puml
+....
+
+.Implementations of Unit
+[plantuml, class-diagram-units]
+....
+!include class-diagrams/units.puml
 ....
