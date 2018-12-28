@@ -1,8 +1,0 @@
-@startuml
-interface Unit
-
-ArmyWithUnits --> Unit : has
-
-Unit <|-- AbstractUnit
-Unit <|-- InfantryUnit
-@enduml

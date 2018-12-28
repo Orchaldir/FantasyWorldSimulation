@@ -1,7 +1,6 @@
 @startuml
 interface Army
 interface Character
-interface Skill
 interface Unit
 
 Army <|-- AbstractArmy
@@ -9,9 +8,4 @@ Army <|-- ArmyWithUnits
 Army --> "0..*" Character : VIPs
 Army --> "0..1" Character : leader
 ArmyWithUnits --> Unit : has
-
-Character --> "0..*" Skill: has
-
-SkillManager -right-> "0..*" Skill: manages
-
 @enduml

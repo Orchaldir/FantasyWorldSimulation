@@ -1,0 +1,12 @@
+@startuml
+interface Unit
+
+ArmyWithUnits --> Unit : has
+
+Unit <|-left- AbstractUnit
+Unit <|-right- InfantryUnit
+
+InfantryUnit --> Race : has
+InfantryUnit --> Weapon : has
+InfantryUnit --> Armor : has
+@enduml

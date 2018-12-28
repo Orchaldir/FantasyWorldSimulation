@@ -8,8 +8,14 @@
 !include class-diagrams/overview.puml
 ....
 
-.Implementations of Unit
-[plantuml, class-diagram-units]
+.Implementations of Character
+[plantuml, class-diagram-character]
 ....
-!include class-diagrams/units.puml
+!include class-diagrams/character.puml
+....
+
+.Implementations of Unit
+[plantuml, class-diagram-unit]
+....
+!include class-diagrams/unit.puml
 ....

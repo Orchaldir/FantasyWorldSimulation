@@ -1,0 +1,9 @@
+@startuml
+interface Character
+interface Skill
+
+Character --> "0..*" Skill: has
+
+SkillManager -right-> "0..*" Skill: manages
+
+@enduml
