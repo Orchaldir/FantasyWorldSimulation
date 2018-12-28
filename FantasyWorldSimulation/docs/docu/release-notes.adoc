@@ -8,7 +8,7 @@ ifndef::imagesdir[:imagesdir: images/]
 | Release
 | Notes
 
-| 2018.2.0
+| 2018.1.1
 |
 
 *New:*

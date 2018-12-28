@@ -1,0 +1,21 @@
+= Comparing Polygon Maps & Grids
+
+[%header,cols="1a,1a"]
+|===
+| Polygon Map
+| Grid
+
+|
+* Better looking
+* Fewer cells
+** Faster algorithms (e.g A*)
+* Border for rivers, coastlines, cliffs, ...
+
+|
+* Smaller Cells
+** Realms can slowly grow
+** Changes to smaller areas can be tracked
+* Faster map generation
+* Fixed Number of neighbors
+
+|===

@@ -1,0 +1,7 @@
+= War
+
+.Classes for War
+[plantuml, diagram-classes, png]
+....
+!include classes.puml
+....

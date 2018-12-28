@@ -1,0 +1,7 @@
+@startuml
+interface Army
+interface Character
+
+Army <|-- AbstractArmy
+Army <|-- ArmyWithUnits
+@enduml
