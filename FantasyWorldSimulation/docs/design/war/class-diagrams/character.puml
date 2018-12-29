@@ -1,9 +1,17 @@
 @startuml
+hide members
+
 interface Character
 interface Skill
 
-Character --> "0..*" Skill: has
+Character -left-> "0..*" Skill: has
 
 SkillManager -right-> "0..*" Skill: manages
+
+Character <|-- PointBuyCharacter
+Character <|-- CharacterWithClass
+Character -right-> Race: has
+
+CharacterWithClass --> Class: has
 
 @enduml

@@ -1,4 +1,6 @@
 @startuml
+hide members
+
 interface Army
 interface Character
 interface Unit
@@ -8,4 +10,9 @@ Army <|-- ArmyWithUnits
 Army --> "0..*" Character : VIPs
 Army --> "0..1" Character : leader
 ArmyWithUnits --> Unit : has
+
+Battle --> "2" Army
+Battle -up-> Terrain
+Battle -up-> Weather
+Battle -up-> Light
 @enduml
