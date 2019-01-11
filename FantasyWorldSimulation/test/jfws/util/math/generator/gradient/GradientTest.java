@@ -3,7 +3,7 @@ package jfws.util.math.generator.gradient;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.interpolation.TwoValueInterpolator;
 
-public class GradientTest {
+public abstract class GradientTest {
 	protected static final double MAX_DISTANCE = 10.0;
 	protected static final double VALUE_AT_CENTER = 2.5;
 	protected static final double VALUE_AT_MAX = 4.5;

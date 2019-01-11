@@ -19,27 +19,27 @@ import static jfws.features.elevation.ElevationCell.DEFAULT_ELEVATION;
 public class SketchConverterWithJson implements SketchConverter {
 
 	// json properties
-	public static final String VERSION = "version";
-	public static final String WIDTH = "width";
-	public static final String HEIGHT = "height";
-	public static final String USED_TERRAIN_TYPES = "used_terrain_types";
-	public static final String TERRAIN_TYPE_MAP = "terrain_type_map";
+	public static final String VERSION_PROPERTY = "version";
+	public static final String WIDTH_PROPERTY = "width";
+	public static final String HEIGHT_PROPERTY = "height";
+	public static final String USED_TERRAIN_TYPES_PROPERTY = "used_terrain_types";
+	public static final String TERRAIN_TYPE_MAP_PROPERTY = "terrain_type_map";
 	public static final String TERRAIN_TYPE_ROW_SEPARATOR = ",";
 
 	// exceptions
 
 	public static final String NOT_A_JSON_OBJECT = "Not a json object!";
 	public static final String INVALID_MAP_SIZE = "Invalid map size!";
-	public static final String NO_VERSION = createNoPropertyException(VERSION);
-	public static final String WRONG_VERSION_FORMAT = createWrongFormatException(VERSION);
+	public static final String NO_VERSION = createNoPropertyException(VERSION_PROPERTY);
+	public static final String WRONG_VERSION_FORMAT = createWrongFormatException(VERSION_PROPERTY);
 	public static final String WRONG_VERSION = "Wrong version!";
 	public static final String NO_SIZE = "No size!";
 	public static final String WRONG_SIZE_FORMAT = "Wrong size format!";
-	public static final String NO_USED_TERRAIN_TYPES = createNoPropertyException(USED_TERRAIN_TYPES);
-	public static final String WRONG_USED_TERRAIN_TYPES_FORMAT = createWrongFormatException(USED_TERRAIN_TYPES);
-	public static final String NO_TERRAIN_TYPE_MAP = createNoPropertyException(TERRAIN_TYPE_MAP);
-	public static final String WRONG_TERRAIN_TYPE_MAP_FORMAT = createWrongFormatException(TERRAIN_TYPE_MAP);
-	public static final String WRONG_TERRAIN_TYPE_MAP_SIZE = String.format("Property %s has wrong size!", TERRAIN_TYPE_MAP);
+	public static final String NO_USED_TERRAIN_TYPES = createNoPropertyException(USED_TERRAIN_TYPES_PROPERTY);
+	public static final String WRONG_USED_TERRAIN_TYPES_FORMAT = createWrongFormatException(USED_TERRAIN_TYPES_PROPERTY);
+	public static final String NO_TERRAIN_TYPE_MAP = createNoPropertyException(TERRAIN_TYPE_MAP_PROPERTY);
+	public static final String WRONG_TERRAIN_TYPE_MAP_FORMAT = createWrongFormatException(TERRAIN_TYPE_MAP_PROPERTY);
+	public static final String WRONG_TERRAIN_TYPE_MAP_SIZE = String.format("Property %s has wrong size!", TERRAIN_TYPE_MAP_PROPERTY);
 	public static final String WRONG_TERRAIN_TYPE_ROW_FORMAT = "Wrong terrain type row format!";
 	public static final String NOT_USED_TERRAIN_TYPE = "Contains not used terrain type!";
 
@@ -119,11 +119,11 @@ public class SketchConverterWithJson implements SketchConverter {
 	}
 
 	private void checkVersion(JsonObject jsonObject) throws IOException {
-		if(!jsonObject.has(VERSION)) {
+		if(!jsonObject.has(VERSION_PROPERTY)) {
 			throw createException(NO_VERSION);
 		}
 
-		JsonElement versionElement = jsonObject.get(VERSION);
+		JsonElement versionElement = jsonObject.get(VERSION_PROPERTY);
 
 		if(!versionElement.isJsonPrimitive()) {
 			throw createException(WRONG_VERSION_FORMAT);
@@ -141,8 +141,8 @@ public class SketchConverterWithJson implements SketchConverter {
 	}
 
 	private void parseMapSize(JsonObject jsonObject) throws IOException {
-		width = getSize(jsonObject, WIDTH);
-		height = getSize(jsonObject, HEIGHT);
+		width = getSize(jsonObject, WIDTH_PROPERTY);
+		height = getSize(jsonObject, HEIGHT_PROPERTY);
 
 		if(width < 1 || height < 1) {
 			throw createException(INVALID_MAP_SIZE);
@@ -164,11 +164,11 @@ public class SketchConverterWithJson implements SketchConverter {
 	private void parseUsedTerrainTypes(JsonObject jsonObject) throws IOException {
 		idToTerrainTypeMap.clear();
 
-		if(!jsonObject.has(USED_TERRAIN_TYPES)) {
+		if(!jsonObject.has(USED_TERRAIN_TYPES_PROPERTY)) {
 			throw createException(NO_USED_TERRAIN_TYPES);
 		}
 
-		JsonElement usedTerrainTypesElement = jsonObject.get(USED_TERRAIN_TYPES);
+		JsonElement usedTerrainTypesElement = jsonObject.get(USED_TERRAIN_TYPES_PROPERTY);
 
 		if(!usedTerrainTypesElement.isJsonArray()) {
 			throw createException(WRONG_USED_TERRAIN_TYPES_FORMAT);
@@ -195,11 +195,11 @@ public class SketchConverterWithJson implements SketchConverter {
 	}
 
 	private ArrayCellMap2D<SketchCell> parseTerrainTypeMap(JsonObject jsonObject) throws IOException {
-		if(!jsonObject.has(TERRAIN_TYPE_MAP)) {
+		if(!jsonObject.has(TERRAIN_TYPE_MAP_PROPERTY)) {
 			throw createException(NO_TERRAIN_TYPE_MAP);
 		}
 
-		JsonElement usedTerrainTypesElement = jsonObject.get(TERRAIN_TYPE_MAP);
+		JsonElement usedTerrainTypesElement = jsonObject.get(TERRAIN_TYPE_MAP_PROPERTY);
 
 		if(!usedTerrainTypesElement.isJsonArray()) {
 			throw createException(WRONG_TERRAIN_TYPE_MAP_FORMAT);
@@ -273,9 +273,9 @@ public class SketchConverterWithJson implements SketchConverter {
 		CellMap2d<SketchCell> cells = map.getCellMap();
 
 		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty(VERSION, SketchMap.VERSION);
-		jsonObject.addProperty(WIDTH, cells.getWidth());
-		jsonObject.addProperty(HEIGHT, cells.getHeight());
+		jsonObject.addProperty(VERSION_PROPERTY, SketchMap.VERSION);
+		jsonObject.addProperty(WIDTH_PROPERTY, cells.getWidth());
+		jsonObject.addProperty(HEIGHT_PROPERTY, cells.getHeight());
 
 		saveUsedTerrainTypes(jsonObject, cells);
 		saveTerrainTypeMap(jsonObject, cells);
@@ -302,7 +302,7 @@ public class SketchConverterWithJson implements SketchConverter {
 
 		log.info("saveUsedTerrainTypes(): Contains {} terrain types.", terrainTypeToIdMap.size());
 
-		jsonObject.add(USED_TERRAIN_TYPES, jsonArray);
+		jsonObject.add(USED_TERRAIN_TYPES_PROPERTY, jsonArray);
 	}
 
 	private void saveTerrainTypeMap(JsonObject jsonObject, CellMap2d<SketchCell> cells) {
@@ -324,6 +324,6 @@ public class SketchConverterWithJson implements SketchConverter {
 			rowsArray.add(row.toString());
 		}
 
-		jsonObject.add(TERRAIN_TYPE_MAP, rowsArray);
+		jsonObject.add(TERRAIN_TYPE_MAP_PROPERTY, rowsArray);
 	}
 }
