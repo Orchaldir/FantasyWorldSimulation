@@ -269,7 +269,7 @@ public class SketchConverterWithJson implements SketchConverter {
 		}
 	}
 
-	protected String convertToJson(SketchMap map) throws IOException {
+	protected String convertToJson(SketchMap map) {
 		CellMap2d<SketchCell> cells = map.getCellMap();
 
 		JsonObject jsonObject = new JsonObject();

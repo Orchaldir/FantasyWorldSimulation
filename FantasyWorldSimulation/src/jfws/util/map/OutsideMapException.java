@@ -10,5 +10,5 @@ public class OutsideMapException extends RuntimeException {
 
 	private final CellMap2d map;
 	private final int x, y, index;
-	private boolean usedIndex;
+	private final boolean usedIndex;
 }

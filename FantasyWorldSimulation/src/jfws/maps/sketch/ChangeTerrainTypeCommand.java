@@ -2,7 +2,6 @@ package jfws.maps.sketch;
 
 import jfws.maps.sketch.terrain.TerrainType;
 import jfws.util.command.Command;
-import jfws.util.map.OutsideMapException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
