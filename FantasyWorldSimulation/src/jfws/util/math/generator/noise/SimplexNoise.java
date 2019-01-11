@@ -22,18 +22,18 @@ import jfws.util.math.generator.Generator;
 public class SimplexNoise implements Generator {
 
 	private static Grad grad3[] = {
-			new Grad(1, 1, 0),
-			new Grad(-1, 1, 0),
-			new Grad(1, -1, 0),
-			new Grad(-1, -1, 0),
-			new Grad(1, 0, 1),
-			new Grad(-1, 0, 1),
-			new Grad(1, 0, -1),
-			new Grad(-1, 0, -1),
-			new Grad(0, 1, 1),
-			new Grad(0, -1, 1),
-			new Grad(0, 1, -1),
-			new Grad(0, -1, -1)
+			new Grad(1, 1),
+			new Grad(-1, 1),
+			new Grad(1, -1),
+			new Grad(-1, -1),
+			new Grad(1, 0),
+			new Grad(-1, 0),
+			new Grad(1, 0),
+			new Grad(-1, 0),
+			new Grad(0, 1),
+			new Grad(0, -1),
+			new Grad(0, 1),
+			new Grad(0, -1)
 	};
 
 	private static short p[] = {151, 160, 137, 91, 90, 15,
@@ -164,12 +164,11 @@ public class SimplexNoise implements Generator {
 	// Inner class to speed upp gradient computations
 	// (array access is a lot slower than member access)
 	protected static class Grad {
-		private double x, y, z;
+		private double x, y;
 
-		Grad(double x, double y, double z) {
+		Grad(double x, double y) {
 			this.x = x;
 			this.y = y;
-			this.z = z;
 		}
 	}
 }

@@ -75,7 +75,7 @@ public class MapEditorController implements EditorController {
 			BiTwoValueInterpolator.createBiCosineInterpolator());
 
 	private ElevationNoiseManager<RegionCell> elevationNoiseManager = new ElevationNoiseManager<>();
-	private ElevationNoiseWithInterpolation elevationNoise = new ElevationNoiseWithInterpolation("hill",
+	private ElevationNoiseWithInterpolation hillNoise = new ElevationNoiseWithInterpolation("hill",
 			BiTwoValueInterpolator.createBilinearInterpolator(), new ScaledInput(new SimplexNoise(), 50.0), 0);
 
 	private MapType mapToRender =  MapType.SKETCH_MAP;
@@ -108,7 +108,7 @@ public class MapEditorController implements EditorController {
 		renderStyleComboBox.setItems(FXCollections.observableArrayList(colorSelectorMap.getNames()));
 		renderStyleComboBox.getSelectionModel().select(colorSelectorMap.getDefaultColorSelector().getName());
 
-		elevationNoiseManager.add(elevationNoise);
+		elevationNoiseManager.add(hillNoise);
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
 		mapRenderer = new MapRenderer(canvasRenderer, WORLD_TO_SCREEN, BORDER_BETWEEN_CELLS);

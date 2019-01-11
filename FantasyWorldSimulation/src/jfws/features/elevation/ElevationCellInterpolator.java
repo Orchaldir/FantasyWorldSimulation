@@ -14,7 +14,7 @@ public class ElevationCellInterpolator<T extends ElevationCell, U extends Elevat
 		super(interpolator);
 	}
 
-	public static<T,U> MapInterpolator createMapInterpolator(Interpolator2d interpolator) {
+	public static MapInterpolator createMapInterpolator(Interpolator2d interpolator) {
 		return new MapInterpolator(new ElevationCellInterpolator(interpolator));
 	}
 
