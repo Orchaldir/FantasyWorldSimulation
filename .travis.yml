@@ -1,6 +1,10 @@
 language: java
 jdk:
   - oraclejdk9
+addons:
+  sonarcloud:
+    organization: "orchaldir-github"
 before_script: cd FantasyWorldSimulation
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - mvn sonar:sonar
