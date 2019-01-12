@@ -20,6 +20,12 @@ ifndef::imagesdir[:imagesdir: images/]
 * Fixed https://github.com/Orchaldir/FantasyWorldSimulation/issues/16[#16]:
   First time rendering the Region Map takes too long
 
+*CI:*
+
+* Started using https://codecov.io/gh/Orchaldir/FantasyWorldSimulation[Code Coverage]
+* Started using Mutation Testing
+* Started using https://sonarcloud.io/dashboard?id=groupId%3AFantasyWorldSimulation[SonarCloud]
+
 | 2018.1.0
 |
 
@@ -36,6 +42,11 @@ image::region-map.jpg[Region Map]
 * Added views that show different data (e.g elevation, terrain type) of the same map.
 * Added loading & saving of maps.
 * Added undo & redo.
+
+*CI:*
+
+* Started using https://travis-ci.org/Orchaldir/FantasyWorldSimulation[Travis CI]
+* Started using https://app.codacy.com/project/Orchaldir/FantasyWorldSimulation/dashboard?branchId=9744290[Codacy]
 
 *Known Issue:*
 
