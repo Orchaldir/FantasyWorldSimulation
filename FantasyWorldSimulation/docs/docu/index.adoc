@@ -1,12 +1,7 @@
 
 :imagesdir: images/
 
-include::./release-notes.adoc[]
+= Documentation
 
-= Maps
-
-IMPORTANT: This is a work in progress.
-
-include::maps/hierarchy.adoc[]
-
-include::maps/coordinate-systems.adoc[]
+include::./release-notes/index.adoc[]
+include::./maps/index.adoc[]

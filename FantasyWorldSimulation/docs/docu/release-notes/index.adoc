@@ -1,7 +1,7 @@
 
-ifndef::imagesdir[:imagesdir: images/]
+ifndef::imagesdir[:imagesdir: ../images/]
 
-= Release Notes
+== Release Notes
 
 [%header,cols="1,4a"]
 |===
@@ -23,7 +23,7 @@ ifndef::imagesdir[:imagesdir: images/]
 *CI:*
 
 * Started using https://codecov.io/gh/Orchaldir/FantasyWorldSimulation[Code Coverage]
-* Started using Mutation Testing
+* Started using link:../../adr/0008.adoc[Mutation Testing]
 * Started using https://sonarcloud.io/dashboard?id=groupId%3AFantasyWorldSimulation[SonarCloud]
 
 | 2018.1.0
