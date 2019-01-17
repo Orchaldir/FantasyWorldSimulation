@@ -16,6 +16,10 @@
 * AsciiDoc more powerful than Markdown.
 * More familiar with AsciiDoc.
 
+== Build
+
+Execute Maven Goal `generate-resources` to generate the documentation in html.
+
 == Links
 
 * http://asciidoc.org

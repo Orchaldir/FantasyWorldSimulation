@@ -144,6 +144,26 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.7.1</version>
+                <executions>
+                    <execution>
+                        <id>output-html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>docs/docu</sourceDirectory>
+                    <outputDirectory>target/docs/docu</outputDirectory>
+                    <backend>html</backend>
+                    <preserveDirectories>true</preserveDirectories>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
