@@ -8,6 +8,15 @@ ifndef::imagesdir[:imagesdir: ../images/]
 | Release
 | Notes
 
+| 2019.1.0
+|
+
+*New:*
+
+* Added Polygon Maps.
+
+2+^| 2018.1.x
+
 | 2018.1.1
 |
 
@@ -37,8 +46,8 @@ image::region-map.jpg[Region Map]
 
 *New:*
 
-* Added <<Sketch Map>> that is drawn by the user.
-* Added <<Region Map>> that is interpolated from a <<Sketch Map>>.
+* Added Sketch Maps that are drawn by the user.
+* Added Region Maps that are interpolated from a Sketch Map.
 * Added views that show different data (e.g elevation, terrain type) of the same map.
 * Added loading & saving of maps.
 * Added undo & redo.

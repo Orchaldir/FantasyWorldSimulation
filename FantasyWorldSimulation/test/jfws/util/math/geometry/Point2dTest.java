@@ -148,6 +148,11 @@ class Point2dTest {
 		public void testGetNormalizedUnitY() {
 			assertPoint(UNIT_Y.getNormalized(), 0, 1);
 		}
+
+		@Test
+		public void testGetNormalizedDiff() {
+			assertPoint(DIFF.getNormalized(), 0.6, 0.8);
+		}
 	}
 
 }

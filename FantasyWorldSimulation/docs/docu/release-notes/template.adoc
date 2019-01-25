@@ -16,6 +16,10 @@ image::pitcure.png[Pitcure]
 
 * #XXX: tbd
 
+*CI:*
+
+* tbd
+
 *Known Issue:*
 
 * tbd
