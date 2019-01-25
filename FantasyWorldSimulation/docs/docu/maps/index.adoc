@@ -1,7 +1,0 @@
-== Maps
-
-IMPORTANT: This is a work in progress.
-
-include::hierarchy.adoc[]
-
-include::coordinate-systems.adoc[]

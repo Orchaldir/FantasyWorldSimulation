@@ -25,6 +25,8 @@ image::images/pitest.png[Pit Test result]
 
 * Automatically run pitest with CI
 
+WARNING: SonarCloud unlike SonarCube does not support external plugins!
+
 == Links
 
 * https://en.wikipedia.org/wiki/Mutation_testing[Wikipedia]

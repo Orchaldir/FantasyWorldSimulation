@@ -8,4 +8,4 @@
 
 * See [Architectural Decision Records](FantasyWorldSimulation/docs/adr/index.adoc).
 * See [Documentation](FantasyWorldSimulation/docs/docu/index.adoc).
-* See [Release Notes](FantasyWorldSimulation/docs/docu/release-notes.adoc).
+* See [Release Notes](FantasyWorldSimulation/docs/docu/release-notes/index.adoc).

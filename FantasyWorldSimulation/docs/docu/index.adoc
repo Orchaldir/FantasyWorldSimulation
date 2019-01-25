@@ -4,4 +4,3 @@
 = Documentation
 
 include::./release-notes/index.adoc[]
-include::./maps/index.adoc[]
