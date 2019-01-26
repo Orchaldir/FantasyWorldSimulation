@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -38,6 +39,16 @@ public class Face {
 		return getEdgesInCCW().
 				stream().
 				map(HalfEdge::getEndVertex).
+				collect(Collectors.toList());
+	}
+
+	// neighbors
+
+	public List<Face> getNeighborsInCCW() {
+		return getEdgesInCCW().
+				stream().
+				map(HalfEdge::getOppositeFace).
+				filter(Objects::nonNull).
 				collect(Collectors.toList());
 	}
 }

@@ -191,4 +191,74 @@ class FaceTest {
 		}
 	}
 
+	@Nested
+	class TestGetNeighborsInCCW {
+
+		private Face neighbor0;
+		private Face neighbor1;
+		private Face neighbor2;
+		private Face neighbor3;
+
+		@BeforeEach
+		public void setUp() {
+			neighbor0 = mock(Face.class);
+			neighbor1 = mock(Face.class);
+			neighbor2 = mock(Face.class);
+			neighbor3 = mock(Face.class);
+
+			when(edge0.getOppositeFace()).thenReturn(neighbor0);
+			when(edge1.getOppositeFace()).thenReturn(neighbor1);
+			when(edge2.getOppositeFace()).thenReturn(neighbor2);
+			when(edge3.getOppositeFace()).thenReturn(neighbor3);
+		}
+
+		@Test
+		public void getNeighborsWithOneEdge() {
+			setUpOneEdge();
+
+			List<Face> neighbors = face.getNeighborsInCCW();
+
+			assertThat(neighbors, contains(neighbor0));
+		}
+
+		@Test
+		public void getNeighborsWithTwoEdges() {
+			setUpTwoEdges();
+
+			List<Face> neighbors = face.getNeighborsInCCW();
+
+			assertThat(neighbors, contains(neighbor0, neighbor1));
+		}
+
+		@Test
+		public void getNeighborsWithTriangle() {
+			setUpTriangle();
+
+			List<Face> neighbors = face.getNeighborsInCCW();
+
+			assertThat(neighbors, contains(neighbor0, neighbor1, neighbor2));
+		}
+
+		@Test
+		public void getNeighborsWithQuad() {
+			setUpQuad();
+
+			List<Face> neighbors = face.getNeighborsInCCW();
+
+			assertThat(neighbors, contains(neighbor0, neighbor1, neighbor2, neighbor3));
+		}
+
+		@Test
+		public void getNeighborsWithoutNull() {
+			setUpQuad();
+
+			when(edge0.getOppositeFace()).thenReturn(null);
+			when(edge2.getOppositeFace()).thenReturn(null);
+
+			List<Face> neighbors = face.getNeighborsInCCW();
+
+			assertThat(neighbors, contains(neighbor1, neighbor3));
+		}
+	}
+
 }
