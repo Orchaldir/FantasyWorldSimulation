@@ -5,12 +5,15 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
 public class Face {
 
 	private HalfEdge edge;
+
+	// edges
 
 	public List<HalfEdge> getEdgesInCCW() {
 		List<HalfEdge> edges = new ArrayList<>();
@@ -25,12 +28,16 @@ public class Face {
 		return edges;
 	}
 
-	public int getEdgeCount() {
-		return getEdgesInCCW().size();
-	}
-
 	public boolean canBeRendered() {
-		return getEdgeCount() >= 3;
+		return getEdgesInCCW().size() >= 3;
 	}
 
+	// vertices
+
+	public List<Vertex> getVerticesInCCW() {
+		return getEdgesInCCW().
+				stream().
+				map(HalfEdge::getEndVertex).
+				collect(Collectors.toList());
+	}
 }
