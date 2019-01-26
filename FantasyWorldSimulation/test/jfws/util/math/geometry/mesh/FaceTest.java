@@ -76,7 +76,7 @@ class FaceTest {
 		class TestGetEdgesInCCW {
 
 			@Test
-			public void testFaceWithOneEdge() {
+			public void getEdgesWithOneEdge() {
 				setUpOneEdge();
 
 				List<HalfEdge> edges = face.getEdgesInCCW();
@@ -85,7 +85,7 @@ class FaceTest {
 			}
 
 			@Test
-			public void testFaceWithTwoEdges() {
+			public void getEdgesWithTwoEdges() {
 				setUpTwoEdges();
 
 				List<HalfEdge> edges = face.getEdgesInCCW();
@@ -94,7 +94,7 @@ class FaceTest {
 			}
 
 			@Test
-			public void testTriangle() {
+			public void getEdgesWithTriangle() {
 				setUpTriangle();
 
 				List<HalfEdge> edges = face.getEdgesInCCW();
@@ -103,7 +103,7 @@ class FaceTest {
 			}
 
 			@Test
-			public void testQuad() {
+			public void getEdgesWithQuad() {
 				setUpQuad();
 
 				List<HalfEdge> edges = face.getEdgesInCCW();
@@ -117,28 +117,28 @@ class FaceTest {
 		class TestCanBeRendered {
 
 			@Test
-			public void testFaceWithOneEdge() {
+			public void canBeRenderedWithOneEdge() {
 				setUpOneEdge();
 
 				assertFalse(face.canBeRendered());
 			}
 
 			@Test
-			public void testFaceWithTwoEdges() {
+			public void canBeRenderedWithTwoEdges() {
 				setUpTwoEdges();
 
 				assertFalse(face.canBeRendered());
 			}
 
 			@Test
-			public void testTriangle() {
+			public void canBeRenderedWithTriangle() {
 				setUpTriangle();
 
 				assertTrue(face.canBeRendered());
 			}
 
 			@Test
-			public void testQuad() {
+			public void canBeRenderedWithQuad() {
 				setUpQuad();
 
 				assertTrue(face.canBeRendered());
@@ -153,7 +153,7 @@ class FaceTest {
 		class TestGetVerticesInCCW {
 
 			@Test
-			public void testFaceWithOneEdge() {
+			public void getVerticesWithOneEdge() {
 				setUpOneEdge();
 
 				List<Vertex> vertices = face.getVerticesInCCW();
@@ -162,7 +162,7 @@ class FaceTest {
 			}
 
 			@Test
-			public void testFaceWithTwoEdges() {
+			public void getVerticesWithTwoEdges() {
 				setUpTwoEdges();
 
 				List<Vertex> vertices = face.getVerticesInCCW();
@@ -171,7 +171,7 @@ class FaceTest {
 			}
 
 			@Test
-			public void testTriangle() {
+			public void getVerticesWithTriangle() {
 				setUpTriangle();
 
 				List<Vertex> vertices = face.getVerticesInCCW();
@@ -180,7 +180,7 @@ class FaceTest {
 			}
 
 			@Test
-			public void testQuad() {
+			public void getVerticesWithQuad() {
 				setUpQuad();
 
 				List<Vertex> vertices = face.getVerticesInCCW();

@@ -2,6 +2,7 @@ package jfws.util.math.geometry.mesh;
 
 import jfws.util.math.geometry.Point2d;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,6 +58,11 @@ class HalfEdgeTest {
 	}
 
 	@Test
+	public void testGetOppositeFace() {
+		assertThat(edge.getOppositeFace(), equalTo(oppositeFace));
+	}
+
+	@Test
 	public void testGetPreviousEdge() {
 		when(nextEdge.getNextEdge()).thenReturn(middleEdge);
 		when(middleEdge.getNextEdge()).thenReturn(previousEdge);
@@ -69,23 +75,47 @@ class HalfEdgeTest {
 		verify(previousEdge, atLeastOnce()).getNextEdge();
 	}
 
-	@Test
-	public void testInsertPoint() {
-		Point2d newPoint = mock(Point2d.class);
+	@Nested
+	class TestInsertPoint {
 
-		edge.insertPoint(newPoint);
+		@Test
+		public void testWithOppositeFace() {
+			Point2d newPoint = mock(Point2d.class);
 
-		Vertex newEnd = edge.getEndVertex();
-		assertThat(newEnd, is(not(equalTo(end))));
-		assertThat(newEnd.getPoint(), is(equalTo(newPoint)));
+			edge.insertPoint(newPoint);
 
-		HalfEdge newOpposite = edge.getOppositeEdge();
-		assertThat(newOpposite, not(oppositeEdge));
-		assertEdge(newOpposite, oppositeFace, start, edge, previousOppositeEdge);
+			Vertex newEnd = edge.getEndVertex();
+			assertThat(newEnd, is(not(equalTo(end))));
+			assertThat(newEnd.getPoint(), is(equalTo(newPoint)));
 
-		HalfEdge newEdge = edge.getNextEdge();
-		assertThat(newEdge, not(anyOf(is(nextEdge), is(middleEdge), is(previousEdge))));
-		assertEdge(newEdge, face, end, oppositeEdge, nextEdge);
+			HalfEdge newOpposite = edge.getOppositeEdge();
+			assertThat(newOpposite, not(oppositeEdge));
+			assertEdge(newOpposite, oppositeFace, start, edge, previousOppositeEdge);
+
+			HalfEdge newEdge = edge.getNextEdge();
+			assertThat(newEdge, not(anyOf(is(nextEdge), is(middleEdge), is(previousEdge))));
+			assertEdge(newEdge, face, end, oppositeEdge, nextEdge);
+		}
+
+		@Test
+		public void testWithoutOppositeFace() {
+			oppositeEdge.face = null;
+			Point2d newPoint = mock(Point2d.class);
+
+			edge.insertPoint(newPoint);
+
+			Vertex newEnd = edge.getEndVertex();
+			assertThat(newEnd, is(not(equalTo(end))));
+			assertThat(newEnd.getPoint(), is(equalTo(newPoint)));
+
+			HalfEdge newOpposite = edge.getOppositeEdge();
+			assertThat(newOpposite, not(oppositeEdge));
+			assertEdge(newOpposite, null, start, edge, previousOppositeEdge);
+
+			HalfEdge newEdge = edge.getNextEdge();
+			assertThat(newEdge, not(anyOf(is(nextEdge), is(middleEdge), is(previousEdge))));
+			assertEdge(newEdge, face, end, oppositeEdge, nextEdge);
+		}
 	}
 
 }

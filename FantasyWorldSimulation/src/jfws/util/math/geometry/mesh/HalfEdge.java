@@ -24,6 +24,10 @@ public class HalfEdge {
 		return oppositeEdge.getEndVertex();
 	}
 
+	public Face getOppositeFace() {
+		return oppositeEdge.face;
+	}
+
 	public HalfEdge getPreviousEdge() {
 		HalfEdge currentEdge = this;
 
