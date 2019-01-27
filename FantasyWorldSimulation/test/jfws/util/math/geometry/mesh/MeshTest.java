@@ -63,7 +63,6 @@ class MeshTest {
 			assertVertex(vertex0, 0, point0, null);
 			assertVertex(vertex1, 1, point1, null);
 		}
-
 	}
 
 	@Nested
@@ -95,7 +94,6 @@ class MeshTest {
 
 			assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getVertex(1));
 		}
-
 	}
 
 	@Nested
@@ -187,7 +185,54 @@ class MeshTest {
 			public void getEdgeWithTooHighIndex() {
 				assertThrows(IndexOutOfBoundsException.class, () -> mesh.getEdge(6));
 			}
+		}
 
+		@Nested
+		class TestSplitEdge {
+
+			private Point2d point4;
+			private Vertex splitAtVertex;
+			private Face triangle0;
+			private Face triangle1;
+
+			@BeforeEach
+			public void setUp() {
+				point4 = mock(Point2d.class);
+				splitAtVertex = mesh.createVertex(point4);
+
+				triangle0 = mesh.createTriangle(0, 1, 2);
+				triangle1 = mesh.createTriangle(0, 2, 3);
+			}
+
+			@Test
+			public void testSplitEdgeWithoutOppositeFace() {
+				HalfEdge edge = mesh.getEdge(0);
+				HalfEdge oppositeEdge = edge.getOppositeEdge();
+				HalfEdge nextEdge = edge.getNextEdge();
+
+				HalfEdge newEdge = mesh.splitEdge(0, 4);
+
+				assertEdge(edge, 0, splitAtVertex, triangle0, newEdge);
+				assertEdge(newEdge, 10, vertex1, triangle0, nextEdge);
+
+				assertEdge(oppositeEdge, 1, splitAtVertex, null, edge.getOppositeEdge());
+				assertEdge(edge.getOppositeEdge(), 11, vertex0, null, null);
+			}
+
+			@Test
+			public void testSplitOppositeEdgeWithoutFace() {
+				HalfEdge edge = mesh.getEdge(1);
+				HalfEdge oppositeEdge = edge.getOppositeEdge();
+				HalfEdge nextEdge = edge.getNextEdge();
+
+				HalfEdge newEdge = mesh.splitEdge(1, 4);
+
+				assertEdge(edge, 1, splitAtVertex, null, newEdge);
+				assertEdge(newEdge, 10, vertex0, null, nextEdge);
+
+				assertEdge(oppositeEdge, 0 , splitAtVertex, triangle0, edge.getOppositeEdge());
+				assertEdge(edge.getOppositeEdge(), 11, vertex1, triangle0, mesh.getEdge(2));
+			}
 		}
 	}
 
@@ -276,7 +321,6 @@ class MeshTest {
 			public void getEdgeWithTooHighIndex() {
 				assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getFace(2));
 			}
-
 		}
 	}
 

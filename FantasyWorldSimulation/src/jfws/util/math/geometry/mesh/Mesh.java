@@ -85,6 +85,25 @@ public class Mesh {
 		return  edge;
 	}
 
+	public HalfEdge splitEdge(int edgeId, int vertexId) {
+		HalfEdge edge = getEdge(edgeId);
+		Vertex vertex = getVertex(vertexId);
+		HalfEdge oppositeEdge = edge.getOppositeEdge();
+
+		HalfEdge newEdge = new HalfEdge(nextEdgeId++, edge);
+		edge.nextEdge = newEdge;
+		edge.endVertex = vertex;
+
+		HalfEdge newOppositeEdge = new HalfEdge(nextEdgeId++, oppositeEdge);
+		oppositeEdge.nextEdge = newOppositeEdge;
+		oppositeEdge.endVertex = vertex;
+		oppositeEdge.oppositeEdge = newEdge;
+
+		edge.oppositeEdge = newOppositeEdge;
+
+		return newEdge;
+	}
+
 	public Face createTriangle(int vertexId0, int vertexId1, int vertexId2) {
 		HalfEdge edge0 = getOrCreateEdge(vertexId0, vertexId1);
 		HalfEdge edge1 = getOrCreateEdge(vertexId1, vertexId2);
