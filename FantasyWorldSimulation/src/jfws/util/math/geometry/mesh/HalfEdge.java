@@ -41,7 +41,7 @@ public class HalfEdge {
 	public void insertPoint(Point2d point) {
 		HalfEdge newEdge = new HalfEdge(this);
 		nextEdge = newEdge;
-		endVertex = new Vertex(point, newEdge);
+		endVertex = new Vertex(0, point, newEdge);
 
 		HalfEdge newOppositeEdge = new HalfEdge(oppositeEdge);
 		oppositeEdge.nextEdge = newOppositeEdge;
@@ -58,7 +58,7 @@ public class HalfEdge {
 
 		face = new Face(this);
 		HalfEdge fromPoint = new HalfEdge(face, getStartVertex(), null, this);
-		Vertex newVertex = new Vertex(point, fromPoint);
+		Vertex newVertex = new Vertex(0, point, fromPoint);
 		HalfEdge toPoint = new HalfEdge(face, newVertex, null, fromPoint);
 
 		HalfEdge oppositeFromPoint = new HalfEdge(null, newVertex, fromPoint, null);

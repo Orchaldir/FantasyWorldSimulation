@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class Vertex {
 
+	private final int id;
 	private Point2d point;
 	private HalfEdge edge;
 
