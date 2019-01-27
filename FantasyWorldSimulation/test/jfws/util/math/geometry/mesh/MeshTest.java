@@ -99,93 +99,96 @@ class MeshTest {
 	}
 
 	@Nested
-	class TestCreateEdge {
+	class TestEdge {
 
-		@Test
-		public void createEdge() {
-			Vertex vertex0 = mesh.createVertex(point0);
-			Vertex vertex1 = mesh.createVertex(point1);
+		private Vertex vertex0;
+		private Vertex vertex1;
+		private Vertex vertex2;
+		private Vertex vertex3;
 
-			HalfEdge edge = mesh.createEdge(0, 1);
-
-			assertEdge(edge, 0, vertex1, null, null);
-
-			HalfEdge oppositeEdge = edge.getOppositeEdge();
-
-			assertEdge(oppositeEdge, 1, vertex0, null, null);
+		@BeforeEach
+		public void setUp() {
+			vertex0 = mesh.createVertex(point0);
+			vertex1 = mesh.createVertex(point1);
+			vertex2 = mesh.createVertex(point2);
+			vertex3 = mesh.createVertex(point3);
 		}
 
-		@Test
-		public void createEdgeWithSameIndex() {
-			mesh.createVertex(point0);
+		@Nested
+		class TestCreateEdge {
 
-			assertThrows(IllegalArgumentException.class, () -> mesh.createEdge(0, 0));
+			@Test
+			public void createEdge() {
+				HalfEdge edge = mesh.createEdge(0, 1);
+
+				assertEdge(edge, 0, vertex1, null, null);
+				assertEdge(edge.getOppositeEdge(), 1, vertex0, null, null);
+			}
+
+			@Test
+			public void createEdgeTwice() {
+				mesh.createEdge(0, 1);
+
+				assertThrows(IllegalArgumentException.class, () -> mesh.createEdge(0, 1));
+			}
+
+			@Test
+			public void createEdgeWithSameIndex() {
+				assertThrows(IllegalArgumentException.class, () -> mesh.createEdge(0, 0));
+			}
+
+			@Test
+			public void createEdgeWithNegativeStartIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createEdge(-1, 0));
+			}
+
+			@Test
+			public void createEdgeWithTooHighStartIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createEdge(4, 0));
+			}
+
+			@Test
+			public void createEdgeWithNegativeEndIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createEdge(0, -1));
+			}
+
+			@Test
+			public void createEdgeWithTooHighEndIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createEdge(0, 4));
+			}
 		}
 
-		@Test
-		public void createEdgeWithNegativeStartIndex() {
-			mesh.createVertex(point0);
+		@Nested
+		class TestGetEdge {
 
-			assertThrows(IndexOutOfBoundsException.class, () -> mesh.createEdge(-1, 0));
+			private HalfEdge edge0;
+			private HalfEdge edge1;
+			private HalfEdge edge2;
+
+			@BeforeEach
+			public void setUp() {
+				edge0 = mesh.createEdge(0, 1);
+				edge1 = mesh.createEdge(1, 2);
+				edge2 = mesh.createEdge(2, 3);
+			}
+
+			@Test
+			public void getExistingEdge() {
+				assertThat(mesh.getEdge(2), is(equalTo(edge1)));
+				assertThat(mesh.getEdge(3), is(equalTo(edge1.oppositeEdge)));
+			}
+
+			@Test
+			public void getEdgeWithNegativeIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.getEdge(-1));
+			}
+
+			@Test
+			public void getEdgeWithTooHighIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.getEdge(6));
+			}
+
 		}
-
-		@Test
-		public void  createEdgeWithTooHighStartIndex() {
-			mesh.createVertex(point0);
-
-			assertThrows(IndexOutOfBoundsException.class, () ->  mesh.createEdge(1, 0));
-		}
-
-		@Test
-		public void createEdgeWithNegativeEndIndex() {
-			mesh.createVertex(point0);
-
-			assertThrows(IndexOutOfBoundsException.class, () -> mesh.createEdge(0, -1));
-		}
-
-		@Test
-		public void  createEdgeWithTooHighEndIndex() {
-			mesh.createVertex(point0);
-
-			assertThrows(IndexOutOfBoundsException.class, () ->  mesh.createEdge(0, 1));
-		}
-	}
-
-	@Nested
-	class TestGetEdge {
-
-		@Test
-		public void getExistingEdge() {
-			mesh.createVertex(point0);
-			mesh.createVertex(point1);
-			mesh.createVertex(point2);
-			mesh.createVertex(point3);
-			mesh.createEdge(0, 1);
-			HalfEdge edge = mesh.createEdge(1, 2);
-			mesh.createEdge(2, 3);
-
-			assertThat(mesh.getEdge(2), is(equalTo(edge)));
-			assertThat(mesh.getEdge(3), is(equalTo(edge.oppositeEdge)));
-		}
-
-		@Test
-		public void getEdgeWithNegativeIndex() {
-			mesh.createVertex(point0);
-			mesh.createVertex(point1);
-			mesh.createEdge(0, 1);
-
-			assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getEdge(-1));
-		}
-
-		@Test
-		public void getEdgeWithTooHighIndex() {
-			mesh.createVertex(point0);
-			mesh.createVertex(point1);
-			mesh.createEdge(0, 1);
-
-			assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getEdge(2));
-		}
-
 	}
 
 	@Nested
@@ -211,7 +214,6 @@ class MeshTest {
 			public void createTriangle() {
 				Face triangle = mesh.createTriangle(2, 3, 0);
 
-				assertNotNull(triangle);
 				assertThat(triangle.getId(), is(equalTo(0)));
 
 				HalfEdge edge0 = triangle.getEdge();
@@ -226,9 +228,24 @@ class MeshTest {
 				HalfEdge opposite1 = edge1.getOppositeEdge();
 				HalfEdge opposite2 = edge2.getOppositeEdge();
 
-				assertEdge(opposite0, 1, vertex2, null, opposite2);
-				assertEdge(opposite1, 3, vertex3, null, opposite0);
-				assertEdge(opposite2, 5, vertex0, null, opposite1);
+				assertEdge(opposite0, 1, vertex2, null, null);
+				assertEdge(opposite1, 3, vertex3, null, null);
+				assertEdge(opposite2, 5, vertex0, null, null);
+			}
+
+			@Test
+			public void createTriangleWhileReusingAnEdge() {
+				Face triangle0 = mesh.createTriangle(0, 1, 2);
+				Face triangle1 = mesh.createTriangle(0, 2, 3);
+
+				assertThat(triangle0.getId(), is(equalTo(0)));
+				assertThat(triangle1.getId(), is(equalTo(1)));
+
+				HalfEdge edge0 = triangle0.getEdge().getPreviousEdge();
+
+				assertThat(edge0.getFace(), is(equalTo(triangle0)));
+				assertThat(edge0.getOppositeFace(), is(equalTo(triangle1)));
+				assertThat(edge0.getOppositeEdge(), is(equalTo(triangle1.getEdge())));
 			}
 		}
 

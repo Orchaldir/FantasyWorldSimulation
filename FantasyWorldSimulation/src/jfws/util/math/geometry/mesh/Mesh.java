@@ -35,6 +35,9 @@ public class Mesh {
 		if(startVertexId == endVertexId) {
 			throw new IllegalArgumentException("Start & end vertex id are the same!");
 		}
+		else if(getEdge(startVertexId, endVertexId) != null) {
+			throw new IllegalArgumentException("Edge already exists!");
+		}
 
 		Vertex start = getVertex(startVertexId);
 		Vertex end = getVertex(endVertexId);
@@ -61,10 +64,31 @@ public class Mesh {
 		throw new IndexOutOfBoundsException(id);
 	}
 
+	private HalfEdge getEdge(int startVertexId, int endVertexId) {
+		for(HalfEdge edge : edges) {
+			if(edge.getEndVertex().getId() == endVertexId &&
+					edge.getStartVertex().getId() == startVertexId) {
+				return edge;
+			}
+		}
+
+		return  null;
+	}
+
+	private HalfEdge getOrCreateEdge(int startVertexId, int endVertexId) {
+		HalfEdge edge = getEdge(startVertexId, endVertexId);
+
+		if(edge == null) {
+			return createEdge(startVertexId, endVertexId);
+		}
+
+		return  edge;
+	}
+
 	public Face createTriangle(int vertexId0, int vertexId1, int vertexId2) {
-		HalfEdge edge0 = createEdge(vertexId0, vertexId1);
-		HalfEdge edge1 = createEdge(vertexId1, vertexId2);
-		HalfEdge edge2 = createEdge(vertexId2, vertexId0);
+		HalfEdge edge0 = getOrCreateEdge(vertexId0, vertexId1);
+		HalfEdge edge1 = getOrCreateEdge(vertexId1, vertexId2);
+		HalfEdge edge2 = getOrCreateEdge(vertexId2, vertexId0);
 
 		Face triangle = new Face(nextFaceId++, edge0);
 
@@ -75,10 +99,6 @@ public class Mesh {
 		edge0.nextEdge = edge1;
 		edge1.nextEdge = edge2;
 		edge2.nextEdge = edge0;
-
-		edge0.oppositeEdge.nextEdge = edge2.oppositeEdge;
-		edge2.oppositeEdge.nextEdge = edge1.oppositeEdge;
-		edge1.oppositeEdge.nextEdge = edge0.oppositeEdge;
 
 		faces.add(triangle);
 
