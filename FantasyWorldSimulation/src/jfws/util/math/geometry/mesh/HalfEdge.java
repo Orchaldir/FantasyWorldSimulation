@@ -8,16 +8,23 @@ import lombok.Getter;
 @Getter
 public class HalfEdge {
 
+	protected final int id;
 	protected Face face;
 	protected Vertex endVertex;
 	protected HalfEdge oppositeEdge;
 	protected HalfEdge nextEdge;
 
-	public HalfEdge(HalfEdge edge) {
+	public HalfEdge(int id, HalfEdge edge) {
+		this.id = id;
 		face = edge.face;
 		endVertex = edge.endVertex;
 		oppositeEdge = edge.oppositeEdge;
 		nextEdge = edge.nextEdge;
+	}
+
+	public HalfEdge(int id, Vertex endVertex) {
+		this.id = id;
+		this.endVertex = endVertex;
 	}
 
 	public Vertex getStartVertex() {
@@ -38,6 +45,7 @@ public class HalfEdge {
 		return currentEdge;
 	}
 
+	/*
 	public void insertPoint(Point2d point) {
 		HalfEdge newEdge = new HalfEdge(this);
 		nextEdge = newEdge;
@@ -71,5 +79,6 @@ public class HalfEdge {
 
 		return face;
 	}
+	*/
 
 }

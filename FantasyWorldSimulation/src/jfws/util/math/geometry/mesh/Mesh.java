@@ -28,6 +28,36 @@ public class Mesh {
 			}
 		}
 
-		throw new IndexOutOfBoundsException();
+		throw new IndexOutOfBoundsException(index);
+	}
+
+	public HalfEdge createEdge(int startIndex, int endIndex) {
+		if(startIndex == endIndex) {
+			throw new IllegalArgumentException("Start & end index are the same!");
+		}
+
+		Vertex start = getVertex(startIndex);
+		Vertex end = getVertex(endIndex);
+
+		HalfEdge edge = new HalfEdge(nextEdgeId++, end);
+		HalfEdge oppositeEdge = new HalfEdge(nextEdgeId++, start);
+
+		edge.oppositeEdge = oppositeEdge;
+		oppositeEdge.oppositeEdge = edge;
+
+		edges.add(edge);
+		edges.add(oppositeEdge);
+
+		return edge;
+	}
+
+	public HalfEdge getEdge(int index) {
+		for(HalfEdge edge : edges) {
+			if(edge.getId() == index) {
+				return edge;
+			}
+		}
+
+		throw new IndexOutOfBoundsException(index);
 	}
 }
