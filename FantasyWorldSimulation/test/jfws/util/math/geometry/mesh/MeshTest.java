@@ -37,6 +37,14 @@ class MeshTest {
 		assertThat(vertex.getEdge(), is(equalTo(edge)));
 	}
 
+	private void assertEdge(HalfEdge edge, int id, Vertex endVertex, Face face, HalfEdge next) {
+		assertNotNull(edge);
+		assertThat(edge.getId(), is(equalTo(id)));
+		assertThat(edge.getEndVertex(), is(equalTo(endVertex)));
+		assertThat(edge.getFace(), is(equalTo(face)));
+		assertThat(edge.getNextEdge(), is(equalTo(next)));
+	}
+
 	@Nested
 	class TestCreateVertex {
 
@@ -100,17 +108,11 @@ class MeshTest {
 
 			HalfEdge edge = mesh.createEdge(0, 1);
 
-			assertNotNull(edge);
-			assertThat(edge.getId(), is(equalTo(0)));
-			assertThat(edge.getEndVertex(), is(equalTo(vertex1)));
-			assertNull(edge.getFace());
+			assertEdge(edge, 0, vertex1, null, null);
 
 			HalfEdge oppositeEdge = edge.getOppositeEdge();
 
-			assertNotNull(oppositeEdge);
-			assertThat(oppositeEdge.getId(), is(equalTo(1)));
-			assertThat(oppositeEdge.getEndVertex(), is(equalTo(vertex0)));
-			assertNull(oppositeEdge.getFace());
+			assertEdge(oppositeEdge, 1, vertex0, null, null);
 		}
 
 		@Test
@@ -184,6 +186,81 @@ class MeshTest {
 			assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getEdge(2));
 		}
 
+	}
+
+	@Nested
+	class TestFace {
+
+		private Vertex vertex0;
+		private Vertex vertex1;
+		private Vertex vertex2;
+		private Vertex vertex3;
+
+		@BeforeEach
+		public void setUp() {
+			vertex0 = mesh.createVertex(point0);
+			vertex1 = mesh.createVertex(point1);
+			vertex2 = mesh.createVertex(point2);
+			vertex3 = mesh.createVertex(point3);
+		}
+
+		@Nested
+		class TestCreateTriangle {
+
+			@Test
+			public void createTriangle() {
+				Face triangle = mesh.createTriangle(2, 3, 0);
+
+				assertNotNull(triangle);
+				assertThat(triangle.getId(), is(equalTo(0)));
+
+				HalfEdge edge0 = triangle.getEdge();
+				HalfEdge edge1 = edge0.getNextEdge();
+				HalfEdge edge2 = edge1.getNextEdge();
+
+				assertEdge(edge0, 0, vertex3, triangle, edge1);
+				assertEdge(edge1, 2, vertex0, triangle, edge2);
+				assertEdge(edge2, 4, vertex2, triangle, edge0);
+
+				HalfEdge opposite0 = edge0.getOppositeEdge();
+				HalfEdge opposite1 = edge1.getOppositeEdge();
+				HalfEdge opposite2 = edge2.getOppositeEdge();
+
+				assertEdge(opposite0, 1, vertex2, null, opposite2);
+				assertEdge(opposite1, 3, vertex3, null, opposite0);
+				assertEdge(opposite2, 5, vertex0, null, opposite1);
+			}
+		}
+
+		@Nested
+		class TestGetFace {
+
+			private Face face0;
+			private Face face1;
+
+			@BeforeEach
+			public void setUp() {
+				face0 = mesh.createTriangle(0, 1, 2);
+				face1 = mesh.createTriangle(0, 2, 3);
+			}
+
+			@Test
+			public void getExistingFace() {
+				assertThat(mesh.getFace(0), is(equalTo(face0)));
+				assertThat(mesh.getFace(1), is(equalTo(face1)));
+			}
+
+			@Test
+			public void getFaceWithNegativeIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getFace(-1));
+			}
+
+			@Test
+			public void getEdgeWithTooHighIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () ->  mesh.getFace(2));
+			}
+
+		}
 	}
 
 }

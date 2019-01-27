@@ -10,10 +10,14 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class FaceTest {
+
+	public static final int ID = 33;
 
 	private HalfEdge edge0;
 	private HalfEdge edge1;
@@ -44,7 +48,7 @@ class FaceTest {
 		when(edge2.getEndVertex()).thenReturn(vertex2);
 		when(edge3.getEndVertex()).thenReturn(vertex3);
 
-		face = new Face(edge0);
+		face = new Face(ID, edge0);
 	}
 
 	private void setUpOneEdge() {
@@ -67,6 +71,12 @@ class FaceTest {
 		when(edge1.getNextEdge()).thenReturn(edge2);
 		when(edge2.getNextEdge()).thenReturn(edge3);
 		when(edge3.getNextEdge()).thenReturn(edge0);
+	}
+
+	@Test
+	public void getGetter() {
+		assertThat(face.getId(), is(equalTo(ID)));
+		assertThat(face.getEdge(), is(equalTo(edge0)));
 	}
 
 	@Nested

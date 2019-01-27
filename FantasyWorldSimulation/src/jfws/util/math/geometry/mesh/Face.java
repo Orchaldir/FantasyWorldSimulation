@@ -2,6 +2,7 @@ package jfws.util.math.geometry.mesh;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
+@ToString(of = {"id"})
 public class Face {
 
+	private final int id;
 	private HalfEdge edge;
 
 	// edges
