@@ -234,6 +234,56 @@ class MeshTest {
 				assertEdge(edge.getOppositeEdge(), 11, vertex1, triangle0, mesh.getEdge(2));
 			}
 		}
+
+		@Nested
+		class TestMergeEdge {
+
+			private Face triangle0;
+			private Face triangle1;
+
+			@BeforeEach
+			public void setUp() {
+				triangle0 = mesh.createTriangle(0, 1, 2);
+				triangle1 = mesh.createTriangle(0, 2, 3);
+			}
+
+			private void assertEdge(HalfEdge edge, int id, Vertex startVertex, Vertex endVertex, Face face) {
+				assertNotNull(edge);
+				assertThat(edge.getId(), is(equalTo(id)));
+				assertThat(edge.getStartVertex(), is(equalTo(startVertex)));
+				assertThat(edge.getEndVertex(), is(equalTo(endVertex)));
+				assertThat(edge.getFace(), is(equalTo(face)));
+			}
+
+			@Test
+			public void testMergeEdge() {
+				mesh.mergeEdge(4);
+
+				assertThat(mesh.getFaces().size(), is(equalTo(1)));
+				assertThat(mesh.getFace(0), is(equalTo(triangle0)));
+
+				HalfEdge edge = triangle0.getEdge();
+				assertEdge(edge, 0, vertex0, vertex1,  triangle0);
+				assertEdge(edge.getOppositeEdge(), 1, vertex1, vertex0,  null);
+
+				edge = edge.getNextEdge();
+				assertEdge(edge, 2, vertex1, vertex2,  triangle0);
+				assertEdge(edge.getOppositeEdge(), 3, vertex2, vertex1,  null);
+
+				edge = edge.getNextEdge();
+				assertEdge(edge, 6, vertex2, vertex3,  triangle0);
+				assertEdge(edge.getOppositeEdge(), 7, vertex3, vertex2,  null);
+
+				edge = edge.getNextEdge();
+				assertEdge(edge, 8, vertex3, vertex0,  triangle0);
+				assertEdge(edge.getOppositeEdge(), 9, vertex0, vertex3,  null);
+			}
+
+			@Test
+			public void testMergeEdgeWithoutSecondFace() {
+				assertThrows(IllegalArgumentException.class, () -> mesh.mergeEdge(0));
+			}
+		}
 	}
 
 	@Nested

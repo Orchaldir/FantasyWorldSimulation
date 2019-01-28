@@ -1,14 +1,20 @@
 package jfws.util.math.geometry.mesh;
 
 import jfws.util.math.geometry.Point2d;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Mesh {
 
+	@Getter
 	private final List<Vertex> vertices = new ArrayList<>();
+
+	@Getter
 	private final List<HalfEdge> edges = new ArrayList<>();
+
+	@Getter
 	private final List<Face> faces = new ArrayList<>();
 
 	private int nextVertexId = 0;
@@ -102,6 +108,32 @@ public class Mesh {
 		edge.oppositeEdge = newOppositeEdge;
 
 		return newEdge;
+	}
+
+	public void mergeAtEndVertex(HalfEdge edge) {
+		HalfEdge edgeAfterEnd = edge.getNextEdge();
+		HalfEdge edgeBeforeEnd = edge.getOppositeEdge().getPreviousEdge();
+
+		edgeBeforeEnd.nextEdge = edgeAfterEnd;
+		//edgeAfterEnd.getOppositeEdge().nextEdge = edgeBeforeEnd.oppositeEdge;
+	}
+
+	public void mergeEdge(int edgeId) {
+		HalfEdge edge = getEdge(edgeId);
+		Face oppositeFace = edge.getOppositeFace();
+
+		if(edge.getFace() == null || oppositeFace == null) {
+			throw new IllegalArgumentException("Edge requires 2 faces to merge.");
+		}
+
+		for (HalfEdge edge0 : oppositeFace.getEdgesInCCW()) {
+			edge0.face = edge.face;
+		}
+
+		mergeAtEndVertex(edge);
+		mergeAtEndVertex(edge.getOppositeEdge());
+
+		faces.remove(oppositeFace);
 	}
 
 	public Face createTriangle(int vertexId0, int vertexId1, int vertexId2) {
