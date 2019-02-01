@@ -422,19 +422,23 @@ class MeshTest {
 		@Nested
 		class TestGetFace {
 
-			private Face face0;
-			private Face face1;
+			private Face triangle;
+			private Face face;
 
 			@BeforeEach
 			public void setUp() {
-				face0 = mesh.createTriangle(0, 1, 2);
-				face1 = mesh.createTriangle(0, 2, 3);
+				triangle = mesh.createTriangle(0, 1, 2);
+				face = mesh.createFace(Arrays.asList(0, 2, 3));
+			}
+
+			@Test
+			public void getExistingTriangle() {
+				assertThat(mesh.getFace(0), is(equalTo(triangle)));
 			}
 
 			@Test
 			public void getExistingFace() {
-				assertThat(mesh.getFace(0), is(equalTo(face0)));
-				assertThat(mesh.getFace(1), is(equalTo(face1)));
+				assertThat(mesh.getFace(1), is(equalTo(face)));
 			}
 
 			@Test

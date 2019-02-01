@@ -157,6 +157,20 @@ public class Mesh {
 	}
 
 	public Face createFace(List<Integer> vertices) {
+		List<HalfEdge> edges = createEdgesOfFace(vertices);
+
+		Face face = new Face(nextFaceId++, edges.get(0));
+
+		edges.forEach(edge -> edge.face = face);
+
+		connectEdgesOfFace(edges);
+
+		faces.add(face);
+
+		return face;
+	}
+
+	private List<HalfEdge> createEdgesOfFace(List<Integer> vertices) {
 		final int numberOfVertices = vertices.size();
 
 		if(numberOfVertices < 3) {
@@ -174,25 +188,21 @@ public class Mesh {
 
 			startVertexId = endVertexId;
 		}
+		return edges;
+	}
 
-		HalfEdge firstEdge = edges.get(0);
-
-		Face face = new Face(nextFaceId++, firstEdge);
-
-		edges.forEach(edge -> edge.face = face);
-
+	private void connectEdgesOfFace(List<HalfEdge> edges) {
 		HalfEdge current = edges.get(0);
+		int size = edges.size();
 
-		for(int index = 0; index < numberOfVertices; index++) {
-			int nextIndex = (index + 1) % numberOfVertices;
+		for(int index = 0; index < size; index++) {
+			int nextIndex = (index + 1) % size;
 			HalfEdge next = edges.get(nextIndex);
 
 			current.nextEdge = next;
 
 			current = next;
 		}
-
-		return face;
 	}
 
 	public Face getFace(int id) {
