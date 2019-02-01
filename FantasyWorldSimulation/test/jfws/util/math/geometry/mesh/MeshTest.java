@@ -5,6 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -341,6 +344,78 @@ class MeshTest {
 				assertThat(edge0.getFace(), is(equalTo(triangle0)));
 				assertThat(edge0.getOppositeFace(), is(equalTo(triangle1)));
 				assertThat(edge0.getOppositeEdge(), is(equalTo(triangle1.getEdge())));
+			}
+
+			@Test
+			public void createFaceWithNegativeIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(-1, 1, 2));
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, -1, 2));
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, 1, -2));
+			}
+
+			@Test
+			public void createFaceWithTooHighIndex() {
+
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(6, 1, 2));
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, 6, 2));
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, 1, 6));
+			}
+		}
+
+		@Nested
+		class TestCreateFace {
+
+			@Test
+			public void createFace() {
+				Face face = mesh.createFace(Arrays.asList(0, 1, 2, 3));
+
+				assertNotNull(face);
+				assertThat(face.getId(), is(equalTo(0)));
+
+				HalfEdge edge0 = face.getEdge();
+				HalfEdge edge1 = edge0.getNextEdge();
+				HalfEdge edge2 = edge1.getNextEdge();
+				HalfEdge edge3 = edge2.getNextEdge();
+
+				assertEdge(edge0, 0, vertex1, face, edge1);
+				assertEdge(edge1, 2, vertex2, face, edge2);
+				assertEdge(edge2, 4, vertex3, face, edge3);
+				assertEdge(edge3, 6, vertex0, face, edge0);
+
+				HalfEdge opposite0 = edge0.getOppositeEdge();
+				HalfEdge opposite1 = edge1.getOppositeEdge();
+				HalfEdge opposite2 = edge2.getOppositeEdge();
+				HalfEdge opposite3 = edge3.getOppositeEdge();
+
+				assertEdge(opposite0, 1, vertex0, null, null);
+				assertEdge(opposite1, 3, vertex1, null, null);
+				assertEdge(opposite2, 5, vertex2, null, null);
+				assertEdge(opposite3, 7, vertex3, null, null);
+			}
+
+			@Test
+			public void createFaceWithNoVertices() {
+				assertThrows(IllegalArgumentException.class, () -> mesh.createFace(Collections.emptyList()));
+			}
+
+			@Test
+			public void createFaceWithOneVertex() {
+				assertThrows(IllegalArgumentException.class, () -> mesh.createFace(Arrays.asList(0)));
+			}
+
+			@Test
+			public void createFaceWithTwoVertices() {
+				assertThrows(IllegalArgumentException.class, () -> mesh.createFace(Arrays.asList(0, 1)));
+			}
+
+			@Test
+			public void createFaceWithNegativeIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createFace(Arrays.asList(0, -1, 2, 3)));
+			}
+
+			@Test
+			public void createFaceWithTooHighIndex() {
+				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createFace(Arrays.asList(0, 1, 6, 3)));
 			}
 		}
 

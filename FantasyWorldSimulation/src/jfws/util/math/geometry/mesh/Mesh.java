@@ -156,6 +156,45 @@ public class Mesh {
 		return triangle;
 	}
 
+	public Face createFace(List<Integer> vertices) {
+		final int numberOfVertices = vertices.size();
+
+		if(numberOfVertices < 3) {
+			throw new IllegalArgumentException("Less than 3 vertices!");
+		}
+
+		List<HalfEdge> edges = new ArrayList<>();
+		int startVertexId = vertices.get(0);
+
+		for(int startIndex = 0; startIndex < numberOfVertices; startIndex++) {
+			int endIndex = (startIndex + 1) % numberOfVertices;
+			int endVertexId = vertices.get(endIndex);
+
+			edges.add(getOrCreateEdge(startVertexId, endVertexId));
+
+			startVertexId = endVertexId;
+		}
+
+		HalfEdge firstEdge = edges.get(0);
+
+		Face face = new Face(nextFaceId++, firstEdge);
+
+		edges.forEach(edge -> edge.face = face);
+
+		HalfEdge current = edges.get(0);
+
+		for(int index = 0; index < numberOfVertices; index++) {
+			int nextIndex = (index + 1) % numberOfVertices;
+			HalfEdge next = edges.get(nextIndex);
+
+			current.nextEdge = next;
+
+			current = next;
+		}
+
+		return face;
+	}
+
 	public Face getFace(int id) {
 		for(Face face : faces) {
 			if(face.getId() == id) {
