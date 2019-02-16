@@ -1,6 +1,8 @@
-package jfws.util.map;
+package jfws.util.map.rendering;
 
 import javafx.scene.paint.Color;
+import jfws.util.map.SharedTestData;
+import jfws.util.map.rendering.MapRenderer;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import org.junit.jupiter.api.BeforeEach;

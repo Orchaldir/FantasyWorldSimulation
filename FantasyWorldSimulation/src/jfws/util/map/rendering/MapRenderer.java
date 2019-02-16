@@ -1,5 +1,7 @@
-package jfws.util.map;
+package jfws.util.map.rendering;
 
+import jfws.util.map.CellMap2d;
+import jfws.util.map.ToCellMapper;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import lombok.AllArgsConstructor;

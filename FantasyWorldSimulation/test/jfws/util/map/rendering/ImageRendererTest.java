@@ -1,8 +1,10 @@
-package jfws.util.map;
+package jfws.util.map.rendering;
 
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import jfws.util.map.Map2d;
+import jfws.util.map.rendering.ImageRenderer;
 import jfws.util.rendering.ColorSelector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
