@@ -20,7 +20,7 @@ public class CanvasRenderer implements Renderer {
 	}
 
 	@Override
-	public void setFillColor(Color color) {
+	public void setColor(Color color) {
 		graphicsContext.setFill(color);
 	}
 

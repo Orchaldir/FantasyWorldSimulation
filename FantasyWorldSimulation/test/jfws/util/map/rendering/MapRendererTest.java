@@ -2,7 +2,6 @@ package jfws.util.map.rendering;
 
 import javafx.scene.paint.Color;
 import jfws.util.map.SharedTestData;
-import jfws.util.map.rendering.MapRenderer;
 import jfws.util.rendering.ColorSelector;
 import jfws.util.rendering.Renderer;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +95,7 @@ class MapRendererTest extends SharedTestData {
 	}
 
 	private void verifyRenderRectangle(double x, double y, Color color) {
-		orderVerifier.verify(renderer).setFillColor(ArgumentMatchers.eq(color));
+		orderVerifier.verify(renderer).setColor(ArgumentMatchers.eq(color));
 		orderVerifier.verify(renderer).renderRectangle(eq(x, ERROR), eq(y, ERROR), eq(RESOLUTION_X-BORDER, ERROR), eq(RESOLUTION_Y-BORDER, ERROR));
 	}
 

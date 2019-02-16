@@ -41,7 +41,7 @@ public class MapRenderer {
 			for(int column = 0; column < map.getWidth(); column++) {
 				double originX = toCellMapper.getCellOriginX(column);
 
-				renderer.setFillColor(colorSelector.select(map.getCell(column, row)));
+				renderer.setColor(colorSelector.select(map.getCell(column, row)));
 				renderer.renderRectangle(originX, originY, resolutionX, resolutionY);
 			}
 		}

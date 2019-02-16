@@ -13,6 +13,15 @@
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="FantasyWorldSimulation" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="FantasyWorldSimulation" target="1.9" />
+    </bytecodeTargetLevel>
   </component>
 </project>
