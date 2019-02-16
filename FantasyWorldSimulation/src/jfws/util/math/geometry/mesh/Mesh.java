@@ -115,7 +115,6 @@ public class Mesh {
 		HalfEdge edgeBeforeEnd = edge.getOppositeEdge().getPreviousEdge();
 
 		edgeBeforeEnd.nextEdge = edgeAfterEnd;
-		//edgeAfterEnd.getOppositeEdge().nextEdge = edgeBeforeEnd.oppositeEdge;
 	}
 
 	public void mergeEdge(int edgeId) {
@@ -157,13 +156,13 @@ public class Mesh {
 	}
 
 	public Face createFace(List<Integer> vertices) {
-		List<HalfEdge> edges = createEdgesOfFace(vertices);
+		List<HalfEdge> edgesOfFace = createEdgesOfFace(vertices);
 
-		Face face = new Face(nextFaceId++, edges.get(0));
+		Face face = new Face(nextFaceId++, edgesOfFace.get(0));
 
-		edges.forEach(edge -> edge.face = face);
+		edgesOfFace.forEach(edge -> edge.face = face);
 
-		connectEdgesOfFace(edges);
+		connectEdgesOfFace(edgesOfFace);
 
 		faces.add(face);
 
@@ -177,18 +176,18 @@ public class Mesh {
 			throw new IllegalArgumentException("Less than 3 vertices!");
 		}
 
-		List<HalfEdge> edges = new ArrayList<>();
+		List<HalfEdge> edgesOfFace = new ArrayList<>();
 		int startVertexId = vertices.get(0);
 
 		for(int startIndex = 0; startIndex < numberOfVertices; startIndex++) {
 			int endIndex = (startIndex + 1) % numberOfVertices;
 			int endVertexId = vertices.get(endIndex);
 
-			edges.add(getOrCreateEdge(startVertexId, endVertexId));
+			edgesOfFace.add(getOrCreateEdge(startVertexId, endVertexId));
 
 			startVertexId = endVertexId;
 		}
-		return edges;
+		return edgesOfFace;
 	}
 
 	private void connectEdgesOfFace(List<HalfEdge> edges) {
