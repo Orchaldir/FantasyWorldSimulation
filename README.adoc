@@ -10,6 +10,8 @@ image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasy
 * See link:FantasyWorldSimulation/docs/docu/index.adoc[Documentation].
 * See link:FantasyWorldSimulation/docs/docu/release-notes/index.adoc[Release Notes].
 
+Current Milestone: https://github.com/Orchaldir/FantasyWorldSimulation/milestone/3[World Map]
+
 == How to run the MapEditor
 
 Run `jfws.editor.map.MapEditor.main()`.
