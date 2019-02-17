@@ -33,11 +33,16 @@ class MeshTest {
 		mesh = new Mesh();
 	}
 
-	private void assertVertex(Vertex vertex, int id, Point2d point, HalfEdge edge) {
+	private void assertVertex(Vertex vertex, int id, double x, double y, HalfEdge edge) {
 		assertNotNull(vertex);
 		assertThat(vertex.getId(), is(equalTo(id)));
-		assertThat(vertex.getPoint(), is(equalTo(point)));
+		assertThat(vertex.getPoint().getX(), is(equalTo(x)));
+		assertThat(vertex.getPoint().getY(), is(equalTo(y)));
 		assertThat(vertex.getEdge(), is(equalTo(edge)));
+	}
+
+	private void assertVertex(Vertex vertex, int id, Point2d point, HalfEdge edge) {
+		assertVertex(vertex, id, point.getX(), point.getY(), edge);
 	}
 
 	private void assertEdge(HalfEdge edge, int id, Vertex endVertex, Face face, HalfEdge next) {
@@ -52,8 +57,15 @@ class MeshTest {
 	class TestCreateVertex {
 
 		@Test
-		public void createVertexOnce() {
+		public void createVertexFromPoint() {
 			Vertex vertex = mesh.createVertex(point0);
+
+			assertVertex(vertex, 0, point0, null);
+		}
+
+		@Test
+		public void createVertexFromDoubles() {
+			Vertex vertex = mesh.createVertex(point0.getX(), point0.getY());
 
 			assertVertex(vertex, 0, point0, null);
 		}
@@ -347,14 +359,14 @@ class MeshTest {
 			}
 
 			@Test
-			public void createFaceWithNegativeIndex() {
+			public void createTriangleWithNegativeIndex() {
 				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(-1, 1, 2));
 				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, -1, 2));
 				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, 1, -2));
 			}
 
 			@Test
-			public void createFaceWithTooHighIndex() {
+			public void createTriangleWithTooHighIndex() {
 
 				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(6, 1, 2));
 				assertThrows(IndexOutOfBoundsException.class, () -> mesh.createTriangle(0, 6, 2));
@@ -391,6 +403,15 @@ class MeshTest {
 				assertEdge(opposite1, 3, vertex1, null, null);
 				assertEdge(opposite2, 5, vertex2, null, null);
 				assertEdge(opposite3, 7, vertex3, null, null);
+			}
+
+			@Test
+			public void createTwoFaces() {
+				Face face0 = mesh.createFace(Arrays.asList(0, 1, 2));
+				Face face1 = mesh.createFace(Arrays.asList(0, 2, 3));
+
+				assertThat(face0.getId(), is(equalTo(0)));
+				assertThat(face1.getId(), is(equalTo(1)));
 			}
 
 			@Test

@@ -8,8 +8,18 @@ import jfws.util.rendering.bdd.RandomColorSelectorWhen;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 @ExtendWith( JGivenExtension.class )
 class RandomColorSelectorTest extends ScenarioTest<RandomColorSelectorGiven, RandomColorSelectorWhen, RandomColorSelectorThen> {
+
+	@Test
+	public void testGetName() {
+		RandomColorSelector selector = new RandomColorSelector(null);
+
+		assertThat(selector.getName(), is("Random"));
+	}
 
 	@Test
 	public void the_selected_color_is_random() {

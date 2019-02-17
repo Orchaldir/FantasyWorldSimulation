@@ -11,7 +11,7 @@ import lombok.ToString;
 public class Vertex {
 
 	private final int id;
-	private Point2d point;
+	private final Point2d point;
 	private HalfEdge edge;
 
 }
