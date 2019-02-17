@@ -95,7 +95,7 @@ class ChangeTerrainTypeToolTest {
 	@Test
 	public void testUseOutsideMap() {
 		when(sketchMap.getToCellMapper()).thenReturn(toCellMapper);
-		when(toCellMapper.getCell(X, Y)).thenThrow(new OutsideMapException(null, 0, 1, 2, false));
+		when(toCellMapper.getCell(X, Y)).thenThrow(new OutsideMapException(0, 1, 2, false));
 
 		assertFalse(tool.use(X, Y));
 

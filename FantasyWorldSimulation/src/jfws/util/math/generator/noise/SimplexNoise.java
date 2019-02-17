@@ -18,6 +18,7 @@ package jfws.util.math.generator.noise;
  */
 
 import jfws.util.math.generator.Generator;
+import lombok.AllArgsConstructor;
 
 public class SimplexNoise implements Generator {
 
@@ -163,12 +164,9 @@ public class SimplexNoise implements Generator {
 
 	// Inner class to speed upp gradient computations
 	// (array access is a lot slower than member access)
+	@AllArgsConstructor
 	protected static class Grad {
-		private double x, y;
-
-		Grad(double x, double y) {
-			this.x = x;
-			this.y = y;
-		}
+		private double x;
+		private double y;
 	}
 }

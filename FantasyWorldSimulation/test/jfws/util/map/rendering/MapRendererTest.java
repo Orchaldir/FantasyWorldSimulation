@@ -100,6 +100,8 @@ class MapRendererTest extends SharedTestData {
 	}
 
 	private void verifyColorSelector() {
+		verify(colorSelector, times(1)).reset();
+
 		for(int i = 0; i < SIZE; i++) {
 			verify(colorSelector).select(ArgumentMatchers.eq(i));
 		}

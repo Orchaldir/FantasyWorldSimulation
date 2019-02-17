@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 public class OutsideMapException extends RuntimeException {
 
-	private final CellMap2d map;
-	private final int x, y, index;
+	private final int x;
+	private final int y;
+	private final int index;
 	private final boolean usedIndex;
 }

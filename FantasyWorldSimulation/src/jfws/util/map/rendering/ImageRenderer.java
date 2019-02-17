@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageRenderer {
 
 	public <T> WritableImage render(Map2d<T> map, ColorSelector<T> colorSelector) {
+		colorSelector.reset();
+
 		CellMap2d<T> cellMap = map.getCellMap();
 		WritableImage writableImage = new WritableImage(cellMap.getWidth(), cellMap.getHeight());
 

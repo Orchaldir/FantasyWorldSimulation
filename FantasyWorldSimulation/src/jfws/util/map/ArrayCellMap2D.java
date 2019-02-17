@@ -62,7 +62,7 @@ public class ArrayCellMap2D<T> implements CellMap2d<T> {
 			return cells[index];
 		}
 
-		throw new OutsideMapException(this, getX(index), getY(index), index, true);
+		throw new OutsideMapException(getX(index), getY(index), index, true);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ArrayCellMap2D<T> implements CellMap2d<T> {
 			return cells[getIndex(x, y)];
 		}
 
-		throw new OutsideMapException(this, x, y, getIndex(x, y), false);
+		throw new OutsideMapException(x, y, getIndex(x, y), false);
 	}
 
 	@Override

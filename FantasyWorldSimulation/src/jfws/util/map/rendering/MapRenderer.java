@@ -27,6 +27,8 @@ public class MapRenderer {
 	public <T> void render(ToCellMapper<T> toCellMapper, ColorSelector<T> colorSelector) {
 		log.info("render()");
 
+		colorSelector.reset();
+
 		CellMap2d<T> map = toCellMapper.getMap();
 		double resolutionX = toCellMapper.getResolutionX() - borderBetweenCells;
 		double resolutionY = toCellMapper.getResolutionY() - borderBetweenCells;

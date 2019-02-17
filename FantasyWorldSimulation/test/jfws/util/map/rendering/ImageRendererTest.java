@@ -54,6 +54,8 @@ class ImageRendererTest {
 
 		WritableImage image = imageRenderer.render(map, colorSelector);
 
+		verify(colorSelector, times(1)).reset();
+
 		PixelReader pixelReader = image.getPixelReader();
 
 		assertNotNull(image);

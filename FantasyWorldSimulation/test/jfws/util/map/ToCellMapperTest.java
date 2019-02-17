@@ -123,7 +123,6 @@ class ToCellMapperTest extends SharedTestData {
 		public void testGetCellOutside() {
 			OutsideMapException exception = assertThrows(OutsideMapException.class, () -> MAPPER.getCell(ORIGIN_X - 1, ORIGIN_Y - 1));
 
-			assertThat(exception.getMap(), is(equalTo(MAP)));
 			assertThat(exception.getX(), is(equalTo(-1)));
 			assertThat(exception.getY(), is(equalTo(-1)));
 		}

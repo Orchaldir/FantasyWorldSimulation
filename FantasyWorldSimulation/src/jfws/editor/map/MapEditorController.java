@@ -47,13 +47,19 @@ public class MapEditorController implements EditorController {
 	}
 
 	@FXML
-	private ComboBox<String> terrainTypeComboBox, renderStyleComboBox;
+	private ComboBox<String> terrainTypeComboBox;
+
+	@FXML
+	private ComboBox<String> renderStyleComboBox;
 
 	@FXML
 	private Canvas mapCanvas;
 
 	@FXML
-	private MenuItem undoItem, redoItem;
+	private MenuItem undoItem;
+
+	@FXML
+	private MenuItem redoItem;
 
 	@FXML
 	private MenuItem viewRegionMapItem;
@@ -149,20 +155,17 @@ public class MapEditorController implements EditorController {
 
 		sketchMap.generateElevation(elevationGenerator);
 
-		switch (mapToRender) {
-			case REGION_MAP:
-				elevationInterpolator.interpolate(sketchMap.getCellMap(), regionMap.getCellMap());
+		if (mapToRender == MapType.REGION_MAP) {
+			elevationInterpolator.interpolate(sketchMap.getCellMap(), regionMap.getCellMap());
 
-				for(ElevationNoise elevationNoise : elevationNoiseManager.getAll()) {
-					elevationNoise.addTo(regionMap);
-				}
+			for (ElevationNoise elevationNoise : elevationNoiseManager.getAll()) {
+				elevationNoise.addTo(regionMap);
+			}
 
-				WritableImage image = imageRenderer.render(regionMap, colorSelectorForRegion);
-				mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0);
-				break;
-			default:
-				mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);
-				break;
+			WritableImage image = imageRenderer.render(regionMap, colorSelectorForRegion);
+			mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0);
+		} else {
+			mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);
 		}
 
 		log.info("render(): Finished");
@@ -266,19 +269,16 @@ public class MapEditorController implements EditorController {
 	}
 
 	private void updateViewControls() {
-		switch (mapToRender) {
-			case REGION_MAP:
-				mapRenderer.setBorderBetweenCells(0);
-				renderStyleComboBox.setDisable(true);
-				viewRegionMapItem.setDisable(true);
-				viewSketchMapItem.setDisable(false);
-				break;
-			default:
-				mapRenderer.setBorderBetweenCells(5);
-				renderStyleComboBox.setDisable(false);
-				viewRegionMapItem.setDisable(false);
-				viewSketchMapItem.setDisable(true);
-				break;
+		if (mapToRender == MapType.REGION_MAP) {
+			mapRenderer.setBorderBetweenCells(0);
+			renderStyleComboBox.setDisable(true);
+			viewRegionMapItem.setDisable(true);
+			viewSketchMapItem.setDisable(false);
+		} else {
+			mapRenderer.setBorderBetweenCells(5);
+			renderStyleComboBox.setDisable(false);
+			viewRegionMapItem.setDisable(false);
+			viewSketchMapItem.setDisable(true);
 		}
 	}
 }

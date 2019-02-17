@@ -182,7 +182,6 @@ class ArrayCellMap2DTest extends SharedTestData {
 		public void testCoordinatesAreOutside() {
 			OutsideMapException exception = assertThrows(OutsideMapException.class, () -> MAP.getCell(-1, -2));
 
-			assertThat(exception.getMap(), is(equalTo(MAP)));
 			assertThat(exception.getX(), is(equalTo(-1)));
 			assertThat(exception.getY(), is(equalTo(-2)));
 			assertThat(exception.getIndex(), is(equalTo(-9)));
@@ -193,7 +192,6 @@ class ArrayCellMap2DTest extends SharedTestData {
 		public void testIndexIsOutside() {
 			OutsideMapException exception = assertThrows(OutsideMapException.class, () -> MAP.getCell(-1));
 
-			assertThat(exception.getMap(), is(equalTo(MAP)));
 			assertThat(exception.getX(), is(equalTo(-1)));
 			assertThat(exception.getY(), is(equalTo(0)));
 			assertThat(exception.getIndex(), is(equalTo(-1)));

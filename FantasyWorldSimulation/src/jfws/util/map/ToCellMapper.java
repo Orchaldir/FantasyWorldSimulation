@@ -8,8 +8,10 @@ import lombok.Data;
 public class ToCellMapper<T> {
 
 	private final CellMap2d<T> map;
-	private final double originX, originY;
-	private final double resolutionX, resolutionY;
+	private final double originX;
+	private final double originY;
+	private final double resolutionX;
+	private final double resolutionY;
 
 	public ToCellMapper(CellMap2d<T> map, double originX, double originY, double resolution) {
 		this(map, originX, originY, resolution, resolution);
