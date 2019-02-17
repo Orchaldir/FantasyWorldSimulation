@@ -47,8 +47,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.8.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.8.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.tngtech.jgiven:jgiven-junit5:0.17.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.tngtech.jgiven:jgiven-core:0.17.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.tngtech.jgiven:jgiven-junit5:0.17.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.tngtech.jgiven:jgiven-core:0.17.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.guava:guava:19.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.thoughtworks.paranamer:paranamer:2.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.fusesource.jansi:jansi:1.15" level="project" />
