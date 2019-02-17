@@ -12,7 +12,9 @@ import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.Mesh;
 import jfws.util.math.geometry.mesh.Vertex;
+import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
+import jfws.util.rendering.RandomColorSelector;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
@@ -32,6 +34,8 @@ public class WorldEditorController implements EditorController {
 
 	private CanvasRenderer canvasRenderer;
 
+	private RandomColorSelector randomColorSelector;
+
 	private Mesh mesh;
 
 	private static final double X0 = 100.0;
@@ -47,6 +51,8 @@ public class WorldEditorController implements EditorController {
 
 	public WorldEditorController() {
 		log.info("WorldEditorController()");
+
+		randomColorSelector = new RandomColorSelector(new GeneratorWithRandom(42));
 
 		mesh = new Mesh();
 
@@ -98,7 +104,7 @@ public class WorldEditorController implements EditorController {
 
 			log.info("render(): face={} points={}", face.getId(), polygonPoints.size());
 
-			canvasRenderer.setColor(Color.rgb(generator.nextInt(255), generator.nextInt(255), generator.nextInt(255)));
+			canvasRenderer.setColor(randomColorSelector.select(face));
 			canvasRenderer.renderPolygon(polygonPoints);
 		}
 

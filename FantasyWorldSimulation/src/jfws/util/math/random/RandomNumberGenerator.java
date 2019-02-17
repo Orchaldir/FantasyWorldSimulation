@@ -8,5 +8,6 @@ public interface RandomNumberGenerator {
 	void restart(long seed);
 
 	int getInteger();
+	int getInteger(int maxValue);
 	double getGaussian();
 }

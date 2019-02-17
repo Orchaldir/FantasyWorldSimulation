@@ -72,6 +72,24 @@ class GeneratorWithRandomTest {
 		assertThat(generator.getInteger(), is(equalTo(DIFFERENT_THIRD_INT)));
 	}
 
+	// getInteger()
+
+	@Test
+	public void testGetIntegerWithMax(){
+		final int desiredMaxValue = 5;
+		int min = 10000;
+		int max = -min;
+
+		for(int i = 0; i < 1000; i++) {
+			int value = generator.getInteger(desiredMaxValue);
+			min = Math.min(min, value);
+			max = Math.max(max, value);
+		}
+
+		assertThat(min, is(equalTo(0)));
+		assertThat(max, is(equalTo(desiredMaxValue)));
+	}
+
 	// getGaussian()
 
 	@Test

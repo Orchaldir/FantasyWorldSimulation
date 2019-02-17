@@ -31,6 +31,11 @@ public class GeneratorWithRandom implements RandomNumberGenerator {
 	}
 
 	@Override
+	public int getInteger(int maxValue) {
+		return random.nextInt(maxValue + 1);
+	}
+
+	@Override
 	public double getGaussian() {
 		return random.nextGaussian();
 	}
