@@ -2,7 +2,7 @@
 
 image:https://api.codacy.com/project/badge/Grade/93bf65e4625e4a29ad44dc47d7536139[Codacy Badge,link=https://www.codacy.com/app/Orchaldir/FantasyWorldSimulation?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Orchaldir/FantasyWorldSimulation&amp;utm_campaign=Badge_Grade]
 image:https://travis-ci.org/Orchaldir/FantasyWorldSimulation.svg?branch=master[Build Status,link=https://travis-ci.org/Orchaldir/FantasyWorldSimulation]
-image:https://codecov.io/gh/Orchaldir/FantasyWorldSimulation/branch/master/graph/badge.svg[codecov,link=https://codecov.io/gh/Orchaldir/FantasyWorldSimulation]
+image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWorldSimulation&metric=coverage[SonarCloud Coverage,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWorldSimulation]
 image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWorldSimulation&metric=bugs[SonarCloud Bugs,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWorldSimulation]
 image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWorldSimulation&metric=code_smells[SonarCloud Code Smells,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWorldSimulation]
 
