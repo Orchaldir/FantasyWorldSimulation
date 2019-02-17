@@ -27,6 +27,10 @@ public class Mesh {
 		return vertex;
 	}
 
+	public Vertex createVertex(double x, double y) {
+		return createVertex(new Point2d(x, y));
+	}
+
 	public Vertex getVertex(int id) {
 		for(Vertex vertex : vertices) {
 			if(vertex.getId() == id) {
