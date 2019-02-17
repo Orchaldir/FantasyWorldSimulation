@@ -1,13 +1,7 @@
 package jfws.editor.world;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
-import javafx.stage.Window;
-import jfws.editor.map.EditorController;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.Mesh;
@@ -17,17 +11,12 @@ import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.RandomColorSelector;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class WorldEditorController implements EditorController {
+public class WorldEditorController {
 
 	@FXML
 	private Canvas mapCanvas;
@@ -75,29 +64,10 @@ public class WorldEditorController implements EditorController {
 		render();
 	}
 
-	@Override
-	public BufferedImage getSnapshot() {
-		WritableImage image = mapCanvas.snapshot(null, null);
-		return SwingFXUtils.fromFXImage(image, null);
-	}
-
-	@Override
-	public void saveSnapshot(File file, BufferedImage bufferedImage) throws IOException {
-		ImageIO.write(bufferedImage, "PNG", file);
-	}
-
-	@Override
-	public Window getWindow() {
-		return null;
-	}
-
-	@Override
 	public void render() {
 		List<Face> faces = mesh.getFaces();
 
 		log.info("render(): faces={}", faces.size());
-
-		Random generator = new Random();
 
 		for (Face face : faces) {
 			List<Point2d> polygonPoints = face.getVerticesInCCW().stream().map(Vertex::getPoint).collect(Collectors.toList());
@@ -111,16 +81,9 @@ public class WorldEditorController implements EditorController {
 		log.info("render(): Finished");
 	}
 
-	@Override
-	public void showAlert(Alert.AlertType type, String title, String content) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setContentText(content);
-		alert.showAndWait();
-	}
-
 	@FXML
 	public void onExportImage() {
 		log.info("onExportImage()");
+		render();
 	}
 }
