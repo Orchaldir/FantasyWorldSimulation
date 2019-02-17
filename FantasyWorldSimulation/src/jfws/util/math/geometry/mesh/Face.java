@@ -1,5 +1,6 @@
 package jfws.util.math.geometry.mesh;
 
+import jfws.util.math.geometry.Point2d;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -42,6 +43,13 @@ public class Face {
 		return getEdgesInCCW().
 				stream().
 				map(HalfEdge::getEndVertex).
+				collect(Collectors.toList());
+	}
+
+	public List<Point2d> getPointsInCCW() {
+		return getVerticesInCCW().
+				stream().
+				map(Vertex::getPoint).
 				collect(Collectors.toList());
 	}
 

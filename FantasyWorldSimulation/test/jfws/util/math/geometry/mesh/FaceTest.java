@@ -1,5 +1,6 @@
 package jfws.util.math.geometry.mesh;
 
+import jfws.util.math.geometry.Point2d;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -197,7 +198,30 @@ class FaceTest {
 
 				assertThat(vertices, contains(vertex0, vertex1, vertex2, vertex3));
 			}
+		}
 
+		@Nested
+		class TestGetPointsInCCW {
+
+			private Point2d point0;
+			private Point2d point1;
+			private Point2d point2;
+
+			@BeforeEach
+			public void setUp() {
+				when(vertex0.getPoint()).thenReturn(point0);
+				when(vertex1.getPoint()).thenReturn(point1);
+				when(vertex2.getPoint()).thenReturn(point2);
+			}
+
+			@Test
+			public void getPointsWithQuad() {
+				setUpTriangle();
+
+				List<Point2d> points = face.getPointsInCCW();
+
+				assertThat(points, contains(point0, point1, point2));
+			}
 		}
 	}
 
