@@ -2,6 +2,7 @@ package jfws.util.rendering.bdd;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
+import com.tngtech.jgiven.annotation.ScenarioState;
 import javafx.scene.paint.Color;
 import jfws.util.math.random.RandomNumberGenerator;
 
@@ -20,18 +21,37 @@ public class RandomColorSelectorThen extends Stage<RandomColorSelectorThen> {
 	@ExpectedScenarioState
 	protected RandomNumberGenerator generator;
 
-	@ExpectedScenarioState
-	protected Color color;
+	@ExpectedScenarioState(resolution = ScenarioState.Resolution.NAME)
+	protected Color color0;
+
+	@ExpectedScenarioState(resolution = ScenarioState.Resolution.NAME)
+	protected Color color1;
 
 	public RandomColorSelectorThen the_selected_color_is_random() {
+		assertColor(color0, 1.0, 0.5, 0.0);
+		return this;
+	}
+
+	public RandomColorSelectorThen the_second_color_is_different() {
+		assertColor(color1, 0.25, 1.0, 0.75);
+		return this;
+	}
+
+	public RandomColorSelectorThen the_generator_was_called_$_times(int n) {
+		verify(generator, times(n)).getInteger(MAX_VALUE);
+		return this;
+	}
+
+	public RandomColorSelectorThen the_generator_was_reset_$_times(int n) {
+		verify(generator, times(n)).restart();
+		return this;
+	}
+
+	private void assertColor(Color color, double red, double green, double blue) {
 		assertNotNull(color);
 
-		assertThat(color.getRed(),   is(closeTo(1.0, ERROR)));
-		assertThat(color.getGreen(), is(closeTo(0.5, ERROR)));
-		assertThat(color.getBlue(),  is(closeTo(0.0, ERROR)));
-
-		verify(generator, times(3)).getInteger(MAX_VALUE);
-
-		return this;
+		assertThat(color.getRed(),   is(closeTo(red, ERROR)));
+		assertThat(color.getGreen(), is(closeTo(green, ERROR)));
+		assertThat(color.getBlue(),  is(closeTo(blue, ERROR)));
 	}
 }

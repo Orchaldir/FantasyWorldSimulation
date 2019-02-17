@@ -7,4 +7,6 @@ public interface ColorSelector<T> {
 	String getName();
 
 	Color select(T parameter);
+
+	default void reset() { }
 }

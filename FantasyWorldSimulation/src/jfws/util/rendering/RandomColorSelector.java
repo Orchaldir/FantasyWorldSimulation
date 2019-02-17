@@ -24,4 +24,9 @@ public class RandomColorSelector<T> implements ColorSelector<T> {
 
 		return Color.rgb(red, green, blue);
 	}
+
+	@Override
+	public void reset() {
+		generator.restart();
+	}
 }

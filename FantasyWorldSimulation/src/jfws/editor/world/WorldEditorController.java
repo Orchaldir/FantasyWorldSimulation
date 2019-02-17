@@ -69,6 +69,8 @@ public class WorldEditorController {
 
 		log.info("render(): faces={}", faces.size());
 
+		randomColorSelector.reset();
+
 		for (Face face : faces) {
 			List<Point2d> polygonPoints = face.getVerticesInCCW().stream().map(Vertex::getPoint).collect(Collectors.toList());
 
