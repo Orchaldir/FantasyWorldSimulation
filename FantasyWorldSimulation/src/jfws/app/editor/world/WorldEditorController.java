@@ -24,7 +24,6 @@ public class WorldEditorController {
 
 	private Mesh mesh;
 
-	private FaceRenderer faceRenderer;
 	private MeshRenderer meshRenderer;
 
 	private static final double X0 = 100.0;
@@ -64,7 +63,7 @@ public class WorldEditorController {
 		log.info("initialize()");
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
-		faceRenderer = new FaceRenderer(canvasRenderer);
+		FaceRenderer faceRenderer = new FaceRenderer(canvasRenderer);
 		meshRenderer = new MeshRenderer(faceRenderer);
 
 		render();
