@@ -2,6 +2,7 @@ package jfws.app.demo.distribution;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
@@ -18,11 +19,16 @@ public class PointDistributionController {
 	@FXML
 	private Canvas mapCanvas;
 
+	@FXML
+	private Slider numberOfPointsSlider;
+
 	private CanvasRenderer canvasRenderer;
 
 	private RandomColorSelector randomColorSelector;
 
 	private PoissonDiscDistribution pointDistribution;
+
+	private int numberOfPoints = 800;
 
 	public PointDistributionController() {
 		log.info("PointDistributionController()");
@@ -38,14 +44,19 @@ public class PointDistributionController {
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
 
+		numberOfPointsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+			onNumberOfPointsChanged((Double) newValue);
+		});
+
 		render();
 	}
 
 	public void render() {
-		List<Point2d> points = pointDistribution.distributePoints(new Point2d(800, 600), 800);
+		List<Point2d> points = pointDistribution.distributePoints(new Point2d(800, 600), numberOfPoints);
 
 		log.info("render(): points={}", points.size());
 
+		canvasRenderer.clear(0, 0, 900, 700);
 		canvasRenderer.setColor(Color.RED);
 
 		for (Point2d point : points) {
@@ -62,8 +73,9 @@ public class PointDistributionController {
 	}
 
 	@FXML
-	public void onExportImage() {
-		log.info("onExportImage()");
+	public void onNumberOfPointsChanged(double newValue) {
+		numberOfPoints = (int) newValue;
+		log.info("onNumberOfPointsChanged(): {}", numberOfPoints);
 		render();
 	}
 }

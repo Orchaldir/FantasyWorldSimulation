@@ -29,7 +29,6 @@ public class PoissonDiscDistribution extends RandomPointDistribution {
 		for (int i = 0; i < N; i++) {
 			Point2d point = generateValidPoint(points, size);
 
-			log.info("distributePoints(): i={}", i);
 			points.add(point);
 		}
 
