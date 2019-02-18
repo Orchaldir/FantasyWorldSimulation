@@ -155,4 +155,18 @@ class Point2dTest {
 		}
 	}
 
+	@Nested
+	class TestArithmetic {
+
+		@Test
+		public void testAdd() {
+			assertThat(POINT_0.add(DIFF), is(equalTo(POINT_1)));
+		}
+
+		@Test
+		public void testSub() {
+			assertThat(POINT_1.sub(DIFF), is(equalTo(POINT_0)));
+		}
+	}
+
 }

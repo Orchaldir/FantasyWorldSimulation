@@ -1,14 +1,20 @@
 package jfws.util.math.geometry;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
+@EqualsAndHashCode
 @Getter
+@ToString
 public class Point2d {
 
 	private final double x;
 	private final double y;
+
+	// distance
 
 	public double getDistanceTo(Point2d point) {
 		return getDistanceTo(point.x, point.y);
@@ -40,5 +46,15 @@ public class Point2d {
 		double factor = 1.0 / length;
 
 		return new Point2d(x * factor, y * factor);
+	}
+
+	// arithmetic
+
+	public Point2d add(Point2d point) {
+		return new Point2d(x + point.x, y + point.y);
+	}
+
+	public Point2d sub(Point2d point) {
+		return new Point2d(x - point.x, y - point.y);
 	}
 }
