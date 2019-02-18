@@ -36,6 +36,11 @@ public class GeneratorWithRandom implements RandomNumberGenerator {
 	}
 
 	@Override
+	public double getDoubleBetweenZeroAndOne() {
+		return random.nextDouble();
+	}
+
+	@Override
 	public double getGaussian() {
 		return random.nextGaussian();
 	}

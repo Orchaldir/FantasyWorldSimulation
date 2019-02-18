@@ -21,6 +21,8 @@ class GeneratorWithRandomTest {
 	private static final int DIFFERENT_SECOND_INT = 15869780;
 	private static final int DIFFERENT_THIRD_INT = 1565603387;
 
+	public static final double ERROR = 0.01;
+
 	private RandomNumberGenerator generator;
 
 	@BeforeEach
@@ -75,19 +77,55 @@ class GeneratorWithRandomTest {
 	// getInteger()
 
 	@Test
-	public void testGetIntegerWithMax(){
+	public void testMinOfGetIntegerWithMax(){
 		final int desiredMaxValue = 5;
 		int min = 10000;
-		int max = -min;
 
 		for(int i = 0; i < 1000; i++) {
 			int value = generator.getInteger(desiredMaxValue);
 			min = Math.min(min, value);
-			max = Math.max(max, value);
 		}
 
 		assertThat(min, is(equalTo(0)));
+	}
+
+	@Test
+	public void testMaxOfGetIntegerWithMax(){
+		final int desiredMaxValue = 5;
+		int max = -1000;
+
+		for(int i = 0; i < 1000; i++) {
+			int value = generator.getInteger(desiredMaxValue);
+			max = Math.max(max, value);
+		}
+
 		assertThat(max, is(equalTo(desiredMaxValue)));
+	}
+
+	// getDoubleBetweenZeroAndOne()
+
+	@Test
+	public void testMinOfGetDoubleBetweenZeroAndOne(){
+		double min = 10000;
+
+		for(int i = 0; i < 1000; i++) {
+			double value = generator.getDoubleBetweenZeroAndOne();
+			min = Math.min(min, value);
+		}
+
+		assertThat(min, is(closeTo(0.0, ERROR)));
+	}
+
+	@Test
+	public void testMaxOfGetDoubleBetweenZeroAndOne(){
+		double max = -10000;
+
+		for(int i = 0; i < 1000; i++) {
+			double value = generator.getDoubleBetweenZeroAndOne();
+			max = Math.max(max, value);
+		}
+
+		assertThat(max, is(closeTo(1.0, ERROR)));
 	}
 
 	// getGaussian()
@@ -103,6 +141,6 @@ class GeneratorWithRandomTest {
 
 		mean /= number;
 
-		assertThat(mean, is(closeTo(0, 0.1)));
+		assertThat(mean, is(closeTo(0, ERROR)));
 	}
 }

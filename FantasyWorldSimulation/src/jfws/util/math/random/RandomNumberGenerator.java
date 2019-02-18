@@ -9,5 +9,7 @@ public interface RandomNumberGenerator {
 
 	int getInteger();
 	int getInteger(int maxValue);
+
+	double getDoubleBetweenZeroAndOne();
 	double getGaussian();
 }
