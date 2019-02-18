@@ -15,5 +15,7 @@ public interface Renderer {
 
 	void renderRectangle(double x, double y, double width, double height);
 
+	void renderPoint(Point2d point, double size);
+
 	void renderPolygon(List<Point2d> points);
 }

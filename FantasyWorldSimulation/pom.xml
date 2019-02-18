@@ -138,6 +138,8 @@
                 <version>1.4.3</version>
                 <configuration>
                     <excludedClasses>
+                        <param>jfws.app.demo.distribution.PointDistributionController</param>
+                        <param>jfws.app.demo.distribution.PointDistributionDemo</param>
                         <param>jfws.app.editor.map.MapEditor</param>
                         <param>jfws.app.editor.map.MapEditorController</param>
                         <param>jfws.app.editor.world.WorldEditor</param>

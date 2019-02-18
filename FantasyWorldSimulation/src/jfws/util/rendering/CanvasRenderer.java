@@ -33,6 +33,11 @@ public class CanvasRenderer implements Renderer {
 	}
 
 	@Override
+	public void renderPoint(Point2d point, double size) {
+		renderRectangle(point.getX(), point.getY(), size, size);
+	}
+
+	@Override
 	public void renderPolygon(List<Point2d> points) {
 		double[] xPoints = points.stream().mapToDouble(Point2d::getX).toArray();
 		double[] yPoints = points.stream().mapToDouble(Point2d::getY).toArray();

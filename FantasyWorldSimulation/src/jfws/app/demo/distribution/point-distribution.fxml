@@ -21,7 +21,7 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </top>
          <center>
-            <Canvas fx:id="mapCanvas" height="500.0" width="1000.0" BorderPane.alignment="TOP_LEFT" />
+            <Canvas fx:id="mapCanvas" height="600.0" width="1000.0" BorderPane.alignment="TOP_LEFT" />
          </center>
       </BorderPane>
    </children>
