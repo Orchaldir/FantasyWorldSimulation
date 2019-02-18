@@ -2,9 +2,9 @@ package jfws.app.demo.distribution;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
-import jfws.util.math.geometry.distribution.PointDistribution;
-import jfws.util.math.geometry.distribution.RandomPointDistribution;
+import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.RandomColorSelector;
@@ -22,14 +22,14 @@ public class PointDistributionController {
 
 	private RandomColorSelector randomColorSelector;
 
-	private PointDistribution pointDistribution;
+	private PoissonDiscDistribution pointDistribution;
 
 	public PointDistributionController() {
 		log.info("PointDistributionController()");
 
 		randomColorSelector = new RandomColorSelector(new GeneratorWithRandom(42));
 
-		pointDistribution = new RandomPointDistribution(new GeneratorWithRandom(42));
+		pointDistribution = new PoissonDiscDistribution(new GeneratorWithRandom(42), 20.0);
 	}
 
 	@FXML
@@ -42,13 +42,20 @@ public class PointDistributionController {
 	}
 
 	public void render() {
-		List<Point2d> points = pointDistribution.distributePoints(new Point2d(800, 600), 100);
+		List<Point2d> points = pointDistribution.distributePoints(new Point2d(800, 600), 800);
 
 		log.info("render(): points={}", points.size());
 
+		canvasRenderer.setColor(Color.RED);
+
 		for (Point2d point : points) {
-			canvasRenderer.setColor(randomColorSelector.select(null));
-			canvasRenderer.renderPoint(point, 10);
+			canvasRenderer.renderPoint(point, pointDistribution.getRadius());
+		}
+
+		canvasRenderer.setColor(Color.BLUE);
+
+		for (Point2d point : points) {
+			canvasRenderer.renderPoint(point, 5);
 		}
 
 		log.info("render(): Finished");

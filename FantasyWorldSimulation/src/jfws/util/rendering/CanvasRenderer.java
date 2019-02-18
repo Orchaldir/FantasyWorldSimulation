@@ -34,7 +34,8 @@ public class CanvasRenderer implements Renderer {
 
 	@Override
 	public void renderPoint(Point2d point, double size) {
-		renderRectangle(point.getX(), point.getY(), size, size);
+		double offsetToCenter = size / 2.0;
+		graphicsContext.fillOval(point.getX() - offsetToCenter, point.getY() - offsetToCenter, size, size);
 	}
 
 	@Override
