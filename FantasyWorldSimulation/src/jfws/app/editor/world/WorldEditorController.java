@@ -1,4 +1,4 @@
-package jfws.editor.world;
+package jfws.app.editor.world;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;

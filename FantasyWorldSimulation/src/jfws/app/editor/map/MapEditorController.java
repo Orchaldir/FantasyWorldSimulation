@@ -1,4 +1,4 @@
-package jfws.editor.map;
+package jfws.app.editor.map;
 
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;

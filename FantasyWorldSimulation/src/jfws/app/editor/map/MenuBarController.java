@@ -1,4 +1,4 @@
-package jfws.editor.map;
+package jfws.app.editor.map;
 
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;

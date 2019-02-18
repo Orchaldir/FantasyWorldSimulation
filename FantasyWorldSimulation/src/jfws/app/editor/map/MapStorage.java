@@ -1,6 +1,6 @@
-package jfws.editor.map;
+package jfws.app.editor.map;
 
-import jfws.editor.map.tool.ChangeTerrainTypeTool;
+import jfws.app.editor.map.tool.ChangeTerrainTypeTool;
 import jfws.maps.region.RegionMap;
 import jfws.maps.sketch.SketchConverter;
 import jfws.maps.sketch.SketchConverterWithJson;

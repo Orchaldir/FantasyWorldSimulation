@@ -1,4 +1,4 @@
-package jfws.editor.map.tool;
+package jfws.app.editor.map.tool;
 
 import jfws.maps.sketch.ChangeTerrainTypeCommand;
 import jfws.maps.sketch.SketchCell;

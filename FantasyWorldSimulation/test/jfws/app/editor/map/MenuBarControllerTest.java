@@ -1,4 +1,4 @@
-package jfws.editor.map;
+package jfws.app.editor.map;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
