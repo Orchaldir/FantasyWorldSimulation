@@ -140,6 +140,8 @@
                     <excludedClasses>
                         <param>jfws.editor.map.MapEditor</param>
                         <param>jfws.editor.map.MapEditorController</param>
+                        <param>jfws.editor.world.WorldEditor</param>
+                        <param>jfws.editor.world.WorldEditorController</param>
                     </excludedClasses>
                 </configuration>
                 <dependencies>
