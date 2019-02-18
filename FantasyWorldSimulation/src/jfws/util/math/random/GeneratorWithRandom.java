@@ -1,9 +1,11 @@
 package jfws.util.math.random;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Random;
 
+@ToString(of = {"seed"})
 public class GeneratorWithRandom implements RandomNumberGenerator {
 
 	@Getter
