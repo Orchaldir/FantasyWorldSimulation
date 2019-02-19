@@ -23,7 +23,7 @@ class RandomPointDistributionTest {
 		given_a_random_number_generator();
 		given_a_random_point_distribution();
 
-		points = distribution.distributePoints(SIZE, desiredNumberOfPoints);
+		points = distribution.distributePoints(SIZE, 1.5);
 
 		verify_generator_was_reset(1);
 		verify_generator_was_called(desiredNumberOfPoints);
@@ -56,7 +56,7 @@ class RandomPointDistributionTest {
 
 	private List<Point2d> points;
 
-	private static final Point2d SIZE = new Point2d(800.0, 600.0);
+	private static final Point2d SIZE = new Point2d(6.0, 3.0);
 
 	// given
 
@@ -86,11 +86,11 @@ class RandomPointDistributionTest {
 	}
 
 	private void verify_points() {
-		assertThat(points.get(0).getX(), is(closeTo(80.0, ERROR)));
-		assertThat(points.get(0).getY(), is(closeTo(120.0, ERROR)));
+		assertThat(points.get(0).getX(), is(closeTo(0.6, ERROR)));
+		assertThat(points.get(0).getY(), is(closeTo(0.6, ERROR)));
 
-		assertThat(points.get(1).getX(), is(closeTo(240.0, ERROR)));
-		assertThat(points.get(1).getY(), is(closeTo(240.0, ERROR)));
+		assertThat(points.get(1).getX(), is(closeTo(1.8, ERROR)));
+		assertThat(points.get(1).getY(), is(closeTo(1.2, ERROR)));
 	}
 
 }
