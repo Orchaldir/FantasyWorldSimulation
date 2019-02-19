@@ -167,6 +167,15 @@ class Point2dTest {
 		public void testSub() {
 			assertThat(POINT_1.sub(DIFF), is(equalTo(POINT_0)));
 		}
+
+		@Test
+		public void testFromPolar() {
+			assertPoint(POINT_0.fromPolar(Math.PI * 0.0, 1.0), 2.0, 2.0);
+			assertPoint(POINT_0.fromPolar(Math.PI * 0.5, 2.0), 1.0, 4.0);
+			assertPoint(POINT_0.fromPolar(Math.PI * 1.0, 3.0), -2.0, 2.0);
+			assertPoint(POINT_0.fromPolar(Math.PI * 1.5, 4.0), 1.0, -2.0);
+			assertPoint(POINT_0.fromPolar(Math.PI * 2.0, 5.0), 6.0, 2.0);
+		}
 	}
 
 }

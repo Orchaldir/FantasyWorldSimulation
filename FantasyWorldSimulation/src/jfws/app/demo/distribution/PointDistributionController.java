@@ -5,7 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
-import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
+import jfws.util.math.geometry.distribution.FastPoissonDiscDistribution;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.RandomColorSelector;
@@ -26,7 +26,7 @@ public class PointDistributionController {
 
 	private RandomColorSelector randomColorSelector;
 
-	private PoissonDiscDistribution pointDistribution;
+	private FastPoissonDiscDistribution pointDistribution;
 
 	private int numberOfPoints = 800;
 
@@ -35,7 +35,7 @@ public class PointDistributionController {
 
 		randomColorSelector = new RandomColorSelector(new GeneratorWithRandom(42));
 
-		pointDistribution = new PoissonDiscDistribution(new GeneratorWithRandom(42), 20.0);
+		pointDistribution = new FastPoissonDiscDistribution(new GeneratorWithRandom(42), 10.0);
 	}
 
 	@FXML
@@ -60,13 +60,13 @@ public class PointDistributionController {
 		canvasRenderer.setColor(Color.RED);
 
 		for (Point2d point : points) {
-			canvasRenderer.renderPoint(point, pointDistribution.getRadius());
+			canvasRenderer.renderPoint(point, pointDistribution.getRadius() / 2.0);
 		}
 
 		canvasRenderer.setColor(Color.BLUE);
 
 		for (Point2d point : points) {
-			canvasRenderer.renderPoint(point, 5);
+			canvasRenderer.renderPoint(point, 1);
 		}
 
 		log.info("render(): Finished");

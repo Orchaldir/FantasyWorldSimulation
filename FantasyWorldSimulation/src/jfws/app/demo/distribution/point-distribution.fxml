@@ -21,7 +21,7 @@
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
-                  <Slider fx:id="numberOfPointsSlider" majorTickUnit="50.0" max="800.0" maxWidth="1.7976931348623157E308" minorTickCount="5" prefWidth="400.0" showTickMarks="true" value="500.0" />
+                  <Slider fx:id="numberOfPointsSlider" blockIncrement="50.0" majorTickUnit="1000.0" max="4000.0" maxWidth="1.7976931348623157E308" minorTickCount="200" prefWidth="400.0" showTickLabels="true" showTickMarks="true" value="1000.0" />
                </items></ToolBar>
          </top>
          <center>
