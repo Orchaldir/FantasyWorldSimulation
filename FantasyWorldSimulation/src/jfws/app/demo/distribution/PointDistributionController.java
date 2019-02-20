@@ -1,7 +1,9 @@
 package jfws.app.demo.distribution;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
@@ -18,12 +20,15 @@ import java.util.List;
 public class PointDistributionController {
 
 	enum SelectedDistribution {
-		POISSON,
+		POISSON_DISC,
 		RANDOM
 	}
 
 	@FXML
 	private Canvas mapCanvas;
+
+	@FXML
+	private ComboBox<SelectedDistribution> distributionComboBox;
 
 	@FXML
 	private Slider numberOfPointsSlider;
@@ -52,6 +57,9 @@ public class PointDistributionController {
 		log.info("initialize()");
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
+
+		distributionComboBox.setItems(FXCollections.observableArrayList(SelectedDistribution.values()));
+		distributionComboBox.getSelectionModel().select(selectedDistribution);
 
 		numberOfPointsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			onMaxNumberOfPointsChanged((Double) newValue);
@@ -94,7 +102,14 @@ public class PointDistributionController {
 	}
 
 	private PointDistribution getPointDistribution() {
-		return selectedDistribution == SelectedDistribution.POISSON ? poissonDiscDistribution : randomPointDistribution;
+		return selectedDistribution == SelectedDistribution.POISSON_DISC ? poissonDiscDistribution : randomPointDistribution;
+	}
+
+	@FXML
+	public void onDistributionSelected() {
+		selectedDistribution = distributionComboBox.getSelectionModel().getSelectedItem();
+		log.info("onDistributionSelected(): terrainType={}", selectedDistribution);
+		render();
 	}
 
 	@FXML
