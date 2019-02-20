@@ -7,6 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
+import jfws.util.math.geometry.distribution.GridWithNoiseDistribution;
 import jfws.util.math.geometry.distribution.PointDistribution;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
 import jfws.util.math.geometry.distribution.RandomPointDistribution;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PointDistributionController {
 
 	enum SelectedDistribution {
+		GRID_WITH_NOISE,
 		POISSON_DISC,
 		RANDOM
 	}
@@ -38,12 +40,13 @@ public class PointDistributionController {
 
 	private CanvasRenderer canvasRenderer;
 
-	private RandomPointDistribution randomPointDistribution;
+	private GridWithNoiseDistribution gridWithNoiseDistribution;
 	private PoissonDiscDistribution poissonDiscDistribution;
+	private RandomPointDistribution randomPointDistribution;
 
 	private SelectedDistribution selectedDistribution = SelectedDistribution.POISSON_DISC;
 
-	private int maxNumberOfPoints = 800;
+	private int maxNumberOfPoints = 4000;
 	private double radius = 10.0;
 
 	public PointDistributionController() {
@@ -51,8 +54,9 @@ public class PointDistributionController {
 
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
 
-		randomPointDistribution = new RandomPointDistribution(generator);
+		gridWithNoiseDistribution = new GridWithNoiseDistribution(generator);
 		poissonDiscDistribution = new PoissonDiscDistribution(generator);
+		randomPointDistribution = new RandomPointDistribution(generator);
 	}
 
 	@FXML
@@ -64,10 +68,12 @@ public class PointDistributionController {
 		distributionComboBox.setItems(FXCollections.observableArrayList(SelectedDistribution.values()));
 		distributionComboBox.getSelectionModel().select(selectedDistribution);
 
+		numberOfPointsSlider.setValue(maxNumberOfPoints);
 		numberOfPointsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			onMaxNumberOfPointsChanged((Double) newValue);
 		});
 
+		radiusSlider.setValue(radius);
 		radiusSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			onRadiusChanged((Double) newValue);
 		});
@@ -109,7 +115,14 @@ public class PointDistributionController {
 	}
 
 	private PointDistribution getPointDistribution() {
-		return selectedDistribution == SelectedDistribution.POISSON_DISC ? poissonDiscDistribution : randomPointDistribution;
+		switch (selectedDistribution) {
+			case GRID_WITH_NOISE:
+				return gridWithNoiseDistribution;
+			case POISSON_DISC:
+				return poissonDiscDistribution;
+			default:
+				return randomPointDistribution;
+		}
 	}
 
 	@FXML
