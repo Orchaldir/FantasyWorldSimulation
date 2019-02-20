@@ -24,6 +24,7 @@
                <items>
                   <ComboBox fx:id="distributionComboBox" onAction="#onDistributionSelected" prefWidth="150.0" />
                   <Slider fx:id="numberOfPointsSlider" blockIncrement="50.0" majorTickUnit="1000.0" max="4000.0" maxWidth="1.7976931348623157E308" minorTickCount="200" prefWidth="400.0" showTickLabels="true" showTickMarks="true" value="1000.0" />
+                  <Slider fx:id="radiusSlider" max="55.0" min="5.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" value="20.0" />
                </items></ToolBar>
          </top>
          <center>

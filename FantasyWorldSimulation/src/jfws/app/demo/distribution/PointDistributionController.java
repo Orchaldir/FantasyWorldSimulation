@@ -33,12 +33,15 @@ public class PointDistributionController {
 	@FXML
 	private Slider numberOfPointsSlider;
 
+	@FXML
+	private Slider radiusSlider;
+
 	private CanvasRenderer canvasRenderer;
 
 	private RandomPointDistribution randomPointDistribution;
 	private PoissonDiscDistribution poissonDiscDistribution;
 
-	private SelectedDistribution selectedDistribution = SelectedDistribution.RANDOM;
+	private SelectedDistribution selectedDistribution = SelectedDistribution.POISSON_DISC;
 
 	private int maxNumberOfPoints = 800;
 	private double radius = 10.0;
@@ -63,6 +66,10 @@ public class PointDistributionController {
 
 		numberOfPointsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			onMaxNumberOfPointsChanged((Double) newValue);
+		});
+
+		radiusSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+			onRadiusChanged((Double) newValue);
 		});
 
 		render();
@@ -116,6 +123,13 @@ public class PointDistributionController {
 	public void onMaxNumberOfPointsChanged(double newValue) {
 		maxNumberOfPoints = (int) newValue;
 		log.info("onMaxNumberOfPointsChanged(): {}", maxNumberOfPoints);
+		render();
+	}
+
+	@FXML
+	public void onRadiusChanged(double newValue) {
+		radius = newValue;
+		log.info("onRadiusChanged(): {}", radius);
 		render();
 	}
 }
