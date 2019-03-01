@@ -69,14 +69,12 @@ public class PointDistributionController {
 		distributionComboBox.getSelectionModel().select(selectedDistribution);
 
 		numberOfPointsSlider.setValue(maxNumberOfPoints);
-		numberOfPointsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-			onMaxNumberOfPointsChanged((Double) newValue);
-		});
+		numberOfPointsSlider.valueProperty().addListener((
+				observable, oldValue, newValue) -> onMaxNumberOfPointsChanged((Double) newValue));
 
 		radiusSlider.setValue(radius);
-		radiusSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-			onRadiusChanged((Double) newValue);
-		});
+		radiusSlider.valueProperty().addListener(
+				(observable, oldValue, newValue) -> onRadiusChanged((Double) newValue));
 
 		render();
 	}

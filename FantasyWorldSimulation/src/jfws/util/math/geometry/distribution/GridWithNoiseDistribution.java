@@ -12,6 +12,7 @@ import java.util.List;
 @Slf4j
 public class GridWithNoiseDistribution implements PointDistribution {
 
+	public static final double MIN_DISTANCE = 0.2;
 	protected RandomNumberGenerator generator;
 
 	@Override
@@ -26,13 +27,13 @@ public class GridWithNoiseDistribution implements PointDistribution {
 		double length = radius * 2.0;
 		double columns = Math.ceil(size.getX() / length);
 		double rows = Math.ceil(size.getY() / length);
-		int N = (int) (columns * rows);
+		int numberOfPoints = (int) (columns * rows);
 
-		log.info("distributePoints(): radius={} size={} {}*{}={}", radius, size, columns, rows, N);
+		log.info("distributePoints(): radius={} size={} {}*{}={}", radius, size, columns, rows, numberOfPoints);
 
 		generator.restart();
 
-		List<Point2d> points = new ArrayList<>(N);
+		List<Point2d> points = new ArrayList<>(numberOfPoints);
 		double maxDistanceFromCenter = radius * 0.8;
 
 		for (int column = 0; column < columns; column++) {
@@ -51,7 +52,7 @@ public class GridWithNoiseDistribution implements PointDistribution {
 
 	protected Point2d generatePolarPoint(Point2d point, double maxDistance) {
 		double angle = generator.getDoubleBetweenZeroAndOne() * 2.0 * Math.PI;
-		double distance = (0.1 + generator.getDoubleBetweenZeroAndOne() * 0.9) * maxDistance;
+		double distance = (MIN_DISTANCE + generator.getDoubleBetweenZeroAndOne() * (1.0 - MIN_DISTANCE)) * maxDistance;
 
 		return point.fromPolar(angle, distance);
 	}

@@ -59,9 +59,9 @@ public class Point2d {
 	}
 
 	public Point2d fromPolar(double angle, double distance){
-		double new_x = x + Math.cos(angle) * distance;
-		double new_y = y + Math.sin(angle) * distance;
+		double newX = x + Math.cos(angle) * distance;
+		double newY = y + Math.sin(angle) * distance;
 
-		return new Point2d(new_x, new_y);
+		return new Point2d(newX, newY);
 	}
 }
