@@ -1,6 +1,7 @@
 package jfws.util.math.geometry.distribution;
 
 import jfws.util.math.geometry.Point2d;
+import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.math.random.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -20,7 +21,7 @@ class RandomPointDistributionTest {
 	public void testDistributePoints() {
 		int desiredNumberOfPoints = 2;
 
-		given_a_random_number_generator();
+		given_a_mocked_random_number_generator();
 		given_a_random_point_distribution();
 
 		points = distribution.distributePoints(SIZE, 1.5);
@@ -29,6 +30,16 @@ class RandomPointDistributionTest {
 		verify_generator_was_called(desiredNumberOfPoints);
 		verify_points_size(desiredNumberOfPoints);
 		verify_points();
+	}
+
+	@Test
+	public void testMoreDistributePoints() {
+		given_a_random_number_generator();
+		given_a_random_point_distribution();
+
+		points = distribution.distributePoints(SIZE, 0.5);
+
+		verify_points_size(18);
 	}
 
 	@Test
@@ -61,6 +72,10 @@ class RandomPointDistributionTest {
 	// given
 
 	private void given_a_random_number_generator() {
+		generator = new GeneratorWithRandom(0);
+	}
+
+	private void given_a_mocked_random_number_generator() {
 		generator = mock(RandomNumberGenerator.class);
 		inOrder = inOrder(generator);
 

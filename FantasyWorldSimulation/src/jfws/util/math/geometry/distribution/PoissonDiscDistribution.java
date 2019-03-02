@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Slf4j
-public class PoissonDiscDistribution implements PointDistribution {
+public class PoissonDiscDistribution extends AbstractPointDistribution {
 
 	private final static int MAY_ATTEMPTS = 20;
 
@@ -22,6 +22,8 @@ public class PoissonDiscDistribution implements PointDistribution {
 
 	@Override
 	public List<Point2d> distributePoints(Point2d size, double radius) {
+		checkForInvalidSize(size);
+
 		log.info("distributePoints(): size={} radius={}", size, radius);
 		generator.restart();
 
@@ -33,8 +35,9 @@ public class PoissonDiscDistribution implements PointDistribution {
 
 		double minDistance = radius * 2.0;
 
-		while(generateValidPoint(points, activeIndices, size, minDistance)) {
-		}
+		while(generateValidPoint(points, activeIndices, size, minDistance)) { }
+
+		log.info("distributePoints(): points={}", points.size());
 
 		return points;
 	}
@@ -68,7 +71,7 @@ public class PoissonDiscDistribution implements PointDistribution {
 	}
 
 	protected boolean isCandidateValid(List<Point2d> points, Point2d candidate, Point2d size, double minDistance) {
-		if(isOutside(candidate, size, minDistance)) {
+		if(isOutside(candidate, size)) {
 			return false;
 		}
 
@@ -83,7 +86,7 @@ public class PoissonDiscDistribution implements PointDistribution {
 		return true;
 	}
 
-	private boolean isOutside(Point2d candidate, Point2d size, double radius) {
+	private boolean isOutside(Point2d candidate, Point2d size) {
 		return  candidate.getX() < 0 ||
 				candidate.getY() < 0 ||
 				candidate.getX() > size.getX() ||

@@ -10,18 +10,13 @@ import java.util.List;
 
 @AllArgsConstructor
 @Slf4j
-public class RandomPointDistribution implements PointDistribution {
+public class RandomPointDistribution extends AbstractPointDistribution {
 
 	protected RandomNumberGenerator generator;
 
 	@Override
 	public List<Point2d> distributePoints(Point2d size, double radius) {
-		if(size.getX() <= 0.0) {
-			throw new IllegalArgumentException("X is too small!");
-		}
-		else if(size.getY() <= 0.0) {
-			throw new IllegalArgumentException("Y is too small!");
-		}
+		checkForInvalidSize(size);
 
 		int N = calculateNumberOfPoints(size, radius);
 
