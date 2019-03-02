@@ -16,91 +16,87 @@ import static org.mockito.Mockito.*;
 class RandomPointDistributionTest {
 
 	public static final double ERROR = 0.001;
+	private static final Point2d SIZE = new Point2d(6.0, 3.0);
+
+	private RandomNumberGenerator generator;
+	private InOrder inOrder;
+	private RandomPointDistribution distribution;
+
+	private List<Point2d> points;
 
 	@Test
 	public void testDistributePoints() {
 		int desiredNumberOfPoints = 2;
 
-		given_a_mocked_random_number_generator();
-		given_a_random_point_distribution();
+		createMockedRandomNumberGenerator();
+		createRandomPointDistribution();
 
 		points = distribution.distributePoints(SIZE, 1.5);
 
-		verify_generator_was_reset(1);
-		verify_generator_was_called(desiredNumberOfPoints);
-		verify_points_size(desiredNumberOfPoints);
-		verify_points();
+		assertGeneratorWasReset(1);
+		assertGeneratorWasCalled(desiredNumberOfPoints);
+		assertPointsSize(desiredNumberOfPoints);
+		assertPoints();
 	}
 
 	@Test
 	public void testMoreDistributePoints() {
-		given_a_random_number_generator();
-		given_a_random_point_distribution();
+		createRandomNumberGenerator();
+		createRandomPointDistribution();
 
 		points = distribution.distributePoints(SIZE, 0.5);
 
-		verify_points_size(18);
+		assertPointsSize(18);
 	}
 
 	@Test
 	public void testTooSmallSizeX() {
-		given_a_random_number_generator();
-		given_a_random_point_distribution();
+		createRandomNumberGenerator();
+		createRandomPointDistribution();
 
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(-1.0, 1.0), 2));
 	}
 
 	@Test
 	public void testTooSmallSizeY() {
-		given_a_random_number_generator();
-		given_a_random_point_distribution();
+		createRandomNumberGenerator();
+		createRandomPointDistribution();
 
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(1.0, -1.0), 2));
 	}
 
-	// members
-
-	private RandomNumberGenerator generator;
-	private InOrder inOrder;
-
-	private RandomPointDistribution distribution;
-
-	private List<Point2d> points;
-
-	private static final Point2d SIZE = new Point2d(6.0, 3.0);
-
 	// given
 
-	private void given_a_random_number_generator() {
+	private void createRandomNumberGenerator() {
 		generator = new GeneratorWithRandom(0);
 	}
 
-	private void given_a_mocked_random_number_generator() {
+	private void createMockedRandomNumberGenerator() {
 		generator = mock(RandomNumberGenerator.class);
 		inOrder = inOrder(generator);
 
 		when(generator.getDoubleBetweenZeroAndOne()).thenReturn(0.1, 0.2, 0.3, 0.4);
 	}
 
-	private void given_a_random_point_distribution() {
+	private void createRandomPointDistribution() {
 		distribution =  new RandomPointDistribution(generator);
 	}
 
 	// verify
 
-	private void verify_generator_was_reset(int N) {
+	private void assertGeneratorWasReset(int N) {
 		inOrder.verify(generator, times(N)).restart();
 	}
 
-	private void verify_generator_was_called(int desiredNumberOfPoints) {
+	private void assertGeneratorWasCalled(int desiredNumberOfPoints) {
 		inOrder.verify(generator, times(desiredNumberOfPoints*2)).getDoubleBetweenZeroAndOne();
 	}
 
-	private void verify_points_size(int desiredNumberOfPoints) {
+	private void assertPointsSize(int desiredNumberOfPoints) {
 		assertThat(points, hasSize(desiredNumberOfPoints));
 	}
 
-	private void verify_points() {
+	private void assertPoints() {
 		assertThat(points.get(0).getX(), is(closeTo(0.6, ERROR)));
 		assertThat(points.get(0).getY(), is(closeTo(0.6, ERROR)));
 

@@ -18,21 +18,29 @@ import static org.mockito.Mockito.verify;
 @Slf4j
 class PoissonDiscDistributionTest {
 
+	private static final Point2d SIZE = new Point2d(1.0, 2.0);
+	public static final double RADIUS = 0.05;
+
+	private RandomNumberGenerator spy;
+	private PoissonDiscDistribution distribution;
+
+	private List<Point2d> points;
+
 	@Test
 	public void testPoints() {
-		given_a_random_point_distribution();
+		createRandomPointDistribution();
 
-		generate_points();
+		generatePoints();
 
-		verify_generator_was_reset(1);
+		assertGeneratorWasReset(1);
 		assertThat(points.size(), is(greaterThan(100)));
-		assert_points_are_inside();
-		assert_points_are_not_too_close();
+		assertPointsAreInside();
+		assertPointsAreNotTooClose();
 	}
 
 	@Test
 	public void testTooSmallSizeX() {
-		given_a_random_point_distribution();
+		createRandomPointDistribution();
 
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(0.0, 1.0), 2));
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(-1.0, 1.0), 2));
@@ -40,40 +48,28 @@ class PoissonDiscDistributionTest {
 
 	@Test
 	public void testTooSmallSizeY() {
-		given_a_random_point_distribution();
+		createRandomPointDistribution();
 
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(1.0, 0.0), 2));
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(1.0, -1.0), 2));
 	}
 
-	// members
-
-	private RandomNumberGenerator generator;
-	private RandomNumberGenerator spy;
-	private PoissonDiscDistribution distribution;
-
-	private static final Point2d SIZE = new Point2d(1.0, 2.0);
-	public static final double RADIUS = 0.05;
-
-	private List<Point2d> points;
-
 	//
 
-	private void given_a_random_point_distribution() {
-		generator = new GeneratorWithRandom(0);
-		spy = Mockito.spy(generator);
+	private void createRandomPointDistribution() {
+		spy = Mockito.spy(new GeneratorWithRandom(0));
 		distribution = new PoissonDiscDistribution(spy);
 	}
 
-	private void generate_points() {
+	private void generatePoints() {
 		points = distribution.distributePoints(SIZE, RADIUS);
 	}
 
-	private void verify_generator_was_reset(int N) {
+	private void assertGeneratorWasReset(int N) {
 		verify(spy, times(N)).restart();
 	}
 
-	private void assert_points_are_inside() {
+	private void assertPointsAreInside() {
 		for (Point2d point : points) {
 			assertThat(point.getX(), is(greaterThanOrEqualTo(0.0)));
 			assertThat(point.getX(), is(lessThanOrEqualTo(SIZE.getX())));
@@ -83,7 +79,7 @@ class PoissonDiscDistributionTest {
 		}
 	}
 
-	private void assert_points_are_not_too_close() {
+	private void assertPointsAreNotTooClose() {
 		for (int a = 0; a < points.size() - 1; a++) {
 			Point2d pointA = points.get(a);
 

@@ -18,13 +18,13 @@ public class RandomPointDistribution extends AbstractPointDistribution {
 	public List<Point2d> distributePoints(Point2d size, double radius) {
 		checkForInvalidSize(size);
 
-		int N = calculateNumberOfPoints(size, radius);
+		int numberOfPoints = calculateNumberOfPoints(size, radius);
 
 		generator.restart();
 
-		List<Point2d> points = new ArrayList<>(N);
+		List<Point2d> points = new ArrayList<>(numberOfPoints);
 
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < numberOfPoints; i++) {
 			points.add(generatePoint(size));
 		}
 
@@ -35,11 +35,11 @@ public class RandomPointDistribution extends AbstractPointDistribution {
 		double length = radius * 2.0;
 		double columns = Math.ceil(size.getX() / length);
 		double rows = Math.ceil(size.getY() / length);
-		int N = (int) (columns * rows);
+		int numberOfPoints = (int) (columns * rows);
 
-		log.info("calculateNumberOfPoints(): radius={} size={} {}*{}={}", radius, size, columns, rows, N);
+		log.info("calculateNumberOfPoints(): radius={} size={} {}*{}={}", radius, size, columns, rows, numberOfPoints);
 
-		return N;
+		return numberOfPoints;
 	}
 
 	protected Point2d generatePoint(Point2d size) {

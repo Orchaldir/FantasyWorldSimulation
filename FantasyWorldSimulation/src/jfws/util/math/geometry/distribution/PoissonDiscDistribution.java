@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 public class PoissonDiscDistribution extends AbstractPointDistribution {
 
-	private final static int MAY_ATTEMPTS = 20;
+	private static final int MAY_ATTEMPTS = 20;
 
 	protected RandomNumberGenerator generator;
 
@@ -35,7 +35,7 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 
 		double minDistance = radius * 2.0;
 
-		while(generateValidPoint(points, activeIndices, size, minDistance)) { }
+		while(generateValidPoint(points, activeIndices, size, minDistance));
 
 		log.info("distributePoints(): points={}", points.size());
 
@@ -65,7 +65,7 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 
 	protected Point2d generateCandidate(Point2d activePoint, double minDistance) {
 		double angle = generator.getDoubleBetweenZeroAndOne() * 2.0 * Math.PI;
-		double distance = minDistance * 1.1;// + generator.getDoubleBetweenZeroAndOne() * radius;
+		double distance = minDistance * 1.1;
 
 		return activePoint.fromPolar(angle, distance);
 	}
