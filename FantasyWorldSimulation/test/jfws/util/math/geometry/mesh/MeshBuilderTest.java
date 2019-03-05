@@ -14,14 +14,14 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class MeshTest {
+class MeshBuilderTest {
 
 	private Point2d point0;
 	private Point2d point1;
 	private Point2d point2;
 	private Point2d point3;
 
-	private Mesh mesh;
+	private MeshBuilder mesh;
 
 	@BeforeEach
 	public void setUp() {
@@ -30,7 +30,7 @@ class MeshTest {
 		point2 = mock(Point2d.class);
 		point3 = mock(Point2d.class);
 
-		mesh = new Mesh();
+		mesh = new MeshBuilder();
 	}
 
 	private void assertVertex(Vertex vertex, int id, double x, double y, HalfEdge edge) {

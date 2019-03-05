@@ -23,22 +23,35 @@ class FaceRendererTest {
 	private Face face;
 	private List<Point2d> polygonPoints;
 
+	// tests
+
+	@Test
+	public void testRender() {
+		createFaceRenderer();
+		createFace(2);
+		createColorSelector();
+
+		faceRenderer.render(face, colorSelector);
+
+		verifyRenderingOfFaceAsPolygon(color, polygonPoints);
+	}
+
 	// given
 
-	private void given_a_face_renderer() {
+	private void createFaceRenderer() {
 		renderer = mock(Renderer.class);
 
 		faceRenderer = new FaceRenderer(renderer);
 	}
 
-	private void given_a_color_selector() {
+	private void createColorSelector() {
 		colorSelector = mock(ColorSelector.class);
 		color = mock(Color.class);
 
 		when(colorSelector.select(face)).thenReturn(color);
 	}
 
-	private void given_a_face(int id) {
+	private void createFace(int id) {
 		face = mock(Face.class);
 
 		polygonPoints = new ArrayList<>();
@@ -49,21 +62,8 @@ class FaceRendererTest {
 
 	// verification
 
-	private void verify_rendering_of_face_as_polygon(Color color, List<Point2d> points) {
+	private void verifyRenderingOfFaceAsPolygon(Color color, List<Point2d> points) {
 		verify(renderer, times(1)).setColor(color);
 		verify(renderer, times(1)).renderPolygon(points);
-	}
-
-	// tests
-
-	@Test
-	public void testRender() {
-		given_a_face_renderer();
-		given_a_face(2);
-		given_a_color_selector();
-
-		faceRenderer.render(face, colorSelector);
-
-		verify_rendering_of_face_as_polygon(color, polygonPoints);
 	}
 }

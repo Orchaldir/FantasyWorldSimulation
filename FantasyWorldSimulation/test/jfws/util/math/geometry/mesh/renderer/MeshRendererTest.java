@@ -1,7 +1,7 @@
 package jfws.util.math.geometry.mesh.renderer;
 
 import jfws.util.math.geometry.mesh.Face;
-import jfws.util.math.geometry.mesh.Mesh;
+import jfws.util.math.geometry.mesh.MeshBuilder;
 import jfws.util.rendering.ColorSelector;
 import org.junit.jupiter.api.Test;
 
@@ -16,26 +16,26 @@ class MeshRendererTest {
 
 	@Test
 	public void testRenderFaces() {
-		given_a_mesh_renderer();
-		given_a_color_selector();
-		given_a_mesh(3);
+		createMeshRenderer();
+		createColorSelector();
+		createMesh(3);
 
 		meshRenderer.renderFaces(mesh, colorSelector);
 
-		verify_reset_of_color_selector();
-		verify_rendering_of_faces(3);
+		verifyResetOfColorSelector();
+		verifyRenderingOfFaces(3);
 	}
 
 	@Test
 	public void testRenderNoFaces() {
-		given_a_mesh_renderer();
-		given_a_color_selector();
-		given_a_mesh(0);
+		createMeshRenderer();
+		createColorSelector();
+		createMesh(0);
 
 		meshRenderer.renderFaces(mesh, colorSelector);
 
-		verify_reset_of_color_selector();
-		verify_rendering_of_no_faces();
+		verifyResetOfColorSelector();
+		verifyRenderingOfNoFaces();
 	}
 
 	//
@@ -43,23 +43,23 @@ class MeshRendererTest {
 	private FaceRenderer faceRenderer;
 	private MeshRenderer meshRenderer;
 	private ColorSelector colorSelector;
-	private Mesh mesh;
+	private MeshBuilder mesh;
 	private List<Face> faces;
 
 	// given
 
-	private void given_a_mesh_renderer() {
+	private void createMeshRenderer() {
 		faceRenderer = mock(FaceRenderer.class);
 
 		meshRenderer = new MeshRenderer(faceRenderer);
 	}
 
-	private void given_a_color_selector() {
+	private void createColorSelector() {
 		colorSelector = mock(ColorSelector.class);
 	}
 
-	private void given_a_mesh(int numberOfFaces) {
-		mesh = mock(Mesh.class);
+	private void createMesh(int numberOfFaces) {
+		mesh = mock(MeshBuilder.class);
 
 		faces = new ArrayList<>();
 
@@ -72,11 +72,11 @@ class MeshRendererTest {
 
 	// verification
 
-	private void verify_reset_of_color_selector() {
+	private void verifyResetOfColorSelector() {
 		verify(colorSelector, times(1)).reset();
 	}
 
-	private void verify_rendering_of_faces(int numberOfFaces) {
+	private void verifyRenderingOfFaces(int numberOfFaces) {
 		assertThat(faces, hasSize(numberOfFaces));
 
 		for (Face face : faces) {
@@ -84,7 +84,7 @@ class MeshRendererTest {
 		}
 	}
 
-	private void verify_rendering_of_no_faces() {
+	private void verifyRenderingOfNoFaces() {
 		assertThat(faces, hasSize(0));
 
 		verify(faceRenderer, never()).render(any(), eq(colorSelector));

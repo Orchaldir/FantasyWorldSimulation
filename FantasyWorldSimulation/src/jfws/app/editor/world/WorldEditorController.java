@@ -2,7 +2,7 @@ package jfws.app.editor.world;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import jfws.util.math.geometry.mesh.Mesh;
+import jfws.util.math.geometry.mesh.MeshBuilder;
 import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
 import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
 import jfws.util.math.random.GeneratorWithRandom;
@@ -22,7 +22,7 @@ public class WorldEditorController {
 
 	private RandomColorSelector randomColorSelector;
 
-	private Mesh mesh;
+	private MeshBuilder mesh;
 
 	private MeshRenderer meshRenderer;
 
@@ -44,7 +44,7 @@ public class WorldEditorController {
 
 		randomColorSelector = new RandomColorSelector(new GeneratorWithRandom(42));
 
-		mesh = new Mesh();
+		mesh = new MeshBuilder();
 
 		mesh.createVertex(X0, Y0);
 		mesh.createVertex(X1, Y1);
