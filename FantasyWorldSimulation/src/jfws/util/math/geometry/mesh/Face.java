@@ -13,16 +13,22 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 @ToString(of = {"id"})
-public class Face {
+public class Face<V,E,F> {
 
 	private final int id;
-	private HalfEdge edge;
+	private HalfEdge<V,E,F> edge;
+	private F data;
+
+	public Face(int id, HalfEdge<V,E,F> edge) {
+		this.id = id;
+		this.edge = edge;
+	}
 
 	// edges
 
-	public List<HalfEdge> getEdgesInCCW() {
-		List<HalfEdge> edges = new ArrayList<>();
-		HalfEdge current = edge;
+	public List<HalfEdge<V,E,F>> getEdgesInCCW() {
+		List<HalfEdge<V,E,F>> edges = new ArrayList<>();
+		HalfEdge<V,E,F> current = edge;
 
 		do {
 			edges.add(current);
@@ -39,7 +45,7 @@ public class Face {
 
 	// vertices
 
-	public List<Vertex> getVerticesInCCW() {
+	public List<Vertex<V>> getVerticesInCCW() {
 		return getEdgesInCCW().
 				stream().
 				map(HalfEdge::getEndVertex).
@@ -55,7 +61,7 @@ public class Face {
 
 	// neighbors
 
-	public List<Face> getNeighborsInCCW() {
+	public List<Face<V,E,F>> getNeighborsInCCW() {
 		return getEdgesInCCW().
 				stream().
 				map(HalfEdge::getOppositeFace).

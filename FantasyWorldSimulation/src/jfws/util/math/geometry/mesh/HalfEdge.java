@@ -7,15 +7,25 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString(of = {"id"})
-public class HalfEdge {
+public class HalfEdge<V,E,F> {
 
 	protected final int id;
-	protected Face face;
-	protected Vertex endVertex;
-	protected HalfEdge oppositeEdge;
-	protected HalfEdge nextEdge;
+	protected Face<V,E,F> face;
+	protected Vertex<V> endVertex;
+	protected HalfEdge<V,E,F> oppositeEdge;
+	protected HalfEdge<V,E,F> nextEdge;
+	protected E data;
 
-	public HalfEdge(int id, HalfEdge edge) {
+	public HalfEdge(int id, Face<V,E,F> face, Vertex<V> endVertex,
+					HalfEdge<V,E,F> oppositeEdge, HalfEdge<V,E,F> nextEdge) {
+		this.id = id;
+		this.face = face;
+		this.endVertex = endVertex;
+		this.oppositeEdge = oppositeEdge;
+		this.nextEdge = nextEdge;
+	}
+
+	public HalfEdge(int id, HalfEdge<V,E,F> edge) {
 		this.id = id;
 		face = edge.face;
 		endVertex = edge.endVertex;
@@ -23,21 +33,21 @@ public class HalfEdge {
 		nextEdge = edge.nextEdge;
 	}
 
-	public HalfEdge(int id, Vertex endVertex) {
+	public HalfEdge(int id, Vertex<V> endVertex) {
 		this.id = id;
 		this.endVertex = endVertex;
 	}
 
-	public Vertex getStartVertex() {
+	public Vertex<V> getStartVertex() {
 		return oppositeEdge.getEndVertex();
 	}
 
-	public Face getOppositeFace() {
+	public Face<V,E,F> getOppositeFace() {
 		return oppositeEdge.face;
 	}
 
-	public HalfEdge getPreviousEdge() {
-		HalfEdge currentEdge = this;
+	public HalfEdge<V,E,F> getPreviousEdge() {
+		HalfEdge<V,E,F> currentEdge = this;
 
 		while(currentEdge.getNextEdge() != this) {
 			currentEdge = currentEdge.getNextEdge();

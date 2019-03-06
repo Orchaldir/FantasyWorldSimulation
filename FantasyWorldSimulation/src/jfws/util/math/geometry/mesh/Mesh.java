@@ -2,25 +2,25 @@ package jfws.util.math.geometry.mesh;
 
 import java.util.List;
 
-public interface Mesh {
+public interface Mesh<V,E,F> {
 
 	// vertices
 
-	List<Vertex> getVertices();
+	List<Vertex<V>> getVertices();
 
-	Vertex getVertex(int id);
+	Vertex<V> getVertex(int id);
 
 	// edges
 
-	List<HalfEdge> getEdges();
+	List<HalfEdge<V,E,F>> getEdges();
 
-	HalfEdge getEdge(int id);
+	HalfEdge<V,E,F> getEdge(int id);
 
-	HalfEdge getEdge(int startVertexId, int endVertexId);
+	HalfEdge<V,E,F> getEdge(int startVertexId, int endVertexId);
 
 	// faces
 
-	List<Face> getFaces();
+	List<Face<V,E,F>> getFaces();
 
-	Face getFace(int id);
+	Face<V,E,F> getFace(int id);
 }
