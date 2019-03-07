@@ -3,6 +3,7 @@ package jfws.util.math.geometry.mesh;
 import jfws.util.math.geometry.Point2d;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Face<V,E,F> {
 
 	private final int id;
 	private HalfEdge<V,E,F> edge;
+	@Setter
 	private F data;
 
 	public Face(int id, HalfEdge<V,E,F> edge) {

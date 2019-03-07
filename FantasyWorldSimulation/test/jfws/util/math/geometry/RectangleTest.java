@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +14,8 @@ class RectangleTest {
 	private static final Point2d START = new Point2d(1.1, -2.5);
 	private static final Point2d SIZE = new Point2d(4.4, 7.5);
 	private static final Point2d END = START.add(SIZE);
+	private static final Point2d CORNER1 =  new Point2d(5.5, -2.5);
+	private static final Point2d CORNER3 =  new Point2d(1.1, 5.0);
 
 	private static final Point2d INSIDE = new Point2d(3, 0);
 
@@ -72,5 +74,26 @@ class RectangleTest {
 			assertTrue(rectangle.isInside(END));
 		}
 
+	}
+
+	@Nested
+	class TestGetCorners {
+
+		private Rectangle rectangle;
+
+		@BeforeEach
+		public void setUp() {
+			rectangle = Rectangle.fromSize(START, SIZE);
+		}
+
+		@Test
+		public void testNumberOfCorners() {
+			assertThat(rectangle.getCorners(), hasSize(4));
+		}
+
+		@Test
+		public void testGetCorners() {
+			assertThat(rectangle.getCorners(), contains(START, CORNER1, END, CORNER3));
+		}
 	}
 }

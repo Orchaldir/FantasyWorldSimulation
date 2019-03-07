@@ -2,6 +2,9 @@ package jfws.util.math.geometry;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 public class Rectangle {
 
@@ -32,5 +35,16 @@ public class Rectangle {
 				point.getY() >= start.getY() &&
 				point.getX() <= end.getX() &&
 				point.getY() <= end.getY();
+	}
+
+	public List<Point2d> getCorners() {
+		List<Point2d> corners = new ArrayList<>(4);
+
+		corners.add(start);
+		corners.add(start.add(new Point2d(size.getX(), 0)));
+		corners.add(end);
+		corners.add(start.add(new Point2d(0, size.getY())));
+
+		return corners;
 	}
 }
