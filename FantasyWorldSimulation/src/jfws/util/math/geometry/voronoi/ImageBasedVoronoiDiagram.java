@@ -2,10 +2,7 @@ package jfws.util.math.geometry.voronoi;
 
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
-import jfws.util.math.geometry.mesh.Mesh;
-import jfws.util.math.geometry.mesh.MeshBuilder;
-import jfws.util.math.geometry.mesh.NoData;
-import jfws.util.math.geometry.mesh.Vertex;
+import jfws.util.math.geometry.mesh.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,9 +11,9 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
-public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
+public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
-	private class MapData {
+	private class ClosestPointData<V,E,F> {
 		public int closestPointId = -1;
 		public double distance = Double.MAX_VALUE;
 	}
@@ -26,7 +23,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 		public final Point2d point;
 		public final int x;
 		public final int y;
-		public final List<Vertex<NoData>> vertices = new ArrayList<>(3);
+		public final List<Vertex<V>> vertices = new ArrayList<>(3);
 
 		public PointData(int id, Point2d point, int x, int y) {
 			this.id = id;
@@ -44,17 +41,17 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 	}
 
 	private final Rectangle rectangle;
-	private final MeshBuilder<NoData,NoData,VoronoiFaceData> meshBuilder = new MeshBuilder<>();
+	private final MeshBuilder<V,E,F> meshBuilder = new MeshBuilder<>();
 
 	private final double closestPointResolution;
 	private int closestPointSizeX;
 	private int closestPointSizeY;
-	private MapData[][] closestPointMap;
+	private ClosestPointData[][] closestPointMap;
 
 	private List<PointData> pointDataList;
 
 	@Override
-	public Mesh<NoData,NoData,VoronoiFaceData> getMesh() {
+	public Mesh<V,E,F> getMesh() {
 		return meshBuilder;
 	}
 
@@ -62,12 +59,33 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 	public void update(List<Point2d> points) {
 		meshBuilder.clear();
 
+		createPointDataList(points);
 		initClosestPointMap();
 		fillClosestPointMap(points);
 		findVertices();
 		findVerticesAtBorder();
 		createVerticesAtCorners();
 		createFaces();
+	}
+
+	private void createPointDataList(List<Point2d> points) {
+		log.info("createPointDataList(): points={}", points.size());
+
+		pointDataList = new ArrayList<>(points.size());
+
+		for (Point2d point : points) {
+			int id = pointDataList.size();
+
+			if(!rectangle.isInside(point)) {
+				throw new IllegalArgumentException(String.format("Point %d is outside!", id));
+			}
+
+			PointData pointData = new PointData(id, point, getCellX(point), getCellY(point));
+
+			log.info("createPointDataList(): id={} {} x={} y={}", id, point, pointData.x, pointData.y);
+
+			pointDataList.add(pointData);
+		}
 	}
 
 	private void createFaces() {
@@ -80,7 +98,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 				continue;
 			}
 
-			List<Vertex<NoData>> vertices = sortVertices(pointData);
+			List<Vertex<V>> vertices = sortVertices(pointData);
 			List<Integer> vertexIds = vertices.stream().map(Vertex::getId).collect(Collectors.toList());
 
 			meshBuilder.createFace(vertexIds);
@@ -88,7 +106,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 		}
 	}
 
-	private List<Vertex<NoData>> sortVertices(PointData pointData) {
+	private List<Vertex<V>> sortVertices(PointData pointData) {
 		return pointData.vertices.stream().
 				sorted((v0, v1) ->
 					((Double)pointData.point.getAngleTo(v0.getPoint())).
@@ -107,7 +125,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 	private void createVerticesAtCorner(int x, int y) {
 		int closestPointId = closestPointMap[x][y].closestPointId;
 		Point2d vertexPoint = createPoint(x,  y);
-		Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
+		Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
 		pointDataList.get(closestPointId).vertices.add(vertex);
 	}
 
@@ -126,7 +144,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 
 			if(closestPointId0 != closestPointId1) {
 				Point2d vertexPoint = createPoint(x + 1,  y);
-				Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
+				Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
 
 				log.debug("findVerticesAtBorderX(): x={} y={} closestPointIds: {}!={} vertex={}",
 						x, y, closestPointId0, closestPointId1, vertex.getId());
@@ -144,7 +162,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 
 			if(closestPointId0 != closestPointId1) {
 				Point2d vertexPoint = createPoint(x,  y + 1);
-				Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
+				Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
 
 				log.debug("findVerticesAtBorderY(): y={} x={} closestPointIds: {}!={} vertex={}",
 						y, x, closestPointId0, closestPointId1, vertex.getId());
@@ -159,7 +177,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 		log.info("findVertices()");
 		final int windowSize = 1;
 		int columnSize = closestPointSizeY - windowSize;
-		Vertex<NoData>[] lastVertices = new Vertex[columnSize];
+		Vertex<V>[] lastVertices = new Vertex[columnSize];
 
 		for (int x = 0; x < closestPointSizeX - windowSize; x++) {
 			for (int y = 0; y < columnSize; y++) {
@@ -182,7 +200,7 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 					}
 
 					Point2d vertexPoint = createPoint(x + 1,  y + 1);
-					Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
+					Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
 
 					log.info("findVertices(): x={} y={} point={} closestPointIds={} vertex={}",
 							x, y, vertexPoint, closestPointIds, vertex.getId());
@@ -205,16 +223,9 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 		log.info("fillClosestPointMap(): points={}", points.size());
 
 		Queue<QueueData> queue = new LinkedList<>();
-		pointDataList = new ArrayList<>(points.size());
 
-		for (Point2d point : points) {
-			int id = pointDataList.size();
-			PointData pointData = new PointData(id, point, getCellX(point), getCellY(point));
-
-			log.info("fillClosestPointMap(): id={} {} x={} y={}", id, point, pointData.x, pointData.y);
-
+		for (PointData pointData : pointDataList) {
 			queue.add(new QueueData(pointData, pointData.x, pointData.y));
-			pointDataList.add(pointData);
 		}
 
 		while(!queue.isEmpty()) {
@@ -239,12 +250,12 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 	}
 
 	private boolean checkClosestPointMap(PointData pointData, int x, int y) {
-		MapData mapData = closestPointMap[x][y];
+		ClosestPointData closestPointData = closestPointMap[x][y];
 		double distance = Math.hypot(pointData.x - x, pointData.y - y);
 
-		if(distance < mapData.distance) {
-			mapData.distance = distance;
-			mapData.closestPointId = pointData.id;
+		if(distance < closestPointData.distance) {
+			closestPointData.distance = distance;
+			closestPointData.closestPointId = pointData.id;
 			return true;
 		}
 
@@ -252,23 +263,23 @@ public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 	}
 
 	private void initClosestPointMap() {
-		closestPointSizeX = getCellDistance(rectangle.getSize().getX());
-		closestPointSizeY = getCellDistance(rectangle.getSize().getY());
+		closestPointSizeX = getCellDistance(rectangle.getSize().getX()) + 1;
+		closestPointSizeY = getCellDistance(rectangle.getSize().getY()) + 1;
 
 		log.info("initClosestPointMap():  size={} resolution={} -> {}*{}",
 				rectangle.getSize(), closestPointResolution, closestPointSizeX, closestPointSizeY);
 
-		closestPointMap = new  MapData[closestPointSizeX][closestPointSizeY];
+		closestPointMap = new ClosestPointData[closestPointSizeX][closestPointSizeY];
 
 		for (int x = 0; x < closestPointSizeX; x++) {
 			for (int y = 0; y < closestPointSizeY; y++) {
-				closestPointMap[x][y] = new MapData();
+				closestPointMap[x][y] = new ClosestPointData();
 			}
 		}
 	}
 
 	private int getCellDistance(double value) {
-		return (int) Math.ceil(value * closestPointResolution);
+		return (int) Math.round(value * closestPointResolution);
 	}
 
 	private int getCellX(Point2d point) {

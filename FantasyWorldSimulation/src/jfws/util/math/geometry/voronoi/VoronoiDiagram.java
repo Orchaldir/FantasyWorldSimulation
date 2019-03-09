@@ -6,8 +6,8 @@ import jfws.util.math.geometry.mesh.NoData;
 
 import java.util.List;
 
-public interface VoronoiDiagram {
-	Mesh<NoData, NoData,VoronoiFaceData> getMesh();
+public interface VoronoiDiagram<V,E,F> {
+	Mesh<V,E,F> getMesh();
 
 	void update(List<Point2d> points);
 }

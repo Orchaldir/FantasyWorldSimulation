@@ -187,7 +187,7 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
 		edgesOfFace.forEach(edge -> edge.face = face);
 
-		log.debug("createFace(): id={}", face.getId());
+		log.info("createFace(): id={} vertices={}", face.getId(), vertices);
 
 		connectEdgesOfFace(edgesOfFace);
 
