@@ -7,7 +7,6 @@ import jfws.util.rendering.Renderer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,11 +18,7 @@ public class FaceRenderer {
 	public void render(Face face, ColorSelector<Face> colorSelector) {
 		List<Point2d> polygonPoints = face.getPointsInCCW();
 
-		log.info("render(): face={} pointss={}", face.getId(), polygonPoints.size());
-
 		renderer.setColor(colorSelector.select(face));
 		renderer.renderPolygon(polygonPoints);
-
-		log.info("render(): finished");
 	}
 }

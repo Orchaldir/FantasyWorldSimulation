@@ -59,19 +59,28 @@ public class ImageBasedVoronoiDiagram {
 
 	private void createFaces() {
 		log.info("createFaces()");
-		for (PointData pointData : pointDataList) {
-			List<Integer> vertices = sortVertices(pointData);
+		int id = 0;
 
-			meshBuilder.createFace(vertices);
+		for (PointData pointData : pointDataList) {
+			if(pointData.vertices.size() < 3) {
+				log.warn("createFaces(): Face {} as too few points!", id, pointData.point);
+				continue;
+			}
+
+			List<Vertex<NoData>> vertices = sortVertices(pointData);
+			List<Integer> vertexIds = vertices.stream().map(Vertex::getId).collect(Collectors.toList());
+
+			meshBuilder.createFace(vertexIds);
+			id++;
 		}
 	}
 
-	private List<Integer> sortVertices(PointData pointData) {
+	private List<Vertex<NoData>> sortVertices(PointData pointData) {
 		return pointData.vertices.stream().
 				sorted((v0, v1) ->
 					((Double)pointData.point.getAngleTo(v0.getPoint())).
 					compareTo(pointData.point.getAngleTo(v1.getPoint()))).
-				map(Vertex::getId).collect(Collectors.toList());
+				collect(Collectors.toList());
 	}
 
 	private void createVerticesAtCorners() {
@@ -106,7 +115,7 @@ public class ImageBasedVoronoiDiagram {
 				Point2d vertexPoint = createPoint(x + 1,  y);
 				Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
 
-				log.info("findVerticesAtBorderX(): x={} y={} closestPointIds: {}!={} vertex={}",
+				log.debug("findVerticesAtBorderX(): x={} y={} closestPointIds: {}!={} vertex={}",
 						x, y, closestPointId0, closestPointId1, vertex.getId());
 
 				pointDataList.get(closestPointId0).vertices.add(vertex);
@@ -124,7 +133,7 @@ public class ImageBasedVoronoiDiagram {
 				Point2d vertexPoint = createPoint(x,  y + 1);
 				Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
 
-				log.info("findVerticesAtBorderY(): y={} x={} closestPointIds: {}!={} vertex={}",
+				log.debug("findVerticesAtBorderY(): y={} x={} closestPointIds: {}!={} vertex={}",
 						y, x, closestPointId0, closestPointId1, vertex.getId());
 
 				pointDataList.get(closestPointId0).vertices.add(vertex);
@@ -135,8 +144,12 @@ public class ImageBasedVoronoiDiagram {
 
 	private void findVertices() {
 		log.info("findVertices()");
-		for (int x = 0; x < closestPointSizeX - 1; x++) {
-			for (int y = 0; y < closestPointSizeY - 1; y++) {
+		final int windowSize = 1;
+		int columnSize = closestPointSizeY - windowSize;
+		Vertex<NoData>[] lastVertices = new Vertex[columnSize];
+
+		for (int x = 0; x < closestPointSizeX - windowSize; x++) {
+			for (int y = 0; y < columnSize; y++) {
 				Set<Integer> closestPointIds = new HashSet<>(4);
 
 				closestPointIds.add(closestPointMap[x][y].closestPointId);
@@ -145,16 +158,31 @@ public class ImageBasedVoronoiDiagram {
 				closestPointIds.add(closestPointMap[x+1][y+1].closestPointId);
 
 				if(closestPointIds.size() > 2) {
+					if(y > 0 && lastVertices[y-1] != null) {
+						log.info("findVertices(): Merged x={} y={} with previous vertex.", x, y);
+						lastVertices[y] = lastVertices[y-1];
+						continue;
+					}
+					else if(lastVertices[y] != null) {
+						log.info("findVertices(): Merged x={} y={} with above vertex.", x, y);
+						continue;
+					}
+
 					Point2d vertexPoint = createPoint(x + 1,  y + 1);
 					Vertex<NoData> vertex = meshBuilder.createVertex(vertexPoint);
 
-					log.info("findVertices(): x={} y={} closestPointIds={} vertex={}",
-							x, y, closestPointIds, vertex.getId());
+					log.info("findVertices(): x={} y={} point={} closestPointIds={} vertex={}",
+							x, y, vertexPoint, closestPointIds, vertex.getId());
 
 					for (Integer closestPointId : closestPointIds) {
 						PointData pointData = pointDataList.get(closestPointId);
 						pointData.vertices.add(vertex);
 					}
+
+					lastVertices[y] = vertex;
+				}
+				else {
+					lastVertices[y] = null;
 				}
 			}
 		}

@@ -35,7 +35,6 @@ public class Face<V,E,F> {
 		HalfEdge<V,E,F> current = edge;
 
 		do {
-			log.info("getEdgesInCCW(): current={} next={}", current, current.getNextEdge());
 			edges.add(current);
 			current = current.getNextEdge();
 		}

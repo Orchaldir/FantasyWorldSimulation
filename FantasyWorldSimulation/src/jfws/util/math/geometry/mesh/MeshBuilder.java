@@ -2,10 +2,12 @@ package jfws.util.math.geometry.mesh;
 
 import jfws.util.math.geometry.Point2d;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
 	public class NoData {};
@@ -187,6 +189,8 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
 		edgesOfFace.forEach(edge -> edge.face = face);
 
+		log.debug("createFace(): id={}", face.getId());
+
 		connectEdgesOfFace(edgesOfFace);
 
 		faces.add(face);
@@ -223,6 +227,13 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 		for(int index = 0; index < size; index++) {
 			int nextIndex = (index + 1) % size;
 			HalfEdge<V,E,F> next = edges.get(nextIndex);
+
+			if(current.nextEdge != null) {
+				log.warn("connectEdgesOfFace(): edge={} next={} overwritten={}", current.id, next.id, current.nextEdge.id);
+			}
+			else {
+				log.debug("connectEdgesOfFace(): edge={} next={}", current.id, next.id);
+			}
 
 			current.nextEdge = next;
 

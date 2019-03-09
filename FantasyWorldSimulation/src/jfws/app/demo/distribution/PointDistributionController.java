@@ -15,7 +15,6 @@ import jfws.util.math.geometry.distribution.RandomPointDistribution;
 import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
 import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
 import jfws.util.math.geometry.voronoi.ImageBasedVoronoiDiagram;
-import jfws.util.math.geometry.voronoi.VoronoiDiagram;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.RandomColorSelector;
@@ -55,7 +54,7 @@ public class PointDistributionController {
 
 	private SelectedDistribution selectedDistribution = SelectedDistribution.POISSON_DISC;
 
-	private int maxNumberOfPoints = 20;
+	private int maxNumberOfPoints = 1000;
 	private double radius = 10.0;
 
 	private ImageBasedVoronoiDiagram voronoiDiagram = new ImageBasedVoronoiDiagram(Rectangle.fromSize(SIZE), 2);
