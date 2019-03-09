@@ -54,7 +54,7 @@ public class PointDistributionController {
 
 	private SelectedDistribution selectedDistribution = SelectedDistribution.POISSON_DISC;
 
-	private int maxNumberOfPoints = 1000;
+	private int maxNumberOfPoints = 4000;
 	private double radius = 10.0;
 
 	private ImageBasedVoronoiDiagram voronoiDiagram = new ImageBasedVoronoiDiagram(Rectangle.fromSize(SIZE), 2);

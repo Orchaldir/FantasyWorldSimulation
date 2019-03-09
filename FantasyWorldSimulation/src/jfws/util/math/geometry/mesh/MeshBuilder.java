@@ -10,8 +10,6 @@ import java.util.List;
 @Slf4j
 public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
-	public class NoData {};
-
 	@Getter
 	private final List<Vertex<V>> vertices = new ArrayList<>();
 

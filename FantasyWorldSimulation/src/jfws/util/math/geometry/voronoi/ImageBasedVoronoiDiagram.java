@@ -4,32 +4,43 @@ import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.mesh.Mesh;
 import jfws.util.math.geometry.mesh.MeshBuilder;
-import jfws.util.math.geometry.mesh.MeshBuilder.NoData;
+import jfws.util.math.geometry.mesh.NoData;
 import jfws.util.math.geometry.mesh.Vertex;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
-public class ImageBasedVoronoiDiagram {
+public class ImageBasedVoronoiDiagram implements VoronoiDiagram {
 
 	private class MapData {
 		public int closestPointId = -1;
 		public double distance = Double.MAX_VALUE;
 	}
+
 	private class PointData {
+		public final int id;
 		public final Point2d point;
+		public final int x;
+		public final int y;
 		public final List<Vertex<NoData>> vertices = new ArrayList<>(3);
 
-		public PointData(Point2d point) {
+		public PointData(int id, Point2d point, int x, int y) {
+			this.id = id;
 			this.point = point;
+			this.x = x;
+			this.y = y;
 		}
+	}
+
+	@RequiredArgsConstructor
+	private class QueueData {
+		public final PointData pointData;
+		public final int x;
+		public final int y;
 	}
 
 	private final Rectangle rectangle;
@@ -42,10 +53,12 @@ public class ImageBasedVoronoiDiagram {
 
 	private List<PointData> pointDataList;
 
+	@Override
 	public Mesh<NoData,NoData,VoronoiFaceData> getMesh() {
 		return meshBuilder;
 	}
 
+	@Override
 	public void update(List<Point2d> points) {
 		meshBuilder.clear();
 
@@ -191,31 +204,51 @@ public class ImageBasedVoronoiDiagram {
 	private void fillClosestPointMap(List<Point2d> points) {
 		log.info("fillClosestPointMap(): points={}", points.size());
 
+		Queue<QueueData> queue = new LinkedList<>();
 		pointDataList = new ArrayList<>(points.size());
 
 		for (Point2d point : points) {
 			int id = pointDataList.size();
-			PointData pointData = new PointData(point);
+			PointData pointData = new PointData(id, point, getCellX(point), getCellY(point));
 
-			int pointX = getCellX(point);
-			int pointY = getCellY(point);
+			log.info("fillClosestPointMap(): id={} {} x={} y={}", id, point, pointData.x, pointData.y);
 
-			log.info("fillClosestPointMap(): id={} {} x={} y={}", id, point, pointX, pointY);
-
-			for (int x = 0; x < closestPointSizeX; x++) {
-				for (int y = 0; y < closestPointSizeY; y++) {
-					MapData mapData = closestPointMap[x][y];
-					double distance = Math.hypot(pointX - x, pointY - y);
-
-					if(distance < mapData.distance) {
-						mapData.distance = distance;
-						mapData.closestPointId = id;
-					}
-				}
-			}
-
+			queue.add(new QueueData(pointData, pointData.x, pointData.y));
 			pointDataList.add(pointData);
 		}
+
+		while(!queue.isEmpty()) {
+			QueueData queueData = queue.remove();
+			PointData pointData = queueData.pointData;
+
+			if(checkClosestPointMap(pointData, queueData.x,queueData.y)) {
+				if(queueData.x > 0) {
+					queue.add(new QueueData(pointData, queueData.x-1, queueData.y));
+				}
+				if(queueData.x < closestPointSizeX - 1) {
+					queue.add(new QueueData(pointData, queueData.x+1, queueData.y));
+				}
+				if(queueData.y > 0) {
+					queue.add(new QueueData(pointData, queueData.x, queueData.y-1));
+				}
+				if(queueData.y < closestPointSizeY - 1) {
+					queue.add(new QueueData(pointData, queueData.x, queueData.y+1));
+				}
+			}
+		}
+	}
+
+	private boolean checkClosestPointMap(PointData pointData, int x, int y) {
+		MapData mapData = closestPointMap[x][y];
+		double distance = Math.hypot(pointData.x - x, pointData.y - y);
+
+		if(distance < mapData.distance) {
+			mapData.distance = distance;
+			mapData.closestPointId = pointData.id;
+			return true;
+		}
+
+		return false;
 	}
 
 	private void initClosestPointMap() {
