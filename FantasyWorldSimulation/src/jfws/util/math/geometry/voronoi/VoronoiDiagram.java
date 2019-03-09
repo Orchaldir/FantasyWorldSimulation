@@ -40,4 +40,25 @@ public class VoronoiDiagram {
 
 		return face;
 	}
+
+	public Face<NoData, NoData, VoronoiFaceData> addLaterPoint(Point2d point) {
+		Face<NoData, NoData, VoronoiFaceData> face = getFace(point);
+
+		return null;
+	}
+
+	public Face<NoData, NoData, VoronoiFaceData> getFace(Point2d point) {
+		Face<NoData, NoData, VoronoiFaceData> closestFace = null;
+		double shortestDistance = Double.MAX_VALUE;
+
+		for (Face<NoData, NoData, VoronoiFaceData> face : meshBuilder.getFaces()) {
+			double distance = face.getData().point.getDistanceTo(point);
+
+			if(distance < shortestDistance) {
+				closestFace = face;
+			}
+		}
+
+		return closestFace;
+	}
 }

@@ -48,6 +48,15 @@ public class Point2d {
 		return new Point2d(x * factor, y * factor);
 	}
 
+	// angle
+
+	public double getAngleTo(Point2d point2d) {
+		double diffX = point2d.x - x;
+		double diffY = point2d.y - y;
+
+		return Math.atan2(diffY, diffX);
+	}
+
 	// arithmetic
 
 	public Point2d add(Point2d point) {

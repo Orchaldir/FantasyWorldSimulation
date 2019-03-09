@@ -30,6 +30,10 @@ public class Rectangle {
 		return new Rectangle(start, end, size);
 	}
 
+	public static Rectangle fromSize(Point2d size) {
+		return new Rectangle(new Point2d(0,0), size, size);
+	}
+
 	public boolean isInside(Point2d point) {
 		return  point.getX() >= start.getX() &&
 				point.getY() >= start.getY() &&

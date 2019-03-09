@@ -18,13 +18,11 @@ import static org.mockito.Mockito.*;
 
 class ImageRendererTest {
 
-	private Map2d<Integer> map;
 	private ColorSelector<Integer> colorSelector;
 	private ImageRenderer imageRenderer;
 
 	@BeforeEach
 	public void setUp() {
-		map = mock(Map2d.class);
 		colorSelector = mock(ColorSelector.class);
 
 		imageRenderer = new ImageRenderer();
@@ -45,14 +43,12 @@ class ImageRendererTest {
 
 	@Test
 	public void testRender() {
-		when(map.getCellMap()).thenReturn(MAP);
-
 		doAnswer(invocation -> {
 			int index = invocation.getArgument(0);
 			return getColor(index);
 		}).when(colorSelector).select(anyInt());
 
-		WritableImage image = imageRenderer.render(map, colorSelector);
+		WritableImage image = imageRenderer.render(MAP, colorSelector);
 
 		verify(colorSelector, times(1)).reset();
 

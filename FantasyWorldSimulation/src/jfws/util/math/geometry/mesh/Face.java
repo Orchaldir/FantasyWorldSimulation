@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
+@Slf4j
 @ToString(of = {"id"})
 public class Face<V,E,F> {
 
@@ -33,6 +35,7 @@ public class Face<V,E,F> {
 		HalfEdge<V,E,F> current = edge;
 
 		do {
+			log.info("getEdgesInCCW(): current={} next={}", current, current.getNextEdge());
 			edges.add(current);
 			current = current.getNextEdge();
 		}

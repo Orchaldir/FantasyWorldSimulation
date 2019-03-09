@@ -11,12 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ImageRenderer {
 
-	public <T> WritableImage render(Map2d<T> map, ColorSelector<T> colorSelector) {
+	public <T> WritableImage render(CellMap2d<T> cellMap, ColorSelector<T> colorSelector) {
 		colorSelector.reset();
 
-		CellMap2d<T> cellMap = map.getCellMap();
 		WritableImage writableImage = new WritableImage(cellMap.getWidth(), cellMap.getHeight());
-
 		PixelWriter pixelWriter = writableImage.getPixelWriter();
 
 		for(int y = 0; y < cellMap.getHeight(); y++) {

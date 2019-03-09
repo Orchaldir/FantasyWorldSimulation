@@ -162,7 +162,7 @@ public class MapEditorController implements EditorController {
 				elevationNoise.addTo(regionMap);
 			}
 
-			WritableImage image = imageRenderer.render(regionMap, colorSelectorForRegion);
+			WritableImage image = imageRenderer.render(regionMap.getCellMap(), colorSelectorForRegion);
 			mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0);
 		} else {
 			mapRenderer.render(sketchMap.getToCellMapper(), colorSelectorForSketch);

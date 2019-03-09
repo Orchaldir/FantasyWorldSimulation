@@ -23,6 +23,18 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 	private int nextEdgeId = 0;
 	private int nextFaceId = 0;
 
+	public void clear() {
+		vertices.clear();
+		edges.clear();
+		faces.clear();
+
+		nextVertexId = 0;
+		nextEdgeId = 0;
+		nextFaceId = 0;
+	}
+
+	// vertices
+
 	public Vertex<V> createVertex(Point2d point) {
 		Vertex<V> vertex = new Vertex(nextVertexId++, point, null);
 		vertices.add(vertex);
@@ -43,6 +55,8 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
 		throw new IndexOutOfBoundsException(id);
 	}
+
+	// edges
 
 	public HalfEdge<V,E,F> createEdge(int startVertexId, int endVertexId) {
 		if(startVertexId == endVertexId) {
@@ -119,7 +133,7 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 		return newEdge;
 	}
 
-	public void mergeAtEndVertex(HalfEdge<V,E,F> edge) {
+	private void mergeAtEndVertex(HalfEdge<V,E,F> edge) {
 		HalfEdge<V,E,F> edgeAfterEnd = edge.getNextEdge();
 		HalfEdge<V,E,F> edgeBeforeEnd = edge.getOppositeEdge().getPreviousEdge();
 
@@ -143,6 +157,8 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
 		faces.remove(oppositeFace);
 	}
+
+	// faces
 
 	public Face createTriangle(int vertexId0, int vertexId1, int vertexId2) {
 		HalfEdge<V,E,F> edge0 = getOrCreateEdge(vertexId0, vertexId1);
@@ -223,5 +239,9 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 		}
 
 		throw new IndexOutOfBoundsException(id);
+	}
+
+	public void splitFace() {
+
 	}
 }

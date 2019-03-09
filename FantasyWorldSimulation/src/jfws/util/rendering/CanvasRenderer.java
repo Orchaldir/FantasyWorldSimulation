@@ -4,10 +4,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @AllArgsConstructor
+@Slf4j
 public class CanvasRenderer implements Renderer {
 
 	private final GraphicsContext graphicsContext;
