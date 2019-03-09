@@ -41,6 +41,15 @@ class CanvasRendererTest
 	}
 
 	@Test
+	public void a_point_can_be_rendered() {
+		given().a_canvas_renderer();
+
+		when().a_point_is_rendered_with_the_renderer(100 , 200, 50);
+
+		then().a_point_is_rendered_on_the_canvas(50 , 150, 100, 100);
+	}
+
+	@Test
 	public void a_rectangle_can_be_rendered() {
 		given().a_canvas_renderer();
 

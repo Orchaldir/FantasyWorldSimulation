@@ -24,24 +24,30 @@ class RectangleTest {
 	private static final Point2d OUTSIDE_TOP = new Point2d(0, 10);
 	private static final Point2d OUTSIDE_BOTTOM = new Point2d(0, -5);
 
+	@Test
+	public void testFromSize() {
+		Rectangle rectangle = Rectangle.fromSize(SIZE);
+
+		assertRectangle(rectangle, new Point2d(0,0), SIZE);
+	}
 
 	@Test
-	public void testFromSSize() {
+	public void testFromStartAndSize() {
 		Rectangle rectangle = Rectangle.fromSize(START, SIZE);
 
-		assertRectangle(rectangle);
+		assertRectangle(rectangle, START, END);
 	}
 
 	@Test
 	public void testFromStartAndEnd() {
 		Rectangle rectangle = Rectangle.fromStartAndEnd(START, END);
 
-		assertRectangle(rectangle);
+		assertRectangle(rectangle, START, END);
 	}
 
-	private void assertRectangle(Rectangle rectangle) {
-		assertThat(rectangle.getStart(), is(equalTo(START)));
-		assertThat(rectangle.getEnd(), is(equalTo(END)));
+	private void assertRectangle(Rectangle rectangle, Point2d start, Point2d end) {
+		assertThat(rectangle.getStart(), is(equalTo(start)));
+		assertThat(rectangle.getEnd(), is(equalTo(end)));
 		assertThat(rectangle.getSize(), is(equalTo(SIZE)));
 	}
 

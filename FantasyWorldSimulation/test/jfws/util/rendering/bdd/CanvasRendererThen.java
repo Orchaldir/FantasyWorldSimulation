@@ -36,6 +36,11 @@ public class CanvasRendererThen extends Stage<CanvasRendererThen> {
 		verify(graphicsContext).setFill(color);
 	}
 
+	public void a_point_is_rendered_on_the_canvas(@Hidden double x, @Hidden double y,
+													  @Hidden double width, @Hidden double height) {
+		verify(graphicsContext).fillOval(x, y, width, height);
+	}
+
 	public void a_rectangle_is_rendered_on_the_canvas(@Hidden double x, @Hidden double y,
 													  @Hidden double width, @Hidden double height) {
 		verify(graphicsContext).fillRect(x, y, width, height);

@@ -55,6 +55,15 @@ class ImageBasedVoronoiDiagramTest {
 	}
 
 	@Test
+	public void testResetMesh() {
+		voronoiDiagram.update(List.of(POINT0, POINT1));
+		voronoiDiagram.update(List.of(CENTER));
+
+		assertNumberOfFaces(1);
+		assertFaceIsFullRectangle();
+	}
+
+	@Test
 	public void testOnePoint() {
 		voronoiDiagram.update(List.of(CENTER));
 
@@ -103,7 +112,25 @@ class ImageBasedVoronoiDiagramTest {
 	}
 
 	@Test
-	public void testTwoPoints() {
+	public void testTwoPointsWithSameX() {
+		voronoiDiagram.update(List.of(POINT0, POINT3));
+
+		assertNumberOfFaces(2);
+		assertFaceIsBottomHalf(0);
+		assertFaceIsTopHalf(1);
+	}
+
+	@Test
+	public void testReversedTwoPointsWithSameX() {
+		voronoiDiagram.update(List.of(POINT3, POINT0));
+
+		assertNumberOfFaces(2);
+		assertFaceIsTopHalf(0);
+		assertFaceIsBottomHalf(1);
+	}
+
+	@Test
+	public void testTwoPointsWithSameY() {
 		voronoiDiagram.update(List.of(POINT0, POINT1));
 
 		assertNumberOfFaces(2);
@@ -112,7 +139,7 @@ class ImageBasedVoronoiDiagramTest {
 	}
 
 	@Test
-	public void testTwoPointsReversed() {
+	public void testReversedTwoPointsWithSameY() {
 		voronoiDiagram.update(List.of(POINT1, POINT0));
 
 		assertNumberOfFaces(2);
@@ -121,7 +148,7 @@ class ImageBasedVoronoiDiagramTest {
 	}
 
 	@Test
-	public void testDifferentTwoPoints() {
+	public void testDifferentTwoPointsWithSameY() {
 		voronoiDiagram.update(List.of(POINT2, POINT3));
 
 		assertNumberOfFaces(2);
@@ -129,12 +156,35 @@ class ImageBasedVoronoiDiagramTest {
 		assertFaceIsLeftHalf(1);
 	}
 
+	@Test
+	public void testFourPoints() {
+		voronoiDiagram.update(List.of(POINT0, POINT1, POINT2, POINT3));
+
+		assertNumberOfFaces(4);
+		assertFaceIsBottomLeft(0);
+		assertFaceIsBottomRight(1);
+		assertFaceIsTopRight(2);
+		assertFaceIsTopLeft(3);
+	}
+
 	private void assertNumberOfFaces(int size) {
 		assertThat(mesh.getFaces(), hasSize(size));
 	}
 
+	// full
+
 	private void assertFaceIsFullRectangle() {
 		assertFace(0, List.of(CORNER0, CORNER1, CORNER2, CORNER3));
+	}
+
+	// halves
+
+	private void assertFaceIsBottomHalf(int i) {
+		assertFace(i, List.of(CORNER0, CORNER1, RIGHT_HALF, LEFT_HALF));
+	}
+
+	private void assertFaceIsTopHalf(int i) {
+		assertFace(i, List.of(CORNER2, CORNER3, LEFT_HALF, RIGHT_HALF));
 	}
 
 	private void assertFaceIsLeftHalf(int i) {
@@ -143,6 +193,24 @@ class ImageBasedVoronoiDiagramTest {
 
 	private void assertFaceIsRightHalf(int i) {
 		assertFace(i, List.of(CORNER1, CORNER2, TOP_HALF, BOTTOM_HALF));
+	}
+
+	// quarter
+
+	private void assertFaceIsBottomLeft(int i) {
+		assertFace(i, List.of(CORNER0, BOTTOM_HALF, CENTER, LEFT_HALF));
+	}
+
+	private void assertFaceIsBottomRight(int i) {
+		assertFace(i, List.of(CORNER1, RIGHT_HALF, CENTER, BOTTOM_HALF));
+	}
+
+	private void assertFaceIsTopLeft(int i) {
+		assertFace(i, List.of(CORNER3, LEFT_HALF, CENTER, TOP_HALF));
+	}
+
+	private void assertFaceIsTopRight(int i) {
+		assertFace(i, List.of(CORNER2, TOP_HALF, CENTER, RIGHT_HALF));
 	}
 
 	private void assertFace(int i, List<Point2d> corners) {

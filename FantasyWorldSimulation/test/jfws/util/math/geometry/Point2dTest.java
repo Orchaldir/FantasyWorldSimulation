@@ -156,6 +156,22 @@ class Point2dTest {
 	}
 
 	@Nested
+	class TestGetAngle {
+		@Test
+		public void testGetAngle() {
+			assertThat(POINT_0.getAngleTo(new Point2d(2.0, 2.0)), is(equalTo(0.0)));
+			assertThat(POINT_0.getAngleTo(new Point2d(1.0, 3.0)), is(equalTo(Math.PI / 2.0)));
+			assertThat(POINT_0.getAngleTo(new Point2d(1.0, 0.0)), is(equalTo(-Math.PI / 2.0)));
+			assertThat(POINT_0.getAngleTo(new Point2d(0.0, 2.0)), is(equalTo(Math.PI)));
+		}
+
+		@Test
+		public void testGetAngleWithLongerDistanceBetweenPoints() {
+			assertThat(POINT_0.getAngleTo(new Point2d(20.0, 2.0)), is(equalTo(0.0)));
+		}
+	}
+
+	@Nested
 	class TestArithmetic {
 
 		@Test

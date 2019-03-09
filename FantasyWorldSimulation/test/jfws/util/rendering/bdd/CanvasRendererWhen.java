@@ -36,6 +36,10 @@ public class CanvasRendererWhen extends Stage<CanvasRendererWhen> {
 		renderer.setColor(color);
 	}
 
+	public void a_point_is_rendered_with_the_renderer(@Hidden double x, @Hidden double y, @Hidden double radius) {
+		renderer.renderPoint(new Point2d(x, y), radius);
+	}
+
 	public void a_rectangle_is_rendered_with_the_renderer(@Hidden double x, @Hidden double y, @Hidden double width, @Hidden double height) {
 		renderer.renderRectangle(x, y, width, height);
 	}
