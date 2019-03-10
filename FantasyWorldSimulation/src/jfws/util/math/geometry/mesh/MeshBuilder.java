@@ -249,8 +249,4 @@ public class MeshBuilder<V,E,F> implements Mesh<V,E,F> {
 
 		throw new IndexOutOfBoundsException(id);
 	}
-
-	public void splitFace() {
-
-	}
 }

@@ -4,7 +4,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import jfws.util.map.CellMap2d;
-import jfws.util.map.Map2d;
 import jfws.util.rendering.ColorSelector;
 import lombok.extern.slf4j.Slf4j;
 

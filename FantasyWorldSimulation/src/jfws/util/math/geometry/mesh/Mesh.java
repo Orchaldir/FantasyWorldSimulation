@@ -1,7 +1,5 @@
 package jfws.util.math.geometry.mesh;
 
-import jfws.util.math.geometry.Point2d;
-
 import java.util.List;
 
 public interface Mesh<V,E,F> {
