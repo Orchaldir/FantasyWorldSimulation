@@ -8,15 +8,11 @@ image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasy
 image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWorldSimulation&metric=code_smells[SonarCloud Code Smells,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWorldSimulation]
 
 * See link:FantasyWorldSimulation/docs/adr/index.adoc[Architectural Decision Records].
-* See link:FantasyWorldSimulation/docs/docu/index.adoc[Documentation].
 * See link:FantasyWorldSimulation/docs/docu/release-notes/index.adoc[Release Notes].
 
 Current Milestone: https://github.com/Orchaldir/FantasyWorldSimulation/milestone/3[World Map]
 
-== How to run the MapEditor
+== How to run the Demos
 
-Run `jfws.editor.map.MapEditor.main()`.
-
-== How to build the Documentation
-
-Execute the Maven Goal `generate-resources`.
+* Run `jfws.app.demo.distribution.PointDistributionDemo.main()`.
+* Run `jfws.app.demo.voronoi.VoronoiDemo.main()`.
