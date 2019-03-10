@@ -1,0 +1,18 @@
+= ADR 0009 - Create Demos for complex Features
+
+*Status:* accepted
+
+*Date:* 2019-03-10
+
+== Context and Problem Statement
+
+* How to easily test a feature during development?
+* How to compare different implementations?
+* How to showcase how a feature is used?
+
+== Decision Outcome
+
+*Chosen option:* Create a demo for complex features
+
+* Use a simple gui to configure the feature.
+* See PointDistributionDemo.

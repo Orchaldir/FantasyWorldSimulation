@@ -3,7 +3,7 @@ ifndef::imagesdir[:imagesdir: ../images/]
 
 == Release Notes
 
-[%header,cols="1,4a"]
+[%header,cols="^.<,4a"]
 |===
 | Release
 | Notes
