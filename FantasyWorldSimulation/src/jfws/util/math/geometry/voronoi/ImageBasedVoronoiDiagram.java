@@ -82,7 +82,7 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
 			PointData pointData = new PointData(id, point, getCellX(point), getCellY(point));
 
-			log.info("createPointDataList(): id={} {} x={} y={}", id, point, pointData.x, pointData.y);
+			log.debug("createPointDataList(): id={} {} x={} y={}", id, point, pointData.x, pointData.y);
 
 			pointDataList.add(pointData);
 		}
@@ -202,7 +202,7 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 					Point2d vertexPoint = createPoint(x + 1.0,  y + 1.0);
 					Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
 
-					log.info("findVertices(): x={} y={} point={} closestPointIds={} vertex={}",
+					log.debug("findVertices(): x={} y={} point={} closestPointIds={} vertex={}",
 							x, y, vertexPoint, closestPointIds, vertex.getId());
 
 					for (Integer closestPointId : closestPointIds) {

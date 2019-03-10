@@ -7,17 +7,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import jfws.util.math.geometry.Point2d;
-import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.distribution.GridWithNoiseDistribution;
 import jfws.util.math.geometry.distribution.PointDistribution;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
 import jfws.util.math.geometry.distribution.RandomPointDistribution;
 import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
 import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
-import jfws.util.math.geometry.voronoi.ImageBasedVoronoiDiagram;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
-import jfws.util.rendering.RandomColorSelector;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -56,11 +53,10 @@ public class PointDistributionController {
 
 	private int maxNumberOfPoints = 4000;
 	private double radius = 10.0;
-
-	private ImageBasedVoronoiDiagram voronoiDiagram = new ImageBasedVoronoiDiagram(Rectangle.fromSize(SIZE), 2);
+	private List<Point2d> points;
 
 	public PointDistributionController() {
-		log.info("PointDistributionController()");
+		log.info("VoronoiController()");
 
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
 
@@ -88,6 +84,7 @@ public class PointDistributionController {
 		radiusSlider.valueProperty().addListener(
 				(observable, oldValue, newValue) -> onRadiusChanged((Double) newValue));
 
+		updatePoints();
 		render();
 	}
 
@@ -95,12 +92,6 @@ public class PointDistributionController {
 		canvasRenderer.clear(0, 0, 900, 700);
 
 		List<Point2d> points = getPoints();
-
-		log.info("render(): Voronoi");
-
-		voronoiDiagram.update(points);
-
-		meshRenderer.renderFaces(voronoiDiagram.getMesh(), new RandomColorSelector<>(new GeneratorWithRandom(99)));
 
 		log.info("render(): selectedDistribution={} points={}", selectedDistribution, points.size());
 
@@ -119,9 +110,11 @@ public class PointDistributionController {
 		log.info("render(): Finished");
 	}
 
-	private List<Point2d> getPoints() {
-		List<Point2d> points = getPointDistribution().distributePoints(SIZE, radius);
+	private void updatePoints() {
+		points = getPointDistribution().distributePoints(SIZE, radius);
+	}
 
+	private List<Point2d> getPoints() {
 		if(points.size() > maxNumberOfPoints)
 		{
 			return points.subList(0, maxNumberOfPoints);
@@ -145,6 +138,7 @@ public class PointDistributionController {
 	public void onDistributionSelected() {
 		selectedDistribution = distributionComboBox.getSelectionModel().getSelectedItem();
 		log.info("onDistributionSelected(): terrainType={}", selectedDistribution);
+		updatePoints();
 		render();
 	}
 
@@ -159,6 +153,7 @@ public class PointDistributionController {
 	public void onRadiusChanged(double newValue) {
 		radius = newValue;
 		log.info("onRadiusChanged(): {}", radius);
+		updatePoints();
 		render();
 	}
 }
