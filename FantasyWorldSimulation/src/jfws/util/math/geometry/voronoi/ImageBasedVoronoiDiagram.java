@@ -176,47 +176,55 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 	private void findVertices() {
 		log.info("findVertices()");
 		final int windowSize = 1;
-		int columnSize = closestPointSizeY - windowSize;
+		final int columnSize = closestPointSizeY - windowSize;
 		Vertex<V>[] lastVertices = new Vertex[columnSize];
 
 		for (int x = 0; x < closestPointSizeX - windowSize; x++) {
 			for (int y = 0; y < columnSize; y++) {
-				Set<Integer> closestPointIds = new HashSet<>(4);
-
-				closestPointIds.add(closestPointMap[x][y].closestPointId);
-				closestPointIds.add(closestPointMap[x+1][y].closestPointId);
-				closestPointIds.add(closestPointMap[x][y+1].closestPointId);
-				closestPointIds.add(closestPointMap[x+1][y+1].closestPointId);
-
-				if(closestPointIds.size() > 2) {
-					if(y > 0 && lastVertices[y-1] != null) {
-						log.info("findVertices(): Merged x={} y={} with previous vertex.", x, y);
-						lastVertices[y] = lastVertices[y-1];
-						continue;
-					}
-					else if(lastVertices[y] != null) {
-						log.info("findVertices(): Merged x={} y={} with above vertex.", x, y);
-						continue;
-					}
-
-					Point2d vertexPoint = createPoint(x + 1.0,  y + 1.0);
-					Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
-
-					log.debug("findVertices(): x={} y={} point={} closestPointIds={} vertex={}",
-							x, y, vertexPoint, closestPointIds, vertex.getId());
-
-					for (Integer closestPointId : closestPointIds) {
-						PointData pointData = pointDataList.get(closestPointId);
-						pointData.vertices.add(vertex);
-					}
-
-					lastVertices[y] = vertex;
-				}
-				else {
-					lastVertices[y] = null;
-				}
+				findVertex(lastVertices, x, y);
 			}
 		}
+	}
+
+	private void findVertex(Vertex<V>[] lastVertices, int x, int y) {
+		Set<Integer> closestPointIds = new HashSet<>(4);
+
+		closestPointIds.add(closestPointMap[x][y].closestPointId);
+		closestPointIds.add(closestPointMap[x+1][y].closestPointId);
+		closestPointIds.add(closestPointMap[x][y+1].closestPointId);
+		closestPointIds.add(closestPointMap[x+1][y+1].closestPointId);
+
+		if(closestPointIds.size() > 2) {
+			if(y > 0 && lastVertices[y-1] != null) {
+				log.info("findVertex(): Merged x={} y={} with previous vertex.", x, y);
+				lastVertices[y] = lastVertices[y-1];
+				return;
+			}
+			else if(lastVertices[y] != null) {
+				log.info("findVertex(): Merged x={} y={} with above vertex.", x, y);
+				return;
+			}
+
+			lastVertices[y] = createVertex(closestPointIds, x, y);
+		}
+		else {
+			lastVertices[y] = null;
+		}
+	}
+
+	private Vertex<V> createVertex(Set<Integer> closestPointIds, int x, int y) {
+		Point2d vertexPoint = createPoint(x + 1.0,  y + 1.0);
+		Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
+
+		log.debug("findVertices(): x={} y={} point={} closestPointIds={} vertex={}",
+				x, y, vertexPoint, closestPointIds, vertex.getId());
+
+		for (Integer closestPointId : closestPointIds) {
+			PointData pointData = pointDataList.get(closestPointId);
+			pointData.vertices.add(vertex);
+		}
+
+		return vertex;
 	}
 
 	private void fillClosestPointMap(List<Point2d> points) {

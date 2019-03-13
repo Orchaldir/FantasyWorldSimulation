@@ -4,7 +4,6 @@ import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.Mesh;
-import jfws.util.math.geometry.mesh.NoData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,8 +39,8 @@ class ImageBasedVoronoiDiagramTest {
 
 	public static final Rectangle RECTANGLE = Rectangle.fromStartAndEnd(CORNER0, CORNER2);
 
-	private ImageBasedVoronoiDiagram<NoData, NoData, NoData> voronoiDiagram;
-	private Mesh<NoData, NoData, NoData> mesh;
+	private ImageBasedVoronoiDiagram<Void, Void, Void> voronoiDiagram;
+	private Mesh<Void, Void, Void> mesh;
 
 	@BeforeEach
 	public void setUp() {
@@ -214,7 +213,7 @@ class ImageBasedVoronoiDiagramTest {
 	}
 
 	private void assertFace(int i, List<Point2d> corners) {
-		Face<NoData, NoData, NoData> face = mesh.getFace(i);
+		Face<Void, Void, Void> face = mesh.getFace(i);
 
 		assertNotNull(face);
 		assertThat(face.getId(), is(equalTo(i)));

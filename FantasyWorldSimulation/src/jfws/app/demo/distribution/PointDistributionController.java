@@ -11,8 +11,6 @@ import jfws.util.math.geometry.distribution.GridWithNoiseDistribution;
 import jfws.util.math.geometry.distribution.PointDistribution;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
 import jfws.util.math.geometry.distribution.RandomPointDistribution;
-import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
-import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +41,6 @@ public class PointDistributionController {
 	private Slider radiusSlider;
 
 	private CanvasRenderer canvasRenderer;
-	private MeshRenderer meshRenderer;
 
 	private GridWithNoiseDistribution gridWithNoiseDistribution;
 	private PoissonDiscDistribution poissonDiscDistribution;
@@ -70,8 +67,6 @@ public class PointDistributionController {
 		log.info("initialize()");
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
-		FaceRenderer faceRenderer = new FaceRenderer(canvasRenderer);
-		meshRenderer = new MeshRenderer(faceRenderer);
 
 		distributionComboBox.setItems(FXCollections.observableArrayList(SelectedDistribution.values()));
 		distributionComboBox.getSelectionModel().select(selectedDistribution);
@@ -91,19 +86,19 @@ public class PointDistributionController {
 	public void render() {
 		canvasRenderer.clear(0, 0, 900, 700);
 
-		List<Point2d> points = getPoints();
+		List<Point2d> filteredPoints = getFilteredPoints();
 
-		log.info("render(): selectedDistribution={} points={}", selectedDistribution, points.size());
+		log.info("render(): selectedDistribution={} points={}", selectedDistribution, filteredPoints.size());
 
 		canvasRenderer.setColor(Color.RED);
 
-		for (Point2d point : points) {
+		for (Point2d point : filteredPoints) {
 			canvasRenderer.renderPoint(point, radius);
 		}
 
 		canvasRenderer.setColor(Color.BLUE);
 
-		for (Point2d point : points) {
+		for (Point2d point : filteredPoints) {
 			canvasRenderer.renderPoint(point, 2);
 		}
 
@@ -114,7 +109,7 @@ public class PointDistributionController {
 		points = getPointDistribution().distributePoints(SIZE, radius);
 	}
 
-	private List<Point2d> getPoints() {
+	private List<Point2d> getFilteredPoints() {
 		if(points.size() > maxNumberOfPoints)
 		{
 			return points.subList(0, maxNumberOfPoints);
