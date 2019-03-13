@@ -18,26 +18,26 @@ package jfws.util.math.generator.noise;
  */
 
 import jfws.util.math.generator.Generator;
-import lombok.AllArgsConstructor;
+import jfws.util.math.geometry.Point2d;
 
 public class SimplexNoise implements Generator {
 
-	private static Grad[] grad3 = {
-			new Grad(1, 1),
-			new Grad(-1, 1),
-			new Grad(1, -1),
-			new Grad(-1, -1),
-			new Grad(1, 0),
-			new Grad(-1, 0),
-			new Grad(1, 0),
-			new Grad(-1, 0),
-			new Grad(0, 1),
-			new Grad(0, -1),
-			new Grad(0, 1),
-			new Grad(0, -1)
+	private static final Point2d[] GRADIENTS = {
+			new Point2d(1, 1),
+			new Point2d(-1, 1),
+			new Point2d(1, -1),
+			new Point2d(-1, -1),
+			new Point2d(1, 0),
+			new Point2d(-1, 0),
+			new Point2d(1, 0),
+			new Point2d(-1, 0),
+			new Point2d(0, 1),
+			new Point2d(0, -1),
+			new Point2d(0, 1),
+			new Point2d(0, -1)
 	};
 
-	private static short[] p = {151, 160, 137, 91, 90, 15,
+	private static final short[] PERMUTATION_TABLE = {151, 160, 137, 91, 90, 15,
 			131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
 			190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
 			88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
@@ -52,15 +52,15 @@ public class SimplexNoise implements Generator {
 			138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180};
 
 	// To remove the need for index wrapping, double the permutation table length
-	private static int P_SIZE = p.length;
-	private static int PERM_SIZE = P_SIZE * 2;
-	private static short[] perm = new short[PERM_SIZE];
-	private static short[] permMod12 = new short[PERM_SIZE];
+	private static final int P_SIZE = PERMUTATION_TABLE.length;
+	private static final int PERM_SIZE = P_SIZE * 2;
+	private static final short[] PERMUTATION_TWICE = new short[PERM_SIZE];
+	private static final short[] PERMUTATION_MOD_12 = new short[PERM_SIZE];
 
 	static {
 		for (int i = 0; i < PERM_SIZE; i++) {
-			perm[i] = p[i & 255];
-			permMod12[i] = (short) (perm[i] % 12);
+			PERMUTATION_TWICE[i] = PERMUTATION_TABLE[i & 255];
+			PERMUTATION_MOD_12[i] = (short) (PERMUTATION_TWICE[i] % 12);
 		}
 	}
 
@@ -72,10 +72,6 @@ public class SimplexNoise implements Generator {
 	public static int floorFast(double x) {
 		int xi = (int) x;
 		return x < xi ? xi - 1 : xi;
-	}
-
-	public static double dot(Grad g, double x, double y) {
-		return g.x * x + g.y * y;
 	}
 
 	@Override
@@ -122,9 +118,9 @@ public class SimplexNoise implements Generator {
 		// Work out the hashed gradient indices of the three simplex corners
 		int ii = i & 255;
 		int jj = j & 255;
-		int gi0 = permMod12[ii + perm[jj]];
-		int gi1 = permMod12[ii + i1 + perm[jj + j1]];
-		int gi2 = permMod12[ii + 1 + perm[jj + 1]];
+		int gi0 = PERMUTATION_MOD_12[ii + PERMUTATION_TWICE[jj]];
+		int gi1 = PERMUTATION_MOD_12[ii + i1 + PERMUTATION_TWICE[jj + j1]];
+		int gi2 = PERMUTATION_MOD_12[ii + 1 + PERMUTATION_TWICE[jj + 1]];
 
 		// Calculate the contribution from the three corners
 		double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -134,7 +130,7 @@ public class SimplexNoise implements Generator {
 		}
 		else {
 			t0 *= t0;
-			n0 = t0 * t0 * dot(grad3[gi0], x0, y0);  // (x,y) of grad3 used for 2D gradient
+			n0 = t0 * t0 * GRADIENTS[gi0].getDotProduct(x0, y0);
 		}
 
 		double t1 = 0.5 - x1 * x1 - y1 * y1;
@@ -144,7 +140,7 @@ public class SimplexNoise implements Generator {
 		}
 		else {
 			t1 *= t1;
-			n1 = t1 * t1 * dot(grad3[gi1], x1, y1);
+			n1 = t1 * t1 * GRADIENTS[gi1].getDotProduct(x1, y1);
 		}
 
 		double t2 = 0.5 - x2 * x2 - y2 * y2;
@@ -154,19 +150,11 @@ public class SimplexNoise implements Generator {
 		}
 		else {
 			t2 *= t2;
-			n2 = t2 * t2 * dot(grad3[gi2], x2, y2);
+			n2 = t2 * t2 * GRADIENTS[gi2].getDotProduct(x2, y2);
 		}
 
 		// Add contributions from each corner to get the final noise value.
 		// The result is scaled to return values in the interval [-1,1].
 		return 70.0 * (n0 + n1 + n2);
-	}
-
-	// Inner class to speed upp gradient computations
-	// (array access is a lot slower than member access)
-	@AllArgsConstructor
-	protected static class Grad {
-		private double x;
-		private double y;
 	}
 }

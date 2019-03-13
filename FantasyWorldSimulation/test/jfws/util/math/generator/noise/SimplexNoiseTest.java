@@ -50,13 +50,6 @@ class SimplexNoiseTest {
 		}
 	}
 
-	@Test
-	public void testDot() {
-		SimplexNoise.Grad grad = new SimplexNoise.Grad(1.0, 2.0);
-
-		assertThat(SimplexNoise.dot(grad, 3.0, 4.0), is(equalTo(11.0)));
-	}
-
 	@Nested
 	class TestCalculateNoise {
 
