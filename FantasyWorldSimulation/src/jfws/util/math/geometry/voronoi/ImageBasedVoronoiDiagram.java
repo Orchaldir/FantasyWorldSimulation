@@ -13,11 +13,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
-	private class ClosestPointData<V,E,F> {
-		public int closestPointId = -1;
-		public double distance = Double.MAX_VALUE;
-	}
-
 	private class PointData {
 		public final int id;
 		public final Point2d point;
@@ -238,22 +233,30 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
 		while(!queue.isEmpty()) {
 			QueueData queueData = queue.remove();
-			PointData pointData = queueData.pointData;
 
-			if(checkClosestPointMap(pointData, queueData.x,queueData.y)) {
-				if(queueData.x > 0) {
-					queue.add(new QueueData(pointData, queueData.x-1, queueData.y));
-				}
-				if(queueData.x < closestPointSizeX - 1) {
-					queue.add(new QueueData(pointData, queueData.x+1, queueData.y));
-				}
-				if(queueData.y > 0) {
-					queue.add(new QueueData(pointData, queueData.x, queueData.y-1));
-				}
-				if(queueData.y < closestPointSizeY - 1) {
-					queue.add(new QueueData(pointData, queueData.x, queueData.y+1));
-				}
+			if(checkClosestPointMap(queueData.pointData, queueData.x,queueData.y)) {
+				addNeighbors(queue, queueData);
 			}
+		}
+	}
+
+	private void addNeighbors(Queue<QueueData> queue, QueueData queueData) {
+		PointData pointData = queueData.pointData;
+
+		if(queueData.x > 0) {
+			queue.add(new QueueData(pointData, queueData.x-1, queueData.y));
+		}
+
+		if(queueData.x < closestPointSizeX - 1) {
+			queue.add(new QueueData(pointData, queueData.x+1, queueData.y));
+		}
+
+		if(queueData.y > 0) {
+			queue.add(new QueueData(pointData, queueData.x, queueData.y-1));
+		}
+
+		if(queueData.y < closestPointSizeY - 1) {
+			queue.add(new QueueData(pointData, queueData.x, queueData.y+1));
 		}
 	}
 
