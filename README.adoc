@@ -10,9 +10,10 @@ image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasy
 * See link:FantasyWorldSimulation/docs/adr/index.adoc[Architectural Decision Records].
 * See link:FantasyWorldSimulation/docs/docu/release-notes/index.adoc[Release Notes].
 
-Current Milestone: https://github.com/Orchaldir/FantasyWorldSimulation/milestone/3[World Map]
+Current Milestone: https://github.com/Orchaldir/FantasyWorldSimulation/milestone/4[Biomes]
 
 == How to run the Demos
 
+* Run `jfws.app.demo.biome.BiomeDemo.main()`.
 * Run `jfws.app.demo.distribution.PointDistributionDemo.main()`.
 * Run `jfws.app.demo.voronoi.VoronoiDemo.main()`.
