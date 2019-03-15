@@ -11,7 +11,6 @@ import static org.mockito.Mockito.*;
 class ScaledInputTest {
 
 	public static final double RESOLUTION0 = 10.5;
-	public static final double RESOLUTION1 = 2.3;
 	public static final double X = 1.0;
 	public static final double Y = 2.0;
 	public static final double RESULT = 5.0;
@@ -28,12 +27,6 @@ class ScaledInputTest {
 	@Test
 	public void testGetResolution() {
 		assertThat(scaledInput.getResolution(), is(equalTo(RESOLUTION0)));
-	}
-
-	@Test
-	public void testSetResolution() {
-		scaledInput.setResolution(RESOLUTION1);
-		assertThat(scaledInput.getResolution(), is(equalTo(RESOLUTION1)));
 	}
 
 	@Test
