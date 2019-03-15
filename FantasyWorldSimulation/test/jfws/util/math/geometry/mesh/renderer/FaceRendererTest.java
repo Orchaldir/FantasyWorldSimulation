@@ -14,13 +14,15 @@ import static org.mockito.Mockito.*;
 
 class FaceRendererTest {
 
+	public static final int DATA = 42;
+
 	private Renderer renderer;
 	private FaceRenderer faceRenderer;
 
 	private ColorSelector colorSelector;
 	private Color color;
 
-	private Face face;
+	private Face<Void,Void,Integer> face;
 	private List<Point2d> polygonPoints;
 
 	// tests
@@ -48,7 +50,7 @@ class FaceRendererTest {
 		colorSelector = mock(ColorSelector.class);
 		color = mock(Color.class);
 
-		when(colorSelector.select(face)).thenReturn(color);
+		when(colorSelector.select(DATA)).thenReturn(color);
 	}
 
 	private void createFace(int id) {
@@ -58,6 +60,7 @@ class FaceRendererTest {
 
 		when(face.getId()).thenReturn(id);
 		when(face.getPointsInCCW()).thenReturn(polygonPoints);
+		when(face.getData()).thenReturn(DATA);
 	}
 
 	// verification

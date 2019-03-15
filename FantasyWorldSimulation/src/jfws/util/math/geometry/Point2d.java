@@ -63,8 +63,12 @@ public class Point2d {
 		return new Point2d(x + point.x, y + point.y);
 	}
 
-	public Point2d sub(Point2d point) {
+	public Point2d subtract(Point2d point) {
 		return new Point2d(x - point.x, y - point.y);
+	}
+
+	public Point2d multiply(double value) {
+		return new Point2d(x * value, y * value);
 	}
 
 	public Point2d fromPolar(double angle, double distance){

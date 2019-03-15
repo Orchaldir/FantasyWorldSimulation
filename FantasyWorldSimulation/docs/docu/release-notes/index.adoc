@@ -8,6 +8,14 @@ ifndef::imagesdir[:imagesdir: ../images/]
 | Release
 | Notes
 
+| 2019.2.0
+|
+
+*Known Issue:*
+
+* https://github.com/Orchaldir/FantasyWorldSimulation/issues/59[#59]:
+Mesh of Voronoi Diagram has holes
+
 | 2019.1.0
 |
 

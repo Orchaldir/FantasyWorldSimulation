@@ -180,8 +180,15 @@ class Point2dTest {
 		}
 
 		@Test
-		public void testSub() {
-			assertThat(POINT_1.sub(DIFF), is(equalTo(POINT_0)));
+		public void testSubtract() {
+			assertThat(POINT_1.subtract(DIFF), is(equalTo(POINT_0)));
+		}
+
+		@Test
+		public void testMultiply() {
+			Point2d result = POINT_1.multiply(2.5);
+			assertThat(result.getX(), is(equalTo(10.0)));
+			assertThat(result.getY(), is(equalTo(15.0)));
 		}
 
 		@Test

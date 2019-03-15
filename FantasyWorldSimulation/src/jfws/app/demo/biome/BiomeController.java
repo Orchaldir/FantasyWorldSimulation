@@ -26,7 +26,7 @@ import static jfws.features.elevation.ElevationCell.MIN_ELEVATION;
 public class BiomeController {
 
 	public static final Point2d SIZE = new Point2d(800, 600);
-	public static final Point2d CENTER = new Point2d(SIZE.getX() * 0.5, SIZE.getY() * 0.5);
+	public static final Point2d CENTER = SIZE.multiply(0.5);
 
 	@FXML
 	private Canvas mapCanvas;

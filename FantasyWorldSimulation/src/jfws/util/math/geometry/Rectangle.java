@@ -19,7 +19,7 @@ public class Rectangle {
 	}
 
 	public static Rectangle fromStartAndEnd(Point2d start, Point2d end) {
-		Point2d size = end.sub(start);
+		Point2d size = end.subtract(start);
 
 		return new Rectangle(start, end, size);
 	}
