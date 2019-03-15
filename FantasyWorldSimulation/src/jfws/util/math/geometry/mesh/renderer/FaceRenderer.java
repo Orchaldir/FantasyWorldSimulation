@@ -11,14 +11,14 @@ import java.util.List;
 
 @AllArgsConstructor
 @Slf4j
-public class FaceRenderer {
+public class FaceRenderer<V,E,F> {
 
 	private final Renderer renderer;
 
-	public void render(Face face, ColorSelector<Face> colorSelector) {
+	public void render(Face<V,E,F> face, ColorSelector<F> colorSelector) {
 		List<Point2d> polygonPoints = face.getPointsInCCW();
 
-		renderer.setColor(colorSelector.select(face));
+		renderer.setColor(colorSelector.select(face.getData()));
 		renderer.renderPolygon(polygonPoints);
 	}
 }
