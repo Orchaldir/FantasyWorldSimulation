@@ -71,15 +71,16 @@ public class BiomeController {
 		log.info("createWorldMap(): Init cells");
 
 		SimplexNoise simplexNoise = new SimplexNoise();
-		Transformation elevationGenerator = new Transformation(simplexNoise, -50.0, 175.0, 200);
+		double maxElevation = 175.0;
+		Transformation elevationGenerator = new Transformation(simplexNoise, -50.0, maxElevation, 200);
 
 		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(new LinearInterpolator(), CENTER, UP,
-				CENTER.getY(), 1.0, 0.0);
+				CENTER.getY(), 0.9, 0.1);
 
 		for (Face<Void, Void, Cell> face : voronoiDiagram.getMesh().getFaces()) {
 			Point2d point = points.get(face.getId());
 			double elevation = elevationGenerator.generate(point);
-			double temperature = temperatureGenerator.generate(point);
+			double temperature = temperatureGenerator.generate(point) - 0.2 * Math.max(elevation / maxElevation, 0.0);
 			face.setData(new Cell(elevation, temperature));
 		}
 	}

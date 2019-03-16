@@ -12,7 +12,7 @@ public enum TemperatureLevel {
 	TEMPERATE(Color.GREEN),
 	WARM(Color.YELLOW),
 	HOT(Color.ORANGE),
-	VERY_HOT(Color.ORANGE);
+	VERY_HOT(Color.RED);
 
 	public static final int NUMBER_OF_RANGES = TemperatureLevel.values().length - 1;
 	public static final double LEVEL_WIDTH = 1.0 / (double)NUMBER_OF_RANGES;
