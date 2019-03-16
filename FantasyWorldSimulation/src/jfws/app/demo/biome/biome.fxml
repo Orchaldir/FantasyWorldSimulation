@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -18,7 +19,10 @@
    <children>
       <BorderPane prefHeight="478.0" prefWidth="600.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
          <top>
-            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <items>
+                  <ComboBox fx:id="featureComboBox" onAction="#onFeatureSelected" prefWidth="150.0" />
+               </items></ToolBar>
          </top>
          <center>
             <Canvas fx:id="mapCanvas" height="600.0" width="1000.0" BorderPane.alignment="TOP_LEFT" />
