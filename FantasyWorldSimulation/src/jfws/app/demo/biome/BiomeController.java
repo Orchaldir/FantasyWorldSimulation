@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import jfws.features.elevation.ElevationColorSelector;
+import jfws.features.temperature.TemperatureColorSelector;
 import jfws.util.math.generator.Transformation;
+import jfws.util.math.generator.gradient.AbsoluteLinearGradient;
 import jfws.util.math.generator.noise.SimplexNoise;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
@@ -14,10 +16,10 @@ import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
 import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
 import jfws.util.math.geometry.voronoi.ImageBasedVoronoiDiagram;
+import jfws.util.math.interpolation.LinearInterpolator;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
-import jfws.util.rendering.RandomColorSelector;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class BiomeController {
 
 	public static final Point2d SIZE = new Point2d(800, 600);
 	public static final Point2d CENTER = SIZE.multiply(0.5);
+	public static final Point2d UP = new Point2d(0, 1);
 
 	enum SelectedFeature {
 		ELEVATION,
@@ -45,7 +48,7 @@ public class BiomeController {
 	private MeshRenderer meshRenderer;
 
 	private ColorSelector elevationColorSelector = new ElevationColorSelector();
-	private RandomColorSelector temperatureColorSelector = new RandomColorSelector(new GeneratorWithRandom(99));
+	private ColorSelector temperatureColorSelector = new TemperatureColorSelector();
 
 	private final double poissonDiskRadius = 5.0;
 
@@ -70,9 +73,14 @@ public class BiomeController {
 		SimplexNoise simplexNoise = new SimplexNoise();
 		Transformation elevationGenerator = new Transformation(simplexNoise, -50.0, 175.0, 200);
 
+		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(new LinearInterpolator(), CENTER, UP,
+				CENTER.getY(), 1.0, 0.0);
+
 		for (Face<Void, Void, Cell> face : voronoiDiagram.getMesh().getFaces()) {
-			double elevation = elevationGenerator.generate(points.get(face.getId()));
-			face.setData(new Cell(elevation));
+			Point2d point = points.get(face.getId());
+			double elevation = elevationGenerator.generate(point);
+			double temperature = temperatureGenerator.generate(point);
+			face.setData(new Cell(elevation, temperature));
 		}
 	}
 
