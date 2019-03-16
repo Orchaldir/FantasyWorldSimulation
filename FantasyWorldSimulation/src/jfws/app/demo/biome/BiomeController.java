@@ -3,7 +3,8 @@ package jfws.app.demo.biome;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import jfws.features.elevation.ElevationColorSelector;
-import jfws.util.math.generator.gradient.CircularGradient;
+import jfws.util.math.generator.Transformation;
+import jfws.util.math.generator.noise.SimplexNoise;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
@@ -11,16 +12,12 @@ import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
 import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
 import jfws.util.math.geometry.voronoi.ImageBasedVoronoiDiagram;
-import jfws.util.math.interpolation.LinearInterpolator;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import jfws.util.rendering.ColorSelector;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-
-import static jfws.features.elevation.ElevationCell.MAX_ELEVATION;
-import static jfws.features.elevation.ElevationCell.MIN_ELEVATION;
 
 @Slf4j
 public class BiomeController {
@@ -55,10 +52,12 @@ public class BiomeController {
 
 		log.info("createWorldMap(): Init cells");
 
-		CircularGradient gradient = new CircularGradient(new LinearInterpolator(), CENTER, CENTER.getY(), MAX_ELEVATION, MIN_ELEVATION);
+		SimplexNoise simplexNoise = new SimplexNoise();
+		Transformation gradient = new Transformation(simplexNoise, -50.0, 175.0, 200);
 
 		for (Face<Void, Void, Cell> face : voronoiDiagram.getMesh().getFaces()) {
-			face.setData(new Cell(gradient.generate(points.get(face.getId()))));
+			double elevation = gradient.generate(points.get(face.getId()));
+			face.setData(new Cell(elevation));
 		}
 	}
 
