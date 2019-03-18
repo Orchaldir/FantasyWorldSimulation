@@ -118,7 +118,7 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 	}
 
 	private void createVerticesAtCorner(int x, int y) {
-		int closestPointId = closestPointMap[x][y].closestPointId;
+		int closestPointId = closestPointMap[x][y].getClosestPointId();
 		Point2d vertexPoint = createPoint(x,  y);
 		Vertex<V> vertex = meshBuilder.createVertex(vertexPoint);
 		pointDataList.get(closestPointId).vertices.add(vertex);
@@ -134,8 +134,8 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
 	private void findVerticesAtBorderX(int y) {
 		for (int x = 0; x < closestPointSizeX - 1; x++) {
-			int closestPointId0 = closestPointMap[x][y].closestPointId;
-			int closestPointId1 = closestPointMap[x+1][y].closestPointId;
+			int closestPointId0 = closestPointMap[x][y].getClosestPointId();
+			int closestPointId1 = closestPointMap[x+1][y].getClosestPointId();
 
 			if(closestPointId0 != closestPointId1) {
 				Point2d vertexPoint = createPoint(x + 1.0,  y);
@@ -152,8 +152,8 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
 	private void findVerticesAtBorderY(int x) {
 		for (int y = 0; y < closestPointSizeY - 1; y++) {
-			int closestPointId0 = closestPointMap[x][y].closestPointId;
-			int closestPointId1 = closestPointMap[x][y+1].closestPointId;
+			int closestPointId0 = closestPointMap[x][y].getClosestPointId();
+			int closestPointId1 = closestPointMap[x][y+1].getClosestPointId();
 
 			if(closestPointId0 != closestPointId1) {
 				Point2d vertexPoint = createPoint(x,  y + 1.0);
@@ -184,10 +184,10 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 	private void findVertex(Vertex<V>[] lastVertices, int x, int y) {
 		Set<Integer> closestPointIds = new HashSet<>(4);
 
-		closestPointIds.add(closestPointMap[x][y].closestPointId);
-		closestPointIds.add(closestPointMap[x+1][y].closestPointId);
-		closestPointIds.add(closestPointMap[x][y+1].closestPointId);
-		closestPointIds.add(closestPointMap[x+1][y+1].closestPointId);
+		closestPointIds.add(closestPointMap[x][y].getClosestPointId());
+		closestPointIds.add(closestPointMap[x+1][y].getClosestPointId());
+		closestPointIds.add(closestPointMap[x][y+1].getClosestPointId());
+		closestPointIds.add(closestPointMap[x+1][y+1].getClosestPointId());
 
 		if(closestPointIds.size() > 2) {
 			if(y > 0 && lastVertices[y-1] != null) {
@@ -266,9 +266,8 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 		double diffY = pointData.y - y;
 		double distance = Math.hypot(diffX, diffY);
 
-		if(distance < closestPointData.distance) {
-			closestPointData.distance = distance;
-			closestPointData.closestPointId = pointData.id;
+		if(distance < closestPointData.getDistance()) {
+			closestPointData.update(pointData.id, distance);
 			return true;
 		}
 
