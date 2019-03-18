@@ -193,10 +193,12 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 			if(y > 0 && lastVertices[y-1] != null) {
 				log.info("findVertex(): Merged x={} y={} with previous vertex.", x, y);
 				lastVertices[y] = lastVertices[y-1];
+				mergeVertex(closestPointIds, lastVertices[y]);
 				return;
 			}
 			else if(lastVertices[y] != null) {
 				log.info("findVertex(): Merged x={} y={} with above vertex.", x, y);
+				mergeVertex(closestPointIds, lastVertices[y]);
 				return;
 			}
 
@@ -204,6 +206,17 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 		}
 		else {
 			lastVertices[y] = null;
+		}
+	}
+
+	private void mergeVertex(Set<Integer> closestPointIds, Vertex<V> vertex) {
+		for(Integer id : closestPointIds) {
+			PointData pointData = pointDataList.get(id);
+
+			if(!pointData.vertices.contains(vertex)) {
+				log.info("mergeVertex(): Add {} to PointData {}.", vertex, pointData.id);
+				pointData.vertices.add(vertex);
+			}
 		}
 	}
 
