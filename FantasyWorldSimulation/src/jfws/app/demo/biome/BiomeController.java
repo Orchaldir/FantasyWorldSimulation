@@ -4,10 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
+import jfws.feature.world.WorldCell;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.temperature.TemperatureColorSelector;
+import jfws.util.math.generator.Sum;
 import jfws.util.math.generator.Transformation;
 import jfws.util.math.generator.gradient.AbsoluteLinearGradient;
+import jfws.util.math.generator.gradient.CircularGradient;
 import jfws.util.math.generator.noise.SimplexNoise;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
@@ -24,11 +27,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import static jfws.feature.world.WorldCell.ELEVATION;
+import static jfws.feature.world.WorldCell.TEMPERATURE;
+
 @Slf4j
 public class BiomeController {
 
 	public static final Point2d SIZE = new Point2d(800, 600);
 	public static final Point2d CENTER = SIZE.multiply(0.5);
+	public static final Point2d BOTTOM = new Point2d(CENTER.getX(), 0);
 	public static final Point2d UP = new Point2d(0, 1);
 
 	enum SelectedFeature {
@@ -42,7 +49,7 @@ public class BiomeController {
 	@FXML
 	private ComboBox<SelectedFeature> featureComboBox;
 
-	private SelectedFeature selectedFeature = SelectedFeature.TEMPERATURE;
+	private SelectedFeature selectedFeature = SelectedFeature.ELEVATION;
 
 	private CanvasRenderer canvasRenderer;
 	private MeshRenderer meshRenderer;
@@ -52,7 +59,7 @@ public class BiomeController {
 
 	private final double poissonDiskRadius = 5.0;
 
-	private ImageBasedVoronoiDiagram<Void, Void, Cell> voronoiDiagram = new ImageBasedVoronoiDiagram<>(Rectangle.fromSize(SIZE), 2);
+	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> voronoiDiagram = new ImageBasedVoronoiDiagram<>(Rectangle.fromSize(SIZE), 2);
 
 	public BiomeController() {
 		log.info("BiomeController()");
@@ -70,18 +77,26 @@ public class BiomeController {
 
 		log.info("createWorldMap(): Init cells");
 
+		LinearInterpolator interpolator = new LinearInterpolator();
 		SimplexNoise simplexNoise = new SimplexNoise();
 		double maxElevation = 175.0;
-		Transformation elevationGenerator = new Transformation(simplexNoise, -50.0, maxElevation, 200);
+		Transformation elevationNoise = new Transformation(simplexNoise, 55.0, 120, 200);
+		CircularGradient circularGradient = new CircularGradient(interpolator, BOTTOM, 350, 100.0, -65.0);
+		Sum elevationGenerator = new Sum(List.of(elevationNoise, circularGradient));
 
-		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(new LinearInterpolator(), CENTER, UP,
+		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(interpolator, CENTER, UP,
 				CENTER.getY(), 0.9, 0.1);
 
-		for (Face<Void, Void, Cell> face : voronoiDiagram.getMesh().getFaces()) {
+		for (Face<Void, Void, WorldCell> face : voronoiDiagram.getMesh().getFaces()) {
+			face.setData(new WorldCell());
+		}
+
+		for (Face<Void, Void, WorldCell> face : voronoiDiagram.getMesh().getFaces()) {
 			Point2d point = points.get(face.getId());
-			double elevation = elevationGenerator.generate(point);
-			double temperature = temperatureGenerator.generate(point) - 0.2 * Math.max(elevation / maxElevation, 0.0);
-			face.setData(new Cell(elevation, temperature));
+			WorldCell cell = face.getData();
+
+			cell.attributes[ELEVATION] = elevationGenerator.generate(point);
+			cell.attributes[TEMPERATURE] = temperatureGenerator.generate(point) - 0.2 * Math.max(cell.attributes[ELEVATION] / maxElevation, 0.0);
 		}
 	}
 
