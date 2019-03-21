@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Collection;
+
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
@@ -76,5 +78,22 @@ public class Point2d {
 		double newY = y + Math.sin(angle) * distance;
 
 		return new Point2d(newX, newY);
+	}
+
+	public static Point2d calculateCentroid(Collection<Point2d> points) {
+		double sumX = 0.0;
+		double sumY = 0.0;
+		int numberOfPoints = points.size();
+
+		if(numberOfPoints == 0) {
+			throw new IllegalArgumentException("No Points!");
+		}
+
+		for (Point2d point : points) {
+			sumX += point.x;
+			sumY += point.y;
+		}
+
+		return new Point2d(sumX / numberOfPoints, sumY / numberOfPoints);
 	}
 }

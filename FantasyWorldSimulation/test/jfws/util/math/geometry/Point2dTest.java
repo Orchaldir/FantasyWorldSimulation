@@ -3,10 +3,14 @@ package jfws.util.math.geometry;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class Point2dTest {
 
@@ -24,6 +28,8 @@ class Point2dTest {
 
 	private static final Point2d POINT_0 = new Point2d(X0, Y0);
 	private static final Point2d POINT_1 = new Point2d(X1, Y1);
+	private static final Point2d POINT_2 = new Point2d(X1, Y0);
+	private static final Point2d POINT_3 = new Point2d(X0, Y1);
 
 	private static final Point2d ZERO = new Point2d(0, 0);
 	private static final Point2d UNIT_X = new Point2d(1, 0);
@@ -198,6 +204,23 @@ class Point2dTest {
 			assertPoint(POINT_0.fromPolar(Math.PI * 1.0, 3.0), -2.0, 2.0);
 			assertPoint(POINT_0.fromPolar(Math.PI * 1.5, 4.0), 1.0, -2.0);
 			assertPoint(POINT_0.fromPolar(Math.PI * 2.0, 5.0), 6.0, 2.0);
+		}
+	}
+
+	@Nested
+	class TestCalculateCentroid {
+
+		@Test
+		public void testCalculateCentroid() {
+			Point2d centroid = Point2d.calculateCentroid(List.of(POINT_0, POINT_1, POINT_2, POINT_3));
+
+			assertThat(centroid.getX(), is(equalTo(2.5)));
+			assertThat(centroid.getY(), is(equalTo(4.0)));
+		}
+
+		@Test
+		public void testCalculateCentroidWithEmptyList() {
+			assertThrows(IllegalArgumentException.class, () ->  Point2d.calculateCentroid(Collections.emptyList()));
 		}
 	}
 
