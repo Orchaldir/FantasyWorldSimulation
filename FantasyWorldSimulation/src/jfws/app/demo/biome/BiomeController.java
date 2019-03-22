@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import jfws.feature.world.WorldCell;
+import jfws.feature.world.generation.AddGeneratorStep;
 import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.temperature.TemperatureColorSelector;
 import jfws.util.math.generator.Sum;
@@ -83,20 +84,23 @@ public class BiomeController {
 		Transformation elevationNoise = new Transformation(simplexNoise, 55.0, 120, 200);
 		CircularGradient circularGradient = new CircularGradient(interpolator, BOTTOM, 350, 100.0, -65.0);
 		Sum elevationGenerator = new Sum(List.of(elevationNoise, circularGradient));
+		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationGenerator, ELEVATION);
 
 		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(interpolator, CENTER, UP,
 				CENTER.getY(), 0.9, 0.1);
+		AddGeneratorStep temperatureStep = new AddGeneratorStep(temperatureGenerator, TEMPERATURE);
 
 		for (Face<Void, Void, WorldCell> face : voronoiDiagram.getMesh().getFaces()) {
 			face.setData(new WorldCell());
 		}
 
+		elevationStep.generate(voronoiDiagram.getMesh());
+		temperatureStep.generate(voronoiDiagram.getMesh());
+
 		for (Face<Void, Void, WorldCell> face : voronoiDiagram.getMesh().getFaces()) {
-			Point2d point = points.get(face.getId());
 			WorldCell cell = face.getData();
 
-			cell.attributes[ELEVATION] = elevationGenerator.generate(point);
-			cell.attributes[TEMPERATURE] = temperatureGenerator.generate(point) - 0.2 * Math.max(cell.attributes[ELEVATION] / maxElevation, 0.0);
+			cell.attributes[TEMPERATURE] -= 0.2 * Math.max(cell.attributes[ELEVATION] / maxElevation, 0.0);
 		}
 	}
 

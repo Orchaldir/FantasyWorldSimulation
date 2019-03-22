@@ -8,7 +8,7 @@ public class WorldCell implements ElevationCell, TemperatureCell {
 	public static final int ELEVATION = 0;
 	public static final int TEMPERATURE = 1;
 
-	public final Double[] attributes = new Double[2];
+	public final Double[] attributes = { 0.0, 0.0 };
 
 	@Override
 	public double getElevation() {
