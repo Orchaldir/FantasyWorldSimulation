@@ -11,9 +11,16 @@ ifndef::imagesdir[:imagesdir: ../images/]
 | 2019.2.0
 |
 
-*Known Issue:*
+*New:*
 
-* https://github.com/Orchaldir/FantasyWorldSimulation/issues/59[#59]:
+* Added world generation with following attributes:
+** Elevation
+** Temperature
+** Rainfall
+
+*Fixed:*
+
+* Fixed https://github.com/Orchaldir/FantasyWorldSimulation/issues/59[#59]:
 Mesh of Voronoi Diagram has holes
 
 | 2019.1.0
