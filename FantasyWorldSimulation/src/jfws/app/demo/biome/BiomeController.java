@@ -11,7 +11,7 @@ import jfws.features.elevation.ElevationColorSelector;
 import jfws.features.rainfall.RainfallColorSelector;
 import jfws.features.temperature.TemperatureColorSelector;
 import jfws.util.math.generator.Sum;
-import jfws.util.math.generator.Transformation;
+import jfws.util.math.generator.noise.Transformation;
 import jfws.util.math.generator.gradient.AbsoluteLinearGradient;
 import jfws.util.math.generator.gradient.CircularGradient;
 import jfws.util.math.generator.noise.SimplexNoise;
@@ -54,7 +54,7 @@ public class BiomeController {
 	@FXML
 	private ComboBox<SelectedFeature> featureComboBox;
 
-	private SelectedFeature selectedFeature = SelectedFeature.ELEVATION;
+	private SelectedFeature selectedFeature = SelectedFeature.RAINFALL;
 
 	private CanvasRenderer canvasRenderer;
 	private MeshRenderer meshRenderer;
@@ -100,7 +100,7 @@ public class BiomeController {
 		log.info("generateElevation()");
 
 		SimplexNoise simplexNoise = new SimplexNoise();
-		Transformation elevationNoise = new Transformation(simplexNoise, 55.0, 120, 200);
+		Transformation elevationNoise = new Transformation(simplexNoise, -10.0, 120, 200);
 		CircularGradient circularGradient = new CircularGradient(new LinearInterpolator(), BOTTOM, 350, 100.0, -65.0);
 		Sum elevationGenerator = new Sum(List.of(elevationNoise, circularGradient));
 		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationGenerator, ELEVATION);
@@ -124,7 +124,7 @@ public class BiomeController {
 		log.info("generateRainfall()");
 
 		SimplexNoise simplexNoise = new SimplexNoise();
-		Transformation elevationNoise = new Transformation(simplexNoise, 0.5, 1.0, 200);
+		Transformation elevationNoise = new Transformation(simplexNoise, 0.0, 1.0, 200, 300, 300);
 		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationNoise, RAINFALL);
 
 		elevationStep.generate(mesh);

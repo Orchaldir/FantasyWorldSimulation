@@ -68,12 +68,6 @@ public class SimplexNoise implements Generator {
 	private static final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
 	private static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
 
-	// This method is a *lot* faster than using (int)Math.floor(x)
-	public static int floorFast(double x) {
-		int xi = (int) x;
-		return x < xi ? xi - 1 : xi;
-	}
-
 	@Override
 	public double generate(double xin, double yin) {
 		// Noise contributions from the three corners
@@ -156,5 +150,11 @@ public class SimplexNoise implements Generator {
 		// Add contributions from each corner to get the final noise value.
 		// The result is scaled to return values in the interval [-1,1].
 		return 70.0 * (n0 + n1 + n2);
+	}
+
+	// This method is a *lot* faster than using (int)Math.floor(x)
+	public static int floorFast(double x) {
+		int xi = (int) x;
+		return x < xi ? xi - 1 : xi;
 	}
 }

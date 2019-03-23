@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum RainfallLevel {
-	VERY_WET(Color.LIGHTBLUE),
-	WET(Color.CYAN),
+	VERY_WET(Color.BLUE),
+	WET(Color.LIGHTBLUE),
 	AVERAGE(Color.GREEN),
 	DRY(Color.LIGHTGOLDENRODYELLOW),
 	VERY_DRY(Color.GOLDENROD);
