@@ -6,7 +6,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import jfws.feature.world.WorldCell;
 import jfws.feature.world.generation.AddGeneratorStep;
+import jfws.feature.world.generation.ModifyWithAttributeStep;
 import jfws.features.elevation.ElevationColorSelector;
+import jfws.features.rainfall.RainfallColorSelector;
 import jfws.features.temperature.TemperatureColorSelector;
 import jfws.util.math.generator.Sum;
 import jfws.util.math.generator.Transformation;
@@ -17,6 +19,7 @@ import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
 import jfws.util.math.geometry.mesh.Face;
+import jfws.util.math.geometry.mesh.Mesh;
 import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
 import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
 import jfws.util.math.geometry.voronoi.ImageBasedVoronoiDiagram;
@@ -28,8 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-import static jfws.feature.world.WorldCell.ELEVATION;
-import static jfws.feature.world.WorldCell.TEMPERATURE;
+import static jfws.feature.world.WorldCell.*;
 
 @Slf4j
 public class BiomeController {
@@ -38,10 +40,12 @@ public class BiomeController {
 	public static final Point2d CENTER = SIZE.multiply(0.5);
 	public static final Point2d BOTTOM = new Point2d(CENTER.getX(), 0);
 	public static final Point2d UP = new Point2d(0, 1);
+	public static final double MAX_ELEVATION = 175.0;
 
 	enum SelectedFeature {
 		ELEVATION,
-		TEMPERATURE
+		TEMPERATURE,
+		RAINFALL
 	}
 
 	@FXML
@@ -57,6 +61,7 @@ public class BiomeController {
 
 	private ColorSelector elevationColorSelector = new ElevationColorSelector();
 	private ColorSelector temperatureColorSelector = new TemperatureColorSelector();
+	private ColorSelector rainfallColorSelector = new RainfallColorSelector();
 
 	private final double poissonDiskRadius = 5.0;
 
@@ -78,30 +83,51 @@ public class BiomeController {
 
 		log.info("createWorldMap(): Init cells");
 
-		LinearInterpolator interpolator = new LinearInterpolator();
-		SimplexNoise simplexNoise = new SimplexNoise();
-		double maxElevation = 175.0;
-		Transformation elevationNoise = new Transformation(simplexNoise, 55.0, 120, 200);
-		CircularGradient circularGradient = new CircularGradient(interpolator, BOTTOM, 350, 100.0, -65.0);
-		Sum elevationGenerator = new Sum(List.of(elevationNoise, circularGradient));
-		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationGenerator, ELEVATION);
+		Mesh<Void, Void, WorldCell> mesh = voronoiDiagram.getMesh();
 
-		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(interpolator, CENTER, UP,
-				CENTER.getY(), 0.9, 0.1);
-		AddGeneratorStep temperatureStep = new AddGeneratorStep(temperatureGenerator, TEMPERATURE);
-
-		for (Face<Void, Void, WorldCell> face : voronoiDiagram.getMesh().getFaces()) {
+		for (Face<Void, Void, WorldCell> face : mesh.getFaces()) {
 			face.setData(new WorldCell());
 		}
 
-		elevationStep.generate(voronoiDiagram.getMesh());
-		temperatureStep.generate(voronoiDiagram.getMesh());
+		generateElevation(mesh);
+		generateTemperature(mesh);
+		generateRainfall(mesh);
 
-		for (Face<Void, Void, WorldCell> face : voronoiDiagram.getMesh().getFaces()) {
-			WorldCell cell = face.getData();
+		log.info("createWorldMap(): finished");
+	}
 
-			cell.attributes[TEMPERATURE] -= 0.2 * Math.max(cell.attributes[ELEVATION] / maxElevation, 0.0);
-		}
+	private void generateElevation(Mesh<Void, Void, WorldCell> mesh) {
+		log.info("generateElevation()");
+
+		SimplexNoise simplexNoise = new SimplexNoise();
+		Transformation elevationNoise = new Transformation(simplexNoise, 55.0, 120, 200);
+		CircularGradient circularGradient = new CircularGradient(new LinearInterpolator(), BOTTOM, 350, 100.0, -65.0);
+		Sum elevationGenerator = new Sum(List.of(elevationNoise, circularGradient));
+		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationGenerator, ELEVATION);
+
+		elevationStep.generate(mesh);
+	}
+
+	private void generateTemperature(Mesh<Void, Void, WorldCell> mesh) {
+		log.info("generateTemperature()");
+
+		AbsoluteLinearGradient temperatureGenerator = new AbsoluteLinearGradient(new LinearInterpolator(), CENTER, UP,
+				CENTER.getY(), 0.9, 0.1);
+		AddGeneratorStep temperatureStep = new AddGeneratorStep(temperatureGenerator, TEMPERATURE);
+		ModifyWithAttributeStep subtractElevationStep = new ModifyWithAttributeStep(ELEVATION, TEMPERATURE, 0.0, Double.MAX_VALUE, -0.3 / MAX_ELEVATION);
+
+		temperatureStep.generate(mesh);
+		subtractElevationStep.generate(mesh);
+	}
+
+	private void generateRainfall(Mesh<Void, Void, WorldCell> mesh) {
+		log.info("generateRainfall()");
+
+		SimplexNoise simplexNoise = new SimplexNoise();
+		Transformation elevationNoise = new Transformation(simplexNoise, 0.5, 1.0, 200);
+		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationNoise, RAINFALL);
+
+		elevationStep.generate(mesh);
 	}
 
 	@FXML
@@ -128,11 +154,13 @@ public class BiomeController {
 	}
 
 	private ColorSelector getColorSelector() {
-		if(selectedFeature == SelectedFeature.ELEVATION) {
-			return elevationColorSelector;
-		}
-		else {
-			return temperatureColorSelector;
+		switch (selectedFeature) {
+			case ELEVATION:
+				return elevationColorSelector;
+			case TEMPERATURE:
+				return temperatureColorSelector;
+			default:
+				return rainfallColorSelector;
 		}
 	}
 
