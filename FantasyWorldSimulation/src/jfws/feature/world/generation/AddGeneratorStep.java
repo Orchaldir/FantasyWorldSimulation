@@ -24,6 +24,6 @@ public class AddGeneratorStep implements WorldGenerationStep {
 		Point2d point = Point2d.calculateCentroid(face.getPointsInCCW());
 		WorldCell cell = face.getData();
 
-		cell.attributes[index] += generator.generate(point);
+		cell.addToAttribute(index, generator.generate(point));
 	}
 }

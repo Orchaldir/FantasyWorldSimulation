@@ -48,7 +48,7 @@ class AddGeneratorStepTest {
 		addGeneratorStep = spy(new AddGeneratorStep(generator, INDEX));
 
 		cell = new WorldCell();
-		cell.attributes[INDEX] = 4.5;
+		cell.setAttribute(INDEX, 4.5);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ class AddGeneratorStepTest {
 
 		addGeneratorStep.generateFace(face0);
 
-		assertThat(cell.attributes[INDEX], is(equalTo(5.7)));
+		assertThat(cell.getAttribute(INDEX), is(equalTo(5.7)));
 
 		verify(face0, times(1)).getData();
 		verify(face0, times(1)).getPointsInCCW();

@@ -10,16 +10,23 @@ public class WorldCell implements ElevationCell, TemperatureCell, RainfallCell {
 	public static final int TEMPERATURE = 1;
 	public static final int RAINFALL = 2;
 
-	public final Double[] attributes = { 0.0, 0.0, 0.0 };
+	private final Double[] attributes = { 0.0, 0.0, 0.0 };
+
+	public double getAttribute(int index) {
+		return attributes[index];
+	}
+
+	public void setAttribute(int index, double value) {
+		attributes[index] = value;
+	}
+
+	public void addToAttribute(int index, double value) {
+		attributes[index] += value;
+	}
 
 	@Override
 	public double getElevation() {
 		return attributes[ELEVATION];
-	}
-
-	@Override
-	public void setElevation(double value) {
-		attributes[ELEVATION] = value;
 	}
 
 	@Override
@@ -28,17 +35,7 @@ public class WorldCell implements ElevationCell, TemperatureCell, RainfallCell {
 	}
 
 	@Override
-	public void setTemperature(double value) {
-		attributes[TEMPERATURE] = value;
-	}
-
-	@Override
 	public double getRainfall() {
 		return attributes[RAINFALL];
-	}
-
-	@Override
-	public void setRainfall(double value) {
-		attributes[RAINFALL] = value;
 	}
 }

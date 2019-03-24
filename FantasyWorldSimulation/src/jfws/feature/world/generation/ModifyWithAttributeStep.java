@@ -24,6 +24,7 @@ public class ModifyWithAttributeStep implements WorldGenerationStep {
 	public void generateFace(Face<Void, Void, WorldCell> face) {
 		WorldCell cell = face.getData();
 
-		cell.attributes[targetIndex] += factor * Math.min(Math.max(cell.attributes[sourceIndex], minValue), maxValue);
+		double value = factor * Math.min(Math.max(cell.getAttribute(sourceIndex), minValue), maxValue);
+		cell.addToAttribute(targetIndex, value);
 	}
 }
