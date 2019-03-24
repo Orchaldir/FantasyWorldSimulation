@@ -14,6 +14,6 @@ public class TemperatureColorSelector<T extends TemperatureCell> implements Colo
 	public Color select(T cell) {
 		double temperature = cell.getTemperature();
 
-		return TemperatureLevel.getColor(temperature);
+		return TemperatureLevel.UTILITY.getColor(temperature);
 	}
 }

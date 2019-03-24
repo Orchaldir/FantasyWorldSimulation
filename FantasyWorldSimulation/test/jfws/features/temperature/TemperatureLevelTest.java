@@ -12,6 +12,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 class TemperatureLevelTest {
 
+	private static final double LEVEL_WIDTH = TemperatureLevel.UTILITY.getLevelWidth();
+
 	@Nested
 	class TestGetLevelIndex {
 
@@ -104,5 +106,17 @@ class TemperatureLevelTest {
 			assertThat(color.getGreen(), is(closeTo(0.823, 0.001)));
 			assertThat(color.getRed(), is(equalTo(1.0)));
 		}
+	}
+
+	private double getLevelIndex(double value) {
+		return TemperatureLevel.UTILITY.getLevelIndex(value);
+	}
+
+	private TemperatureLevel from(double value) {
+		return TemperatureLevel.UTILITY.from(value);
+	}
+
+	private Color getColor(double value) {
+		return TemperatureLevel.UTILITY.getColor(value);
 	}
 }
