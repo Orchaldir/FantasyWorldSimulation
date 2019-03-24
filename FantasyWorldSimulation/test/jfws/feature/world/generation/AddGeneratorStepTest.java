@@ -4,7 +4,6 @@ import jfws.feature.world.WorldCell;
 import jfws.util.math.generator.Generator;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.mesh.Face;
-import jfws.util.math.geometry.mesh.Mesh;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,10 +20,7 @@ class AddGeneratorStepTest {
 
 	private Generator generator;
 
-	private Mesh<Void, Void, WorldCell> mesh;
-
-	private Face<Void, Void, WorldCell> face0;
-	private Face<Void, Void, WorldCell> face1;
+	private Face<Void, Void, WorldCell> face;
 
 	private AddGeneratorStep addGeneratorStep;
 
@@ -40,44 +36,26 @@ class AddGeneratorStepTest {
 	public void setUp() {
 		generator = mock(Generator.class);
 
-		mesh = mock(Mesh.class);
+		face = mock(Face.class);
 
-		face0 = mock(Face.class);
-		face1 = mock(Face.class);
-
-		addGeneratorStep = spy(new AddGeneratorStep(generator, INDEX));
+		addGeneratorStep = new AddGeneratorStep(generator, INDEX);
 
 		cell = new WorldCell();
 		cell.setAttribute(INDEX, 4.5);
 	}
 
 	@Test
-	public void testGenerate() {
-		doNothing().when(addGeneratorStep).generateFace(any());
-		when(mesh.getFaces()).thenReturn(List.of(face0, face1));
-
-		addGeneratorStep.generate(mesh);
-
-		verifyGenerateFace(face0);
-		verifyGenerateFace(face1);
-	}
-
-	private void verifyGenerateFace(Face<Void, Void, WorldCell> face0) {
-		verify(addGeneratorStep, times(1)).generateFace(eq(face0));
-	}
-
-	@Test
-	public void testGenerateFace() {
-		when(face0.getData()).thenReturn(cell);
-		when(face0.getPointsInCCW()).thenReturn(List.of(CORNER0, CORNER1, CORNER2, CORNER3));
+	public void testGenerateCell() {
+		when(face.getData()).thenReturn(cell);
+		when(face.getPointsInCCW()).thenReturn(List.of(CORNER0, CORNER1, CORNER2, CORNER3));
 		when(generator.generate(CENTER)).thenReturn(1.2);
 
-		addGeneratorStep.generateFace(face0);
+		addGeneratorStep.generateCell(face);
 
 		assertThat(cell.getAttribute(INDEX), is(equalTo(5.7)));
 
-		verify(face0, times(1)).getData();
-		verify(face0, times(1)).getPointsInCCW();
+		verify(face, times(1)).getData();
+		verify(face, times(1)).getPointsInCCW();
 		verify(generator, times(1)).generate(eq(CENTER));
 	}
 
