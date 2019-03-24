@@ -14,6 +14,11 @@ class TemperatureLevelTest {
 
 	private static final double LEVEL_WIDTH = TemperatureLevel.UTILITY.getLevelWidth();
 
+	@Test
+	public void testGetters() {
+		assertThat(LEVEL_WIDTH, is(closeTo(0.166666, 0.0001)));
+	}
+
 	@Nested
 	class TestGetLevelIndex {
 

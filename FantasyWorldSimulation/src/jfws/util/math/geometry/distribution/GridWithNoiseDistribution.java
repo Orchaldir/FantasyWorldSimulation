@@ -10,19 +10,14 @@ import java.util.List;
 
 @AllArgsConstructor
 @Slf4j
-public class GridWithNoiseDistribution implements PointDistribution {
+public class GridWithNoiseDistribution extends AbstractPointDistribution {
 
 	public static final double MIN_DISTANCE = 0.2;
 	protected RandomNumberGenerator generator;
 
 	@Override
 	public List<Point2d> distributePoints(Point2d size, double radius) {
-		if(size.getX() <= 0.0) {
-			throw new IllegalArgumentException("X is too small!");
-		}
-		else if(size.getY() <= 0.0) {
-			throw new IllegalArgumentException("Y is too small!");
-		}
+		checkForInvalidSize(size);
 
 		double length = radius * 2.0;
 		double columns = Math.ceil(size.getX() / length);

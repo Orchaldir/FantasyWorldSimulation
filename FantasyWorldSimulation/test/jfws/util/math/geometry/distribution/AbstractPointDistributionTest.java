@@ -25,6 +25,7 @@ public abstract class AbstractPointDistributionTest {
 		createRandomNumberGenerator();
 		createRandomPointDistribution();
 
+		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(0.0, 1.0), 2));
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(-1.0, 1.0), 2));
 	}
 
@@ -33,6 +34,7 @@ public abstract class AbstractPointDistributionTest {
 		createRandomNumberGenerator();
 		createRandomPointDistribution();
 
+		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(1.0, 0.0), 2));
 		assertThrows(IllegalArgumentException.class, () ->  distribution.distributePoints(new Point2d(1.0, -1.0), 2));
 	}
 

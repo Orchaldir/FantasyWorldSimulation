@@ -1,6 +1,7 @@
 package jfws.util.math.geometry.distribution;
 
 import jfws.util.math.geometry.Point2d;
+import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.random.RandomNumberGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 
 	private static final int MAY_ATTEMPTS = 20;
 
-	protected RandomNumberGenerator generator;
+	protected final RandomNumberGenerator generator;
 
 	@Override
 	public List<Point2d> distributePoints(Point2d size, double radius) {
@@ -34,15 +35,16 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 		activeIndices.add(0);
 
 		double minDistance = radius * 2.0;
+		Rectangle rectangle = Rectangle.fromSize(size);
 
-		while(generateValidPoint(points, activeIndices, size, minDistance));
+		while(generateValidPoint(points, activeIndices, rectangle, minDistance));
 
 		log.info("distributePoints(): points={}", points.size());
 
 		return points;
 	}
 
-	protected boolean generateValidPoint(List<Point2d> points, List<Integer> activeIndices, Point2d size, double minDistance) {
+	protected boolean generateValidPoint(List<Point2d> points, List<Integer> activeIndices, Rectangle rectangle, double minDistance) {
 		while(!activeIndices.isEmpty()) {
 			Integer activeIndex = activeIndices.get(0);
 			Point2d activePoint = points.get(activeIndex);
@@ -50,7 +52,7 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 			for (int i = 0; i < MAY_ATTEMPTS; i++) {
 				Point2d candidate = generateCandidate(activePoint, minDistance);
 
-				if(isCandidateValid(points, candidate, size, minDistance)) {
+				if(isCandidateValid(points, candidate, rectangle, minDistance)) {
 					activeIndices.add(points.size());
 					points.add(candidate);
 					return true;
@@ -70,8 +72,8 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 		return activePoint.fromPolar(angle, distance);
 	}
 
-	protected boolean isCandidateValid(List<Point2d> points, Point2d candidate, Point2d size, double minDistance) {
-		if(isOutside(candidate, size)) {
+	protected boolean isCandidateValid(List<Point2d> points, Point2d candidate, Rectangle rectangle, double minDistance) {
+		if(!rectangle.isInside(candidate)) {
 			return false;
 		}
 
@@ -84,12 +86,5 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 		}
 
 		return true;
-	}
-
-	private boolean isOutside(Point2d candidate, Point2d size) {
-		return  candidate.getX() < 0 ||
-				candidate.getY() < 0 ||
-				candidate.getX() > size.getX() ||
-				candidate.getY() > size.getY();
 	}
 }

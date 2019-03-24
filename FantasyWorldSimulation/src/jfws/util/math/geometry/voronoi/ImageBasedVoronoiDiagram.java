@@ -89,7 +89,7 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
 		for (PointData pointData : pointDataList) {
 			if(pointData.vertices.size() < 3) {
-				log.warn("createFaces(): Face {} as too few points!", id, pointData.point);
+				log.warn("createFaces(): Voronoi cell {} has too few corners!", id, pointData.point);
 				continue;
 			}
 
