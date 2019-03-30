@@ -29,7 +29,7 @@ Mesh of Voronoi Diagram has holes
 .The point distribution demo
 image::point-distribution-demo.png[Point Distribution Demo]
 
-.The Voronoin demo
+.The Voronoi demo
 image::voronoi-demo.png[Voronoi Demo]
 
 *New:*
