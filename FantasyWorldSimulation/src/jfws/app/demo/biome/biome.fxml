@@ -25,7 +25,7 @@
                </items></ToolBar>
          </top>
          <center>
-            <Canvas fx:id="mapCanvas" height="600.0" width="1000.0" BorderPane.alignment="TOP_LEFT" />
+            <Canvas fx:id="mapCanvas" height="600.0" onMouseClicked="#onMouseClicked" width="1000.0" BorderPane.alignment="TOP_LEFT" />
          </center>
       </BorderPane>
    </children>
