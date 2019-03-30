@@ -1,4 +1,4 @@
-package jfws.features.elevation;
+package jfws.feature.world.attribute.elevation;
 
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,9 @@
-package jfws.features.elevation;
+package jfws.feature.world.attribute.elevation;
 
 import javafx.scene.paint.Color;
 import jfws.util.rendering.ColorSelector;
 
-import static jfws.features.elevation.ElevationCell.*;
+import static jfws.feature.world.attribute.elevation.ElevationCell.*;
 
 public class ElevationColorSelector<T extends ElevationCell> implements ColorSelector<T> {
 

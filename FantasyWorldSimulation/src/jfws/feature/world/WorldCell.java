@@ -1,8 +1,8 @@
 package jfws.feature.world;
 
-import jfws.features.elevation.ElevationCell;
-import jfws.features.rainfall.RainfallCell;
-import jfws.features.temperature.TemperatureCell;
+import jfws.feature.world.attribute.elevation.ElevationCell;
+import jfws.feature.world.attribute.rainfall.RainfallCell;
+import jfws.feature.world.attribute.temperature.TemperatureCell;
 
 public class WorldCell implements ElevationCell, TemperatureCell, RainfallCell {
 

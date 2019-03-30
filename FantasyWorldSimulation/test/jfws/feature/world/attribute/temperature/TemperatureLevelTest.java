@@ -1,10 +1,10 @@
-package jfws.features.temperature;
+package jfws.feature.world.attribute.temperature;
 
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static jfws.features.temperature.TemperatureLevel.*;
+import static jfws.feature.world.attribute.temperature.TemperatureLevel.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;

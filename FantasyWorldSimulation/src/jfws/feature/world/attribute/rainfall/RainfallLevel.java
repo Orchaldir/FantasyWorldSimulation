@@ -1,8 +1,8 @@
-package jfws.features.rainfall;
+package jfws.feature.world.attribute.rainfall;
 
 import javafx.scene.paint.Color;
-import jfws.features.AttributeLevel;
-import jfws.features.AttributeLevelUtility;
+import jfws.feature.world.attribute.AttributeLevel;
+import jfws.feature.world.attribute.AttributeLevelUtility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

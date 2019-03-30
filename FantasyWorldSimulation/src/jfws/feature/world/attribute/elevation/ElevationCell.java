@@ -1,4 +1,4 @@
-package jfws.features.elevation;
+package jfws.feature.world.attribute.elevation;
 
 public interface ElevationCell {
 

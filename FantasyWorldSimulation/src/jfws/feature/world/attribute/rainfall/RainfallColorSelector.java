@@ -1,4 +1,4 @@
-package jfws.features.rainfall;
+package jfws.feature.world.attribute.rainfall;
 
 import javafx.scene.paint.Color;
 import jfws.util.rendering.ColorSelector;

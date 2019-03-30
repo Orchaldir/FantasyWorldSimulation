@@ -1,4 +1,4 @@
-package jfws.features.temperature;
+package jfws.feature.world.attribute.temperature;
 
 import javafx.scene.paint.Color;
 import jfws.util.rendering.ColorSelector;

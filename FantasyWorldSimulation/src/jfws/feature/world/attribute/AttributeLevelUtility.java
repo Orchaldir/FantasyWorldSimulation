@@ -1,4 +1,4 @@
-package jfws.features;
+package jfws.feature.world.attribute;
 
 import javafx.scene.paint.Color;
 import lombok.Getter;
