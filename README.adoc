@@ -10,7 +10,7 @@ image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasy
 * See link:FantasyWorldSimulation/docs/adr/index.adoc[Architectural Decision Records].
 * See link:FantasyWorldSimulation/docs/docu/release-notes/index.adoc[Release Notes].
 
-Current Milestone: https://github.com/Orchaldir/FantasyWorldSimulation/milestone/4[Biomes]
+Current Milestone: https://github.com/Orchaldir/FantasyWorldSimulation/milestone/7[World Map Features]
 
 == How to run the Demos
 
