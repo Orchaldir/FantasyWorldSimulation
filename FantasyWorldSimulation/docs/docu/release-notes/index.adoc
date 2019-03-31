@@ -11,6 +11,12 @@ ifndef::imagesdir[:imagesdir: ../images/]
 | 2019.2.0
 |
 
+.The generated elevation
+image::biome/elevation.png[Biome Demo - Elevation]
+
+.The generated temperature
+image::biome/temperature.png[Biome Demo - Temperature]
+
 *New:*
 
 * Added world generation with following attributes:
