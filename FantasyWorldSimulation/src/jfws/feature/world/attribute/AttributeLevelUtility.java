@@ -27,8 +27,8 @@ public class AttributeLevelUtility<T extends AttributeLevel> {
 		return featureLevels[levelIndex];
 	}
 
-	public Color getColor(double rainfall) {
-		double levelIndex = getLevelIndex(rainfall);
+	public Color getColor(double value) {
+		double levelIndex = getLevelIndex(value);
 		int lowerLevelIndex = (int) levelIndex;
 		Color lowerColor = featureLevels[lowerLevelIndex].getColor();
 		Color higherColor = featureLevels[(int) Math.ceil(levelIndex)].getColor();

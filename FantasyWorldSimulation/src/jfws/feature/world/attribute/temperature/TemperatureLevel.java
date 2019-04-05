@@ -1,6 +1,8 @@
 package jfws.feature.world.attribute.temperature;
 
 import javafx.scene.paint.Color;
+import jfws.feature.world.attribute.AttributeCell;
+import jfws.feature.world.attribute.AttributeColorSelector;
 import jfws.feature.world.attribute.AttributeLevel;
 import jfws.feature.world.attribute.AttributeLevelUtility;
 import lombok.AllArgsConstructor;
@@ -16,8 +18,14 @@ public enum TemperatureLevel implements AttributeLevel {
 	HOT(Color.ORANGE),
 	VERY_HOT(Color.RED);
 
-	public static final AttributeLevelUtility<TemperatureLevel> UTILITY = new AttributeLevelUtility<>(values());
-
 	@Getter
 	private final Color color;
+
+	public static final AttributeLevelUtility<TemperatureLevel> UTILITY = new AttributeLevelUtility<>(values());
+	public static final String NAME = "Temperature";
+
+	public static <T extends AttributeCell>
+	AttributeColorSelector<T> createColorSelector(int index) {
+		return new AttributeColorSelector<T>(NAME, UTILITY, index);
+	}
 }

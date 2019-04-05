@@ -1,6 +1,9 @@
 package jfws.feature.world.attribute.temperature;
 
 import javafx.scene.paint.Color;
+import jfws.feature.world.attribute.AttributeCell;
+import jfws.feature.world.attribute.AttributeColorSelector;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -11,12 +14,17 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 class TemperatureLevelTest {
+	
+	private double levelWidth;
 
-	private static final double LEVEL_WIDTH = TemperatureLevel.UTILITY.getLevelWidth();
+	@BeforeEach
+	public void setUp() {
+		levelWidth = TemperatureLevel.UTILITY.getLevelWidth();
+	}
 
 	@Test
 	public void testGetters() {
-		assertThat(LEVEL_WIDTH, is(closeTo(0.166666, 0.0001)));
+		assertThat(levelWidth, is(closeTo(0.166666, 0.0001)));
 	}
 
 	@Nested
@@ -34,23 +42,23 @@ class TemperatureLevelTest {
 
 		@Test
 		public void testGetLevelIndex() {
-			assertThat(getLevelIndex(LEVEL_WIDTH * 0), is(closeTo(0.0, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 1), is(closeTo(1.0, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 2), is(closeTo(2.0, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 3), is(closeTo(3.0, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 4), is(closeTo(4.0, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 5), is(closeTo(5.0, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 6), is(closeTo(6.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 0), is(closeTo(0.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 1), is(closeTo(1.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 2), is(closeTo(2.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 3), is(closeTo(3.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 4), is(closeTo(4.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 5), is(closeTo(5.0, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 6), is(closeTo(6.0, 0.01)));
 		}
 
 		@Test
 		public void testGetLevelIndexOfCenterOfTheRange() {
-			assertThat(getLevelIndex(LEVEL_WIDTH * 0.5), is(closeTo(0.5, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 1.5), is(closeTo(1.5, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 2.5), is(closeTo(2.5, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 3.5), is(closeTo(3.5, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 4.5), is(closeTo(4.5, 0.01)));
-			assertThat(getLevelIndex(LEVEL_WIDTH * 5.5), is(closeTo(5.5, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 0.5), is(closeTo(0.5, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 1.5), is(closeTo(1.5, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 2.5), is(closeTo(2.5, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 3.5), is(closeTo(3.5, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 4.5), is(closeTo(4.5, 0.01)));
+			assertThat(getLevelIndex(levelWidth * 5.5), is(closeTo(5.5, 0.01)));
 		}
 	}
 
@@ -69,13 +77,13 @@ class TemperatureLevelTest {
 
 		@Test
 		public void testFrom() {
-			assertThat(from(LEVEL_WIDTH * 0), is(equalTo(VERY_COLD)));
-			assertThat(from(LEVEL_WIDTH * 1), is(equalTo(COLD)));
-			assertThat(from(LEVEL_WIDTH * 2), is(equalTo(COOL)));
-			assertThat(from(LEVEL_WIDTH * 3), is(equalTo(TEMPERATE)));
-			assertThat(from(LEVEL_WIDTH * 4), is(equalTo(WARM)));
-			assertThat(from(LEVEL_WIDTH * 5), is(equalTo(HOT)));
-			assertThat(from(LEVEL_WIDTH * 6), is(equalTo(VERY_HOT)));
+			assertThat(from(levelWidth * 0), is(equalTo(VERY_COLD)));
+			assertThat(from(levelWidth * 1), is(equalTo(COLD)));
+			assertThat(from(levelWidth * 2), is(equalTo(COOL)));
+			assertThat(from(levelWidth * 3), is(equalTo(TEMPERATE)));
+			assertThat(from(levelWidth * 4), is(equalTo(WARM)));
+			assertThat(from(levelWidth * 5), is(equalTo(HOT)));
+			assertThat(from(levelWidth * 6), is(equalTo(VERY_HOT)));
 		}
 	}
 
@@ -94,23 +102,32 @@ class TemperatureLevelTest {
 
 		@Test
 		public void testGetColor() {
-			assertThat(getColor(LEVEL_WIDTH * 0), is(equalTo(VERY_COLD.getColor())));
-			assertThat(getColor(LEVEL_WIDTH * 1), is(equalTo(COLD.getColor())));
-			assertThat(getColor(LEVEL_WIDTH * 2), is(equalTo(COOL.getColor())));
-			assertThat(getColor(LEVEL_WIDTH * 3), is(equalTo(TEMPERATE.getColor())));
-			assertThat(getColor(LEVEL_WIDTH * 4), is(equalTo(WARM.getColor())));
-			assertThat(getColor(LEVEL_WIDTH * 5), is(equalTo(HOT.getColor())));
-			assertThat(getColor(LEVEL_WIDTH * 6), is(equalTo(VERY_HOT.getColor())));
+			assertThat(getColor(levelWidth * 0), is(equalTo(VERY_COLD.getColor())));
+			assertThat(getColor(levelWidth * 1), is(equalTo(COLD.getColor())));
+			assertThat(getColor(levelWidth * 2), is(equalTo(COOL.getColor())));
+			assertThat(getColor(levelWidth * 3), is(equalTo(TEMPERATE.getColor())));
+			assertThat(getColor(levelWidth * 4), is(equalTo(WARM.getColor())));
+			assertThat(getColor(levelWidth * 5), is(equalTo(HOT.getColor())));
+			assertThat(getColor(levelWidth * 6), is(equalTo(VERY_HOT.getColor())));
 		}
 
 		@Test
 		public void testGetColorInterpolation() {
-			Color color = getColor(LEVEL_WIDTH * 4.5);
+			Color color = getColor(levelWidth * 4.5);
 
 			assertThat(color.getBlue(), is(equalTo(0.0)));
 			assertThat(color.getGreen(), is(closeTo(0.823, 0.001)));
 			assertThat(color.getRed(), is(equalTo(1.0)));
 		}
+	}
+
+	@Test
+	public void testCreateColorSelector() {
+		AttributeColorSelector<AttributeCell> colorSelector = createColorSelector(34);
+
+		assertThat(colorSelector.getName(), is(equalTo(NAME)));
+		assertThat(colorSelector.getIndex(), is(equalTo(34)));
+		assertThat(colorSelector.getUtility(), is(equalTo(UTILITY)));
 	}
 
 	private double getLevelIndex(double value) {
