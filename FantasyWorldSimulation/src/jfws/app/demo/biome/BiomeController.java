@@ -7,11 +7,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import jfws.feature.world.WorldCell;
+import jfws.feature.world.attribute.rainfall.RainfallLevel;
+import jfws.feature.world.attribute.temperature.TemperatureLevel;
 import jfws.feature.world.generation.AddGeneratorStep;
 import jfws.feature.world.generation.ModifyWithAttributeStep;
 import jfws.feature.world.attribute.elevation.ElevationColorSelector;
-import jfws.feature.world.attribute.rainfall.RainfallColorSelector;
-import jfws.feature.world.attribute.temperature.TemperatureColorSelector;
 import jfws.util.math.generator.Sum;
 import jfws.util.math.generator.noise.Transformation;
 import jfws.util.math.generator.gradient.AbsoluteLinearGradient;
@@ -62,8 +62,8 @@ public class BiomeController {
 	private MeshRenderer meshRenderer;
 
 	private ColorSelector elevationColorSelector = new ElevationColorSelector();
-	private ColorSelector temperatureColorSelector = new TemperatureColorSelector();
-	private ColorSelector rainfallColorSelector = new RainfallColorSelector();
+	private ColorSelector temperatureColorSelector = TemperatureLevel.createColorSelector(TEMPERATURE);
+	private ColorSelector rainfallColorSelector = RainfallLevel.createColorSelector(RAINFALL);
 
 	private final double poissonDiskRadius = 5.0;
 

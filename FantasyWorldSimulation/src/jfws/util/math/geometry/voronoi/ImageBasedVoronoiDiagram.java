@@ -51,6 +51,24 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 	}
 
 	@Override
+	public Face<V,E,F> getFace(Point2d point) {
+		if(!rectangle.isInside(point)) {
+			throw new IllegalArgumentException(String.format("{} is outside!", point));
+		}
+
+		Point2d relativePoint = point.subtract(rectangle.getStart());
+
+		int x = getCellDistance(relativePoint.getX());
+		int y = getCellDistance(relativePoint.getY());
+
+		log.info("getFace() {} -> x={} y={}", point, x, y);
+
+		int faceId = closestPointMap[x][y].getClosestPointId();
+
+		return meshBuilder.getFace(faceId);
+	}
+
+	@Override
 	public void update(List<Point2d> points) {
 		meshBuilder.clear();
 

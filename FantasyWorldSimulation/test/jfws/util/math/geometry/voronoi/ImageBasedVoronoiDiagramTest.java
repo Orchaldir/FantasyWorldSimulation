@@ -5,6 +5,7 @@ import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.Mesh;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -164,6 +165,25 @@ class ImageBasedVoronoiDiagramTest {
 		assertFaceIsBottomRight(1);
 		assertFaceIsTopRight(2);
 		assertFaceIsTopLeft(3);
+	}
+
+	@Nested
+	class TestGetFace {
+
+		@Test
+		public void testGetFaceWithPointIsOutside() {
+			assertThrows(IllegalArgumentException.class, () -> voronoiDiagram.getFace(OUTSIDE));
+		}
+
+		@Test
+		public void testGetFaceWithFourFaces() {
+			voronoiDiagram.update(List.of(POINT0, POINT1, POINT2, POINT3));
+
+			assertThat(voronoiDiagram.getFace(POINT0), is(equalTo(mesh.getFace(0))));
+			assertThat(voronoiDiagram.getFace(POINT1), is(equalTo(mesh.getFace(1))));
+			assertThat(voronoiDiagram.getFace(POINT2), is(equalTo(mesh.getFace(2))));
+			assertThat(voronoiDiagram.getFace(POINT3), is(equalTo(mesh.getFace(3))));
+		}
 	}
 
 	private void assertNumberOfFaces(int size) {
