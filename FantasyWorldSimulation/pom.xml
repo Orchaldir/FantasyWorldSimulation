@@ -13,6 +13,7 @@
         <java.version>1.9</java.version>
         <maven.compiler.source>1.9</maven.compiler.source>
         <maven.compiler.target>1.9</maven.compiler.target>
+        <sonar.coverage.exclusions>src/jfws/app/**/*</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
