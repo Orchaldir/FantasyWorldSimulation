@@ -7,6 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import jfws.feature.world.WorldCell;
+import jfws.feature.world.attribute.magic.ManaLevel;
 import jfws.feature.world.attribute.rainfall.RainfallLevel;
 import jfws.feature.world.attribute.temperature.TemperatureLevel;
 import jfws.feature.world.generation.AddGeneratorStep;
@@ -47,7 +48,8 @@ public class BiomeController {
 	enum SelectedFeature {
 		ELEVATION,
 		TEMPERATURE,
-		RAINFALL
+		RAINFALL,
+		MANA_LEVEL
 	}
 
 	@FXML
@@ -56,7 +58,7 @@ public class BiomeController {
 	@FXML
 	private ComboBox<SelectedFeature> featureComboBox;
 
-	private SelectedFeature selectedFeature = SelectedFeature.RAINFALL;
+	private SelectedFeature selectedFeature = SelectedFeature.MANA_LEVEL;
 
 	private CanvasRenderer canvasRenderer;
 	private MeshRenderer meshRenderer;
@@ -64,6 +66,7 @@ public class BiomeController {
 	private ColorSelector elevationColorSelector = new ElevationColorSelector();
 	private ColorSelector temperatureColorSelector = TemperatureLevel.createColorSelector(TEMPERATURE);
 	private ColorSelector rainfallColorSelector = RainfallLevel.createColorSelector(RAINFALL);
+	private ColorSelector manaLevelColorSelector = ManaLevel.createClosestLevelColorSelector(MANA_LEVEL);
 
 	private static final double POISSON_DISK_RADIUS = 5.0;
 
@@ -105,6 +108,7 @@ public class BiomeController {
 		generateElevation(mesh);
 		generateTemperature(mesh);
 		generateRainfall(mesh);
+		generateManaLevel(mesh);
 	}
 
 	private void generateElevation(Mesh<Void, Void, WorldCell> mesh) {
@@ -142,6 +146,16 @@ public class BiomeController {
 		elevationStep.generate(mesh);
 	}
 
+	private void generateManaLevel(Mesh<Void, Void, WorldCell> mesh) {
+		log.info("generateManaLevel()");
+
+		SimplexNoise simplexNoise = new SimplexNoise();
+		Transformation elevationNoise = new Transformation(simplexNoise, 0.0, 1.0, 1200, 1300, 300);
+		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationNoise, MANA_LEVEL);
+
+		elevationStep.generate(mesh);
+	}
+
 	@FXML
 	private void initialize() {
 		log.info("initialize()");
@@ -171,8 +185,10 @@ public class BiomeController {
 				return elevationColorSelector;
 			case TEMPERATURE:
 				return temperatureColorSelector;
-			default:
+			case RAINFALL:
 				return rainfallColorSelector;
+			default:
+				return manaLevelColorSelector;
 		}
 	}
 
