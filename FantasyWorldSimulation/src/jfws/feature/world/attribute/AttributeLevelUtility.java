@@ -35,6 +35,13 @@ public class AttributeLevelUtility<T extends AttributeLevel> {
 
 		return interpolate(levelIndex - lowerLevelIndex, 0, 1, lowerColor, higherColor);
 	}
+
+	public Color getClosestColor(double value) {
+		double levelIndex = getLevelIndex(value);
+		int lowerLevelIndex = (int) Math.round(levelIndex);
+		return featureLevels[lowerLevelIndex].getColor();
+	}
+
 	private Color interpolate(double value, double min, double max, Color start, Color end) {
 		double factor = (value - min) / (max - min);
 		return start.interpolate(end, factor);

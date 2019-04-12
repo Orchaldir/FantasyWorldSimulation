@@ -8,13 +8,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-class AttributeColorSelectorTest {
+class ClosestLevelColorSelectorTest {
 
 	public static final String NAME = "test";
 	public static final int INDEX = 77;
 
-	private AttributeColorSelector selector;
+	private ClosestLevelColorSelector selector;
 
 	private AttributeLevelUtility utility;
 	private AttributeCell cell;
@@ -24,7 +25,7 @@ class AttributeColorSelectorTest {
 		utility = mock(AttributeLevelUtility.class);
 		cell = mock(AttributeCell.class);
 
-		selector = new AttributeColorSelector(NAME, utility, INDEX);
+		selector = new ClosestLevelColorSelector(NAME, utility, INDEX);
 	}
 
 	@Test
@@ -35,11 +36,12 @@ class AttributeColorSelectorTest {
 	@Test
 	public void testSelect() {
 		when(cell.getAttribute(INDEX)).thenReturn(123.0);
-		when(utility.getColor(123.0)).thenReturn(Color.BLUEVIOLET);
+		when(utility.getClosestColor(123.0)).thenReturn(Color.BLUEVIOLET);
 
 		assertThat(selector.select(cell), is((equalTo(Color.BLUEVIOLET))));
 
 		verify(cell, times(1)).getAttribute(INDEX);
-		verify(utility, times(1)).getColor(123.0);
+		verify(utility, times(1)).getClosestColor(123.0);
 	}
+
 }

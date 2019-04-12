@@ -5,6 +5,7 @@ import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.Mesh;
 
 public abstract class CellGenerationStep implements WorldGenerationStep {
+
 	@Override
 	public void generate(Mesh<Void, Void, WorldCell> mesh) {
 		for (Face<Void, Void, WorldCell> face : mesh.getFaces()) {

@@ -1,18 +1,15 @@
 package jfws.feature.world.attribute.magic;
 
 import javafx.scene.paint.Color;
-import jfws.feature.world.attribute.AttributeCell;
-import jfws.feature.world.attribute.AttributeColorSelector;
-import jfws.feature.world.attribute.AttributeLevel;
-import jfws.feature.world.attribute.AttributeLevelUtility;
+import jfws.feature.world.attribute.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 public enum ManaLevel implements AttributeLevel {
-	NO_MANA(Color.BLACK),
-	LOW_MANA(Color.DARKGRAY),
-	AVERAGE_MANA(Color.LIGHTGRAY),
+	NO_MANA(Color.DARKRED),
+	LOW_MANA(Color.BLACK),
+	AVERAGE_MANA(Color.GRAY),
 	HIGH_MANA(Color.WHITE),
 	VERY_HIGH_MANA(Color.YELLOW);
 
@@ -25,5 +22,10 @@ public enum ManaLevel implements AttributeLevel {
 	public static <T extends AttributeCell>
 	AttributeColorSelector<T> createColorSelector(int index) {
 		return new AttributeColorSelector<>(ATTRIBUTE_NAME, UTILITY, index);
+	}
+
+	public static <T extends AttributeCell>
+	ClosestLevelColorSelector<T> createClosestLevelColorSelector(int index) {
+		return new ClosestLevelColorSelector<>(ATTRIBUTE_NAME, UTILITY, index);
 	}
 }

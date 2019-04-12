@@ -10,13 +10,13 @@ import lombok.AllArgsConstructor;
 public class AddGeneratorStep extends CellGenerationStep {
 
 	private final Generator generator;
-	private final int index;
+	private final int attributeIndex;
 
 	@Override
 	public void generateCell(Face<Void, Void, WorldCell> face) {
 		Point2d point = Point2d.calculateCentroid(face.getPointsInCCW());
 		WorldCell cell = face.getData();
 
-		cell.addToAttribute(index, generator.generate(point));
+		cell.addToAttribute(attributeIndex, generator.generate(point));
 	}
 }

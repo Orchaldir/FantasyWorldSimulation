@@ -121,6 +121,42 @@ class TemperatureLevelTest {
 		}
 	}
 
+	@Nested
+	class TestGetClosestColor {
+
+		@Test
+		public void testGetClosestColorBelowMinimum() {
+			assertThat(getClosestColor(-1.0), is(equalTo(VERY_COLD.getColor())));
+		}
+
+		@Test
+		public void testGetClosestColorAboveMaximum() {
+			assertThat(getClosestColor(1.5), is(equalTo(VERY_HOT.getColor())));
+		}
+
+		@Test
+		public void testGetClosestColor() {
+			assertThat(getClosestColor(levelWidth * 0), is(equalTo(VERY_COLD.getColor())));
+			assertThat(getClosestColor(levelWidth * 1), is(equalTo(COLD.getColor())));
+			assertThat(getClosestColor(levelWidth * 2), is(equalTo(COOL.getColor())));
+			assertThat(getClosestColor(levelWidth * 3), is(equalTo(TEMPERATE.getColor())));
+			assertThat(getClosestColor(levelWidth * 4), is(equalTo(WARM.getColor())));
+			assertThat(getClosestColor(levelWidth * 5), is(equalTo(HOT.getColor())));
+			assertThat(getClosestColor(levelWidth * 6), is(equalTo(VERY_HOT.getColor())));
+		}
+
+		@Test
+		public void testGetClosestColorInterpolation() {
+			for (double i = 4.0; i < 4.5; i += 0.1) {
+				assertThat(getClosestColor(levelWidth * i), is(equalTo(WARM.getColor())));
+			}
+
+			for (double i = 4.5; i < 5.5; i += 0.1) {
+				assertThat(getClosestColor(levelWidth * i), is(equalTo(HOT.getColor())));
+			}
+		}
+	}
+
 	@Test
 	public void testCreateColorSelector() {
 		AttributeColorSelector<AttributeCell> colorSelector = createColorSelector(34);
@@ -140,5 +176,9 @@ class TemperatureLevelTest {
 
 	private Color getColor(double value) {
 		return TemperatureLevel.UTILITY.getColor(value);
+	}
+
+	private Color getClosestColor(double value) {
+		return TemperatureLevel.UTILITY.getClosestColor(value);
 	}
 }
