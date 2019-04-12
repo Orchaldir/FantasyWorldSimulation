@@ -125,7 +125,7 @@ class TemperatureLevelTest {
 	public void testCreateColorSelector() {
 		AttributeColorSelector<AttributeCell> colorSelector = createColorSelector(34);
 
-		assertThat(colorSelector.getName(), is(equalTo(NAME)));
+		assertThat(colorSelector.getName(), is(equalTo(ATTRIBUTE_NAME)));
 		assertThat(colorSelector.getIndex(), is(equalTo(34)));
 		assertThat(colorSelector.getUtility(), is(equalTo(UTILITY)));
 	}

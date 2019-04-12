@@ -20,10 +20,10 @@ public enum RainfallLevel implements AttributeLevel {
 	private final Color color;
 
 	public static final AttributeLevelUtility<RainfallLevel> UTILITY = new AttributeLevelUtility<>(values());
-	public static final String NAME = "Rainfall";
+	public static final String ATTRIBUTE_NAME = "Rainfall";
 
 	public static <T extends AttributeCell>
 	AttributeColorSelector<T> createColorSelector(int index) {
-		return new AttributeColorSelector<T>(NAME, UTILITY, index);
+		return new AttributeColorSelector<>(ATTRIBUTE_NAME, UTILITY, index);
 	}
 }

@@ -53,7 +53,7 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 	@Override
 	public Face<V,E,F> getFace(Point2d point) {
 		if(!rectangle.isInside(point)) {
-			throw new IllegalArgumentException(String.format("{} is outside!", point));
+			throw new IllegalArgumentException(String.format("%s is outside!", point));
 		}
 
 		Point2d relativePoint = point.subtract(rectangle.getStart());

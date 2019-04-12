@@ -22,10 +22,10 @@ public enum TemperatureLevel implements AttributeLevel {
 	private final Color color;
 
 	public static final AttributeLevelUtility<TemperatureLevel> UTILITY = new AttributeLevelUtility<>(values());
-	public static final String NAME = "Temperature";
+	public static final String ATTRIBUTE_NAME = "Temperature";
 
 	public static <T extends AttributeCell>
 	AttributeColorSelector<T> createColorSelector(int index) {
-		return new AttributeColorSelector<T>(NAME, UTILITY, index);
+		return new AttributeColorSelector<>(ATTRIBUTE_NAME, UTILITY, index);
 	}
 }

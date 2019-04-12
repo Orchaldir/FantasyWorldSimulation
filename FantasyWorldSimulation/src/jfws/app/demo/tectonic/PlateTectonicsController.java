@@ -41,7 +41,7 @@ public class PlateTectonicsController {
 	private CanvasRenderer canvasRenderer;
 	private MeshRenderer meshRenderer;
 
-	private final double poissonDiskRadius = 50.0;
+	private static final double POISSON_DISK_RADIUS = 100.0;
 
 	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> plateVoronoiDiagram = new ImageBasedVoronoiDiagram<>(Rectangle.fromSize(SIZE), 2);
 
@@ -56,7 +56,7 @@ public class PlateTectonicsController {
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
 		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator);
 
-		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, poissonDiskRadius);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, POISSON_DISK_RADIUS);
 		plateVoronoiDiagram.update(points);
 
 		log.info("createWorldMap(): finished");

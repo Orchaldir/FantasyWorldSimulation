@@ -65,7 +65,7 @@ public class BiomeController {
 	private ColorSelector temperatureColorSelector = TemperatureLevel.createColorSelector(TEMPERATURE);
 	private ColorSelector rainfallColorSelector = RainfallLevel.createColorSelector(RAINFALL);
 
-	private final double poissonDiskRadius = 5.0;
+	private static final double POISSON_DISK_RADIUS = 5.0;
 
 	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> voronoiDiagram = new ImageBasedVoronoiDiagram<>(Rectangle.fromSize(SIZE), 2);
 
@@ -85,7 +85,7 @@ public class BiomeController {
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
 		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator);
 
-		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, poissonDiskRadius);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, POISSON_DISK_RADIUS);
 		voronoiDiagram.update(points);
 
 		generateBiomeData();

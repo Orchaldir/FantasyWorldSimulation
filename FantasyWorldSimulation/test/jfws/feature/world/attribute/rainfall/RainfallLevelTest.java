@@ -22,7 +22,7 @@ class RainfallLevelTest {
 	public void testCreateColorSelector() {
 		AttributeColorSelector<AttributeCell> colorSelector = createColorSelector(67);
 
-		assertThat(colorSelector.getName(), is(equalTo(NAME)));
+		assertThat(colorSelector.getName(), is(equalTo(ATTRIBUTE_NAME)));
 		assertThat(colorSelector.getIndex(), is(equalTo(67)));
 		assertThat(colorSelector.getUtility(), is(equalTo(UTILITY)));
 	}
