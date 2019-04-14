@@ -293,8 +293,8 @@ public class ImageBasedVoronoiDiagram<V,E,F> implements VoronoiDiagram<V,E,F> {
 
 	private boolean checkClosestPointMap(PointData pointData, int x, int y) {
 		ClosestPointData closestPointData = closestPointMap[x][y];
-		double diffX = pointData.x - x;
-		double diffY = pointData.y - y;
+		int diffX = pointData.x - x;
+		int diffY = pointData.y - y;
 		double distance = Math.hypot(diffX, diffY);
 
 		if(distance < closestPointData.getDistance()) {
