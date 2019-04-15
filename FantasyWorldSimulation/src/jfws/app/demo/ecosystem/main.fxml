@@ -26,7 +26,7 @@
                </items></ToolBar>
          </top>
          <center>
-            <LineChart fx:id="linechart" BorderPane.alignment="CENTER">
+            <LineChart fx:id="linechart" animated="false" BorderPane.alignment="CENTER">
               <xAxis>
                 <NumberAxis label="Step" side="BOTTOM" />
               </xAxis>

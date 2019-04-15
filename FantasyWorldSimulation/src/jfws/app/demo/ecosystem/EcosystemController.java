@@ -16,13 +16,15 @@ import java.util.Map;
 @Slf4j
 public class EcosystemController {
 
-	private Plant plant0 = new Plant("Grass", 0.5, 1.0);
-	private Plant plant1 = new Plant("Tree", 0.1, 10.0);
+	private Plant plant0 = new Plant("Grass", 2.0, 1.0);
+	private Plant plant1 = new Plant("Tree", 0.1, 1.4);
+	private Plant plant2 = new Plant("Shrub", 0.5, 1.2);
 
 	private Ecosystem ecosystem = new Ecosystem(1000.0);
 	private EcosystemSimulation simulation = new LotkaVolterraSimulation();
 
 	private Map<Plant, XYChart.Series> history = new HashMap<>();
+	private XYChart.Series seriesTotal = new XYChart.Series();
 	private int step = 0;
 
 	@FXML
@@ -33,17 +35,23 @@ public class EcosystemController {
 
 		ecosystem.addPopulation(new Population(plant0, 100.0));
 		ecosystem.addPopulation(new Population(plant1, 100.0));
+		ecosystem.addPopulation(new Population(plant2, 100.0));
 	}
 
 	@FXML
 	private void initialize() {
 		log.info("initialize()");
 
+		seriesTotal.setName("Total");
+		linechart.getData().add(seriesTotal);
+
 		updateChart();
 	}
 
 	private void updateChart() {
 		log.info("updateChart()");
+
+		double total = 0;
 
 		for(Population population : ecosystem.getPopulations()) {
 			Plant plant = population.getPlant();
@@ -55,10 +63,13 @@ public class EcosystemController {
 				linechart.getData().add(series);
 			}
 
-			log.info("updateChart(): size={}", series.getData().size());
 			series.setName(plant.getName());
 			series.getData().add(new XYChart.Data(step, population.getArea()));
+
+			total += population.getArea();
 		}
+
+		seriesTotal.getData().add(new XYChart.Data(step, total));
 	}
 
 	@FXML
