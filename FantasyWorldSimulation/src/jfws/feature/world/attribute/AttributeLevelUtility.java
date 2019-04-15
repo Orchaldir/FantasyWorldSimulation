@@ -46,4 +46,16 @@ public class AttributeLevelUtility<T extends AttributeLevel> {
 		double factor = (value - min) / (max - min);
 		return start.interpolate(end, factor);
 	}
+
+	public double getValue(T level){
+		for (int i = 0; i < featureLevels.length; i++) {
+			T other = featureLevels[i];
+
+			if(other == level) {
+				return levelWidth * (0.5 + i);
+			}
+		}
+
+		throw new IllegalArgumentException();
+	}
 }

@@ -4,4 +4,5 @@ import javafx.scene.paint.Color;
 
 public interface AttributeLevel {
 	Color getColor();
+	double getValue();
 }

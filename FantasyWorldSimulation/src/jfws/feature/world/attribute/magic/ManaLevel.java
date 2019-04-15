@@ -19,6 +19,11 @@ public enum ManaLevel implements AttributeLevel {
 	public static final AttributeLevelUtility<ManaLevel> UTILITY = new AttributeLevelUtility<>(values());
 	public static final String ATTRIBUTE_NAME = "ManaLevel";
 
+	@Override
+	public double getValue() {
+		return UTILITY.getValue(this);
+	}
+
 	public static <T extends AttributeCell>
 	AttributeColorSelector<T> createColorSelector(int index) {
 		return new AttributeColorSelector<>(ATTRIBUTE_NAME, UTILITY, index);

@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 class TemperatureLevelTest {
-	
+
 	private double levelWidth;
 
 	@BeforeEach
@@ -154,6 +154,23 @@ class TemperatureLevelTest {
 			for (double i = 4.5; i < 5.5; i += 0.1) {
 				assertThat(getClosestColor(levelWidth * i), is(equalTo(HOT.getColor())));
 			}
+		}
+	}
+
+	@Nested
+	class TestGetValue {
+
+		public static final double ERROR = 0.001;
+
+		@Test
+		public void testGetValue() {
+			assertThat(VERY_COLD.getValue(), closeTo(levelWidth * 0.5, ERROR));
+			assertThat(COLD.getValue(), closeTo(levelWidth * 1.5, ERROR));
+			assertThat(COOL.getValue(), closeTo(levelWidth * 2.5, ERROR));
+			assertThat(TEMPERATE.getValue(), closeTo(levelWidth * 3.5, ERROR));
+			assertThat(WARM.getValue(), closeTo(levelWidth * 4.5, ERROR));
+			assertThat(HOT.getValue(), closeTo(levelWidth * 5.5, ERROR));
+			assertThat(VERY_HOT.getValue(), closeTo(levelWidth * 6.5, ERROR));
 		}
 	}
 
