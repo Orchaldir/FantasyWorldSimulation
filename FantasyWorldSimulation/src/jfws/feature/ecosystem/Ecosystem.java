@@ -1,15 +1,21 @@
 package jfws.feature.ecosystem;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.*;
 
 @AllArgsConstructor
+@Data
 public class Ecosystem {
-	@Getter
 	private final double area;
+
+	@Setter(AccessLevel.NONE)
 	private final Map<Plant, Population> populations = new HashMap<>();
+
+	// attributes
+	private double mana;
+	private double rainfall;
+	private double temperature;
 
 	public void addPopulation(Population population) {
 		populations.put(population.getPlant(), population);

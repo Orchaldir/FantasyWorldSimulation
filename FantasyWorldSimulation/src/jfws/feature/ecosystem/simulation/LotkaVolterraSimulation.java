@@ -45,10 +45,6 @@ public class LotkaVolterraSimulation implements EcosystemSimulation {
 		double currentCapacity = 0;
 
 		for (Population p : populations) {
-			if(p == population) {
-				continue;
-			}
-
 			double interactionFactor = p.getPlant().getFitness() / population.getPlant().getFitness();
 			currentCapacity += interactionFactor * p.getArea();
 		}
