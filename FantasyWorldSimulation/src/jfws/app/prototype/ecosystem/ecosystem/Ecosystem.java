@@ -1,4 +1,4 @@
-package jfws.feature.ecosystem;
+package jfws.app.prototype.ecosystem.ecosystem;
 
 import lombok.*;
 

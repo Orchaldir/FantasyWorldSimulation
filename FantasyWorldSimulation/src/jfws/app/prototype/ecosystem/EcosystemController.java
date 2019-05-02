@@ -1,14 +1,14 @@
-package jfws.app.demo.ecosystem;
+package jfws.app.prototype.ecosystem;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Slider;
-import jfws.feature.ecosystem.Ecosystem;
-import jfws.feature.ecosystem.Plant;
-import jfws.feature.ecosystem.Population;
-import jfws.feature.ecosystem.simulation.EcosystemSimulation;
-import jfws.feature.ecosystem.simulation.LotkaVolterraSimulation;
+import jfws.app.prototype.ecosystem.ecosystem.Ecosystem;
+import jfws.app.prototype.ecosystem.ecosystem.Plant;
+import jfws.app.prototype.ecosystem.ecosystem.Population;
+import jfws.app.prototype.ecosystem.ecosystem.simulation.EcosystemSimulation;
+import jfws.app.prototype.ecosystem.ecosystem.simulation.LotkaVolterraSimulation;
 import jfws.feature.world.attribute.magic.ManaLevel;
 import jfws.feature.world.attribute.rainfall.RainfallLevel;
 import jfws.feature.world.attribute.temperature.TemperatureLevel;

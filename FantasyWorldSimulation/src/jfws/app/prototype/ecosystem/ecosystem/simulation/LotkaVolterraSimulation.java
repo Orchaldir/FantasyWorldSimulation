@@ -1,7 +1,7 @@
-package jfws.feature.ecosystem.simulation;
+package jfws.app.prototype.ecosystem.ecosystem.simulation;
 
-import jfws.feature.ecosystem.Ecosystem;
-import jfws.feature.ecosystem.Population;
+import jfws.app.prototype.ecosystem.ecosystem.Ecosystem;
+import jfws.app.prototype.ecosystem.ecosystem.Population;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

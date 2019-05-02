@@ -1,4 +1,4 @@
-package jfws.app.demo.ecosystem;
+package jfws.app.prototype.ecosystem;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
