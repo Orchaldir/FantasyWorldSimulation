@@ -1,0 +1,132 @@
+= Ecosystem
+
+* size
+** insect
+** worm?
+** rodent
+** cat
+** dog, great cat
+** bear, horse
+** elephant
+
+* time of activity
+** day
+** night
+** twilight
+
+* social strategies
+** solitary (bears)
+** pair-bonding (geese)
+** small group (lions)
+** large group (wolves)
+** herd (horses)
+** hive (social insects)
+
+* thermoregulation
+** warm-blooded
+** cold-blooded
+
+* home
+** burrow
+** cavity
+** mound
+** nest
+*** hanging nests
+*** floating nests
+
+== Food
+
+* feeding behaviour
+** carnivore
+*** eating blood
+*** eating eggs
+*** eating fish
+*** eating insects
+*** eating meat
+** fungivore
+** herbivore
+*** eating flowers
+*** eating fruits
+*** eating grass
+*** eating leaves
+*** eating pollen
+*** eating seeds
+*** eating wood
+** omnivore
+
+* food strategies
+** ambusher
+** chaser
+*** group pursuers
+*** individual pursuers
+** scavenger
+** stalker
+** trapper
+
+== Abilities
+
+=== Senses
+
+* echolocation
+* electroreception
+
+=== Stealth
+
+* camouflage
+** active
+** passive
+* invisibility
+* mimicry
+** aggressive
+** defensive
+
+=== Normal Abilities
+
+* attractor or lure ( part of mimicry?)
+** tongue looks like small prey
+** anglerfish's lure
+*** some can even glow
+* burrows or trapdoors
+
+* defenses
+** fur
+** scales
+** spines / quills
+* Digestion
+** rabbit's ???
+** rumination
+
+* jumping
+* poison
+* projectile tongue
+* traps
+* webs
+
+=== Magical Abilities
+
+* teleportation
+
+== ???
+
+* animal types
+** fish
+** bird
+** insect
+** mammal
+*** cat-like
+**** cats
+**** hyenas
+**** mongoose
+*** dog-like
+**** bears
+**** dogs
+***** coyotes
+***** dingoes
+***** foxes
+***** jackals
+***** wolves
+*** rodents
+**** beaver
+**** mouse
+**** porcupine
+**** squirrel

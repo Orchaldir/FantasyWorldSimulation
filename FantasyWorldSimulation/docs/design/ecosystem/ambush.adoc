@@ -1,0 +1,21 @@
+= Ambush
+
+[%header,cols=2*a]
+|===
+| Predator
+| Prey
+
+|
+
+* optional: lure the prey
+* sense the prey
+* hide from the prey
+* capture or kill the prey
+
+|
+
+* sense the predator
+* hide from the predator
+* escape or kill the predator
+
+|===
