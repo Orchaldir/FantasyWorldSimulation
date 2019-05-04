@@ -80,10 +80,10 @@ public class SimplexNoise implements Generator {
 		int i = floorFast(xin + s);
 		int j = floorFast(yin + s);
 		double t = (i + j) * G2;
-		double X0 = i - t; // Unskew the cell origin back to (x,y) space
-		double Y0 = j - t;
-		double x0 = xin - X0; // The x,y distances from the cell origin
-		double y0 = yin - Y0;
+		double originX = i - t; // Unskew the cell origin back to (x,y) space
+		double originY = j - t;
+		double x0 = xin - originX; // The x,y distances from the cell origin
+		double y0 = yin - originY;
 
 		// For the 2D case, the simplex shape is an equilateral triangle.
 		// Determine which simplex we are in.

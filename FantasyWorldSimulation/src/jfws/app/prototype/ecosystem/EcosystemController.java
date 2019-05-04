@@ -83,13 +83,11 @@ public class EcosystemController {
 
 		for(Population population : ecosystem.getPopulations()) {
 			Plant plant = population.getPlant();
-			XYChart.Series series = history.get(plant);
-
-			if(series == null) {
-				series = new XYChart.Series();
-				history.put(plant, series);
-				linechart.getData().add(series);
-			}
+			XYChart.Series series = history.computeIfAbsent(plant, p -> {
+						XYChart.Series s = new XYChart.Series();
+						linechart.getData().add(s);
+						return s;
+					});
 
 			series.setName(plant.getName());
 			series.getData().add(new XYChart.Data(step, population.getArea()));
