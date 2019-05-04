@@ -1,8 +1,11 @@
 package jfws.util.map;
 
+import jfws.util.math.geometry.Point2d;
+import jfws.util.math.geometry.Rectangle;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static jfws.util.map.ToCellMapper.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,11 +15,47 @@ class ToCellMapperTest extends SharedTestData {
 	// constructor
 
 	@Test
-	public void testConstructorWithOneResolution() {
+	public void testConstructorWithOriginAndOneResolution() {
 		ToCellMapper<Integer> integerToCellMapper = new ToCellMapper<>(MAP, ORIGIN_X, ORIGIN_Y, RESOLUTION_X);
 
+		assertThat(integerToCellMapper.getOriginX(), is(equalTo(ORIGIN_X)));
+		assertThat(integerToCellMapper.getOriginY(), is(equalTo(ORIGIN_Y)));
 		assertThat(integerToCellMapper.getResolutionX(), is(equalTo(RESOLUTION_X)));
 		assertThat(integerToCellMapper.getResolutionY(), is(equalTo(RESOLUTION_X)));
+	}
+
+	@Test
+	public void testConstructorWithTwoResolutions() {
+		ToCellMapper<Integer> integerToCellMapper = new ToCellMapper<>(MAP, RESOLUTION_X, RESOLUTION_Y);
+
+		assertThat(integerToCellMapper.getOriginX(), is(equalTo(0.0)));
+		assertThat(integerToCellMapper.getOriginY(), is(equalTo(0.0)));
+		assertThat(integerToCellMapper.getResolutionX(), is(equalTo(RESOLUTION_X)));
+		assertThat(integerToCellMapper.getResolutionY(), is(equalTo(RESOLUTION_Y)));
+	}
+
+	@Test
+	public void testConstructorWithOneResolution() {
+		ToCellMapper<Integer> integerToCellMapper = new ToCellMapper<>(MAP, RESOLUTION_X);
+
+		assertThat(integerToCellMapper.getOriginX(), is(equalTo(0.0)));
+		assertThat(integerToCellMapper.getOriginY(), is(equalTo(0.0)));
+		assertThat(integerToCellMapper.getResolutionX(), is(equalTo(RESOLUTION_X)));
+		assertThat(integerToCellMapper.getResolutionY(), is(equalTo(RESOLUTION_X)));
+	}
+
+	@Test
+	public void testFromRectangle() {
+		Point2d origin = new Point2d(ORIGIN_X, ORIGIN_Y);
+		Point2d size = new Point2d(MAP_WIDTH, MAP_HEIGHT);
+		Rectangle rectangle = Rectangle.fromSize(origin, size);
+
+		ToCellMapper<Integer> integerToCellMapper = fromRectangle(MAP, rectangle);
+
+		assertThat(integerToCellMapper.getOriginX(), is(equalTo(ORIGIN_X)));
+		assertThat(integerToCellMapper.getOriginY(), is(equalTo(ORIGIN_Y)));
+		assertThat(integerToCellMapper.getResolutionX(), is(equalTo(RESOLUTION_X)));
+		assertThat(integerToCellMapper.getResolutionY(), is(equalTo(RESOLUTION_Y)));
 	}
 
 	// origin

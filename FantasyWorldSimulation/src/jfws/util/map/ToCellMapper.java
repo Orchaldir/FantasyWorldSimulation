@@ -1,5 +1,6 @@
 package jfws.util.map;
 
+import jfws.util.math.geometry.Rectangle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -23,6 +24,14 @@ public class ToCellMapper<T> {
 
 	public ToCellMapper(CellMap2d<T> map, double resolution) {
 		this(map, resolution, resolution);
+	}
+
+	public static <T> ToCellMapper fromRectangle(CellMap2d<T> map, Rectangle rectangle) {
+		double resolutionX = rectangle.getSize().getX() / map.getWidth();
+		double resolutionY = rectangle.getSize().getY() / map.getHeight();
+
+		return new ToCellMapper(map, rectangle.getStart().getX(), rectangle.getStart().getY(),
+				resolutionX, resolutionY);
 	}
 
 	// coordinates to cell

@@ -9,7 +9,7 @@ import static jfws.util.math.interpolation.Interpolator1d.ARRAY_SIZE;
 public class BiFourValueInterpolator implements Interpolator2d {
 
 	@Getter
-	private Interpolator1d interpolator = new CubicInterpolator();
+	private Interpolator1d interpolator;
 	private final double[] intermediateResult = new double[ARRAY_SIZE];
 
 	@Override
