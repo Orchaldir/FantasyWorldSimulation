@@ -3,10 +3,8 @@ package jfws.feature.world.attribute;
 import javafx.scene.paint.Color;
 import jfws.util.rendering.ColorSelector;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
-@Getter
 public class ClosestLevelColorSelector<T extends AttributeCell> implements ColorSelector<T> {
 
 	private final String name;

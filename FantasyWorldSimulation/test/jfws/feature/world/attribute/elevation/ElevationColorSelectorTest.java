@@ -60,8 +60,10 @@ class ElevationColorSelectorTest {
 
 	@Test
 	public void testInterpolation() {
-		assertThat(colorSelector.interpolate(11.0, 10.0, 12.0, Color.BLACK, Color.WHITE),
-				is(equalTo(new Color(0.5, 0.5, 0.5,  1.0))));
+		Color interpolatedColor = colorSelector.interpolate(11.0, 10.0, 12.0, Color.BLACK, Color.WHITE);
+		Color greyColor = new Color(0.5, 0.5, 0.5, 1.0);
+
+		assertThat(interpolatedColor, is(equalTo(greyColor)));
 	}
 
 }

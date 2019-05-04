@@ -139,7 +139,7 @@
                 <version>1.4.3</version>
                 <configuration>
                     <excludedClasses>
-                        <param>jfws.app.demo.*</param>
+                        <param>jfws.app.*</param>
                     </excludedClasses>
                 </configuration>
                 <dependencies>

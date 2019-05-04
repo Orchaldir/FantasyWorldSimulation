@@ -10,9 +10,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 class WorldCellTest {
 
-	private static final double ELEVATION_VALUE = 1.0;
-	private static final double TEMPERATURE_VALUE = 2.0;
-	private static final double RAINFALL_VALUE = 3.0;
+	private static final double ELEVATION_VALUE = 1.1;
+	private static final double TEMPERATURE_VALUE = 2.2;
+	private static final double RAINFALL_VALUE = 3.3;
+	private static final double MANA_VALUE = 4.4;
 
 	private WorldCell cell;
 
@@ -22,6 +23,7 @@ class WorldCellTest {
 		cell.setAttribute(ELEVATION, ELEVATION_VALUE);
 		cell.setAttribute(TEMPERATURE, TEMPERATURE_VALUE);
 		cell.setAttribute(RAINFALL, RAINFALL_VALUE);
+		cell.setAttribute(MANA_LEVEL, MANA_VALUE);
 	}
 
 	@Test
@@ -29,6 +31,7 @@ class WorldCellTest {
 		assertThat(cell.getAttribute(ELEVATION), is(equalTo(ELEVATION_VALUE)));
 		assertThat(cell.getAttribute(TEMPERATURE), is(equalTo(TEMPERATURE_VALUE)));
 		assertThat(cell.getAttribute(RAINFALL), is(equalTo(RAINFALL_VALUE)));
+		assertThat(cell.getAttribute(MANA_LEVEL), is(equalTo(MANA_VALUE)));
 	}
 
 	@Test
@@ -36,8 +39,9 @@ class WorldCellTest {
 		cell.addToAttribute(TEMPERATURE, 3.5);
 
 		assertThat(cell.getAttribute(ELEVATION), is(equalTo(ELEVATION_VALUE)));
-		assertThat(cell.getAttribute(TEMPERATURE), is(equalTo(5.5)));
+		assertThat(cell.getAttribute(TEMPERATURE), is(equalTo(5.7)));
 		assertThat(cell.getAttribute(RAINFALL), is(equalTo(RAINFALL_VALUE)));
+		assertThat(cell.getAttribute(MANA_LEVEL), is(equalTo(MANA_VALUE)));
 	}
 
 	@Test
@@ -53,5 +57,10 @@ class WorldCellTest {
 	@Test
 	public void testGetRainfall() {
 		assertThat(cell.getRainfall(), is(equalTo(RAINFALL_VALUE)));
+	}
+
+	@Test
+	public void testGetManaLevel() {
+		assertThat(cell.getManaLevel(), is(equalTo(MANA_VALUE)));
 	}
 }
