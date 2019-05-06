@@ -16,19 +16,20 @@ public class GridWithNoiseDistribution extends AbstractPointDistribution {
 	protected RandomNumberGenerator generator;
 
 	@Override
-	public List<Point2d> distributePoints(Point2d size, double radius) {
+	public List<Point2d> distributePoints(Point2d size, int maxPoints) {
 		checkForInvalidSize(size);
 
-		double length = radius * 2.0;
-		double columns = Math.ceil(size.getX() / length);
-		double rows = Math.ceil(size.getY() / length);
-		int numberOfPoints = (int) (columns * rows);
+		int rows = calculateRows(size, maxPoints);
+		int columns = calculateColumns(maxPoints, rows);
+		double length = Math.min(size.getX() / columns, size.getY() / rows);
+		int numberOfPoints = columns * rows;
 
-		log.info("distributePoints(): radius={} size={} {}*{}={}", radius, size, columns, rows, numberOfPoints);
+		log.info("distributePoints(): maxPoints={} size={} {}*{}={} length={}", maxPoints, size, columns, rows, numberOfPoints, length);
 
 		generator.restart();
 
 		List<Point2d> points = new ArrayList<>(numberOfPoints);
+		double radius = length / 2.0;
 		double maxDistanceFromCenter = radius * 0.8;
 
 		for (int column = 0; column < columns; column++) {
@@ -43,6 +44,15 @@ public class GridWithNoiseDistribution extends AbstractPointDistribution {
 		}
 
 		return points;
+	}
+
+	private int calculateRows(Point2d size, int maxPoints) {
+		double sizeFactor = size.getX() / size.getY();
+		return (int) Math.ceil(Math.sqrt(maxPoints / sizeFactor));
+	}
+
+	public int calculateColumns(int maxPoints, int rows) {
+		return (int) Math.ceil(maxPoints / rows);
 	}
 
 	protected Point2d generatePolarPoint(Point2d point, double maxDistance) {

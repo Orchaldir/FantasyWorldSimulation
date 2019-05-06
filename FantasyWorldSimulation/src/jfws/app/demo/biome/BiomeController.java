@@ -58,7 +58,7 @@ public class BiomeController {
 	@FXML
 	private ComboBox<SelectedFeature> featureComboBox;
 
-	private SelectedFeature selectedFeature = SelectedFeature.MANA_LEVEL;
+	private SelectedFeature selectedFeature = SelectedFeature.ELEVATION;
 
 	private CanvasRenderer canvasRenderer;
 	private MeshRenderer meshRenderer;
@@ -88,7 +88,7 @@ public class BiomeController {
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
 		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator);
 
-		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, POISSON_DISK_RADIUS);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, (int)POISSON_DISK_RADIUS);
 		voronoiDiagram.update(points);
 
 		generateBiomeData();

@@ -19,7 +19,7 @@ class RandomPointDistributionTest extends AbstractPointDistributionTest {
 		createMockedRandomNumberGenerator();
 		createRandomPointDistribution();
 
-		points = distribution.distributePoints(SIZE, 1.5);
+		points = distribution.distributePoints(SIZE, desiredNumberOfPoints);
 
 		assertGeneratorWasReset(1);
 		assertGeneratorWasCalled(desiredNumberOfPoints);
@@ -31,10 +31,11 @@ class RandomPointDistributionTest extends AbstractPointDistributionTest {
 	public void testMoreDistributePoints() {
 		createRandomNumberGenerator();
 		createRandomPointDistribution();
+		int maxPoints = 18;
 
-		points = distribution.distributePoints(SIZE, 0.5);
+		points = distribution.distributePoints(SIZE, maxPoints);
 
-		assertNumberOfPoints(18);
+		assertNumberOfPoints(maxPoints);
 	}
 
 	// given

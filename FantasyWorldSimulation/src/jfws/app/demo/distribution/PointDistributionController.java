@@ -48,7 +48,7 @@ public class PointDistributionController {
 
 	private SelectedDistribution selectedDistribution = SelectedDistribution.POISSON_DISC;
 
-	private int maxNumberOfPoints = 4000;
+	private int maxNumberOfPoints = 1000;
 	private double radius = 10.0;
 	private List<Point2d> points;
 
@@ -86,19 +86,17 @@ public class PointDistributionController {
 	public void render() {
 		canvasRenderer.clear(0, 0, 900, 700);
 
-		List<Point2d> filteredPoints = getFilteredPoints();
-
-		log.info("render(): selectedDistribution={} points={}", selectedDistribution, filteredPoints.size());
+		log.info("render(): selectedDistribution={} points={}", selectedDistribution, points.size());
 
 		canvasRenderer.setColor(Color.RED);
 
-		for (Point2d point : filteredPoints) {
+		for (Point2d point : points) {
 			canvasRenderer.renderPoint(point, radius);
 		}
 
 		canvasRenderer.setColor(Color.BLUE);
 
-		for (Point2d point : filteredPoints) {
+		for (Point2d point : points) {
 			canvasRenderer.renderPoint(point, 2);
 		}
 
@@ -106,16 +104,7 @@ public class PointDistributionController {
 	}
 
 	private void updatePoints() {
-		points = getPointDistribution().distributePoints(SIZE, radius);
-	}
-
-	private List<Point2d> getFilteredPoints() {
-		if(points.size() > maxNumberOfPoints)
-		{
-			return points.subList(0, maxNumberOfPoints);
-		}
-
-		return points;
+		points = getPointDistribution().distributePoints(SIZE, maxNumberOfPoints);
 	}
 
 	private PointDistribution getPointDistribution() {
@@ -141,6 +130,7 @@ public class PointDistributionController {
 	public void onMaxNumberOfPointsChanged(double newValue) {
 		maxNumberOfPoints = (int) newValue;
 		log.info("onMaxNumberOfPointsChanged(): {}", maxNumberOfPoints);
+		updatePoints();
 		render();
 	}
 

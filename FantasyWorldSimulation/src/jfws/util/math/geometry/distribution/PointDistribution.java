@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PointDistribution {
 
-	List<Point2d> distributePoints(Point2d size, double radius);
+	List<Point2d> distributePoints(Point2d size, int maxPoints);
 
 }

@@ -22,10 +22,10 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 	protected final RandomNumberGenerator generator;
 
 	@Override
-	public List<Point2d> distributePoints(Point2d size, double radius) {
+	public List<Point2d> distributePoints(Point2d size, int maxPoints) {
 		checkForInvalidSize(size);
 
-		log.info("distributePoints(): size={} radius={}", size, radius);
+		log.info("distributePoints(): size={} maxPoints={}", size, maxPoints);
 		generator.restart();
 
 		List<Point2d> points = new ArrayList<>();
@@ -34,7 +34,7 @@ public class PoissonDiscDistribution extends AbstractPointDistribution {
 		points.add(new Point2d(size.getX()/ 2.0, size.getY()/ 2.0));
 		activeIndices.add(0);
 
-		double minDistance = radius * 2.0;
+		double minDistance = 20;
 		Rectangle rectangle = Rectangle.fromSize(size);
 
 		while(generateValidPoint(points, activeIndices, rectangle, minDistance));

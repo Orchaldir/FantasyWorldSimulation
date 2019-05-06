@@ -9,16 +9,17 @@ class GridWithNoiseDistributionTest extends AbstractPointDistributionTest {
 
 	private static final Point2d SIZE = new Point2d(1.0, 2.0);
 	public static final double RADIUS = 0.05;
+	public static final int MAX_POINTS = 200;
 
 	@Test
 	public void testPoints() {
 		createRandomNumberGeneratorSpy();
 		createRandomPointDistribution();
 
-		points = distribution.distributePoints(SIZE, RADIUS);
+		points = distribution.distributePoints(SIZE, MAX_POINTS);
 
 		assertGeneratorWasReset(1);
-		assertNumberOfPoints(200);
+		assertNumberOfPoints(MAX_POINTS);
 		assertPointsAreInsideGridCells(10, 20);
 	}
 

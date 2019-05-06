@@ -63,7 +63,7 @@ public class VoronoiController {
 	public void render() {
 		canvasRenderer.clear(0, 0, 900, 700);
 
-		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, radius);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, 10000);
 
 		log.info("render(): Voronoi");
 
