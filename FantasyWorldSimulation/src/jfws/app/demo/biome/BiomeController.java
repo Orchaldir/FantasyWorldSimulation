@@ -86,9 +86,9 @@ public class BiomeController {
 	private void createWorldMap() {
 		log.info("createWorldMap()");
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
-		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator);
+		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator, POISSON_DISK_RADIUS);
 
-		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, (int)POISSON_DISK_RADIUS);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, 1000);
 		voronoiDiagram.update(points);
 
 		generateBiomeData();

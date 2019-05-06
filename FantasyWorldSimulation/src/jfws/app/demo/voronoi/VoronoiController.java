@@ -40,9 +40,13 @@ public class VoronoiController {
 	public VoronoiController() {
 		log.info("VoronoiController()");
 
+		createPointDistribution();
+	}
+
+	public void createPointDistribution() {
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
 
-		poissonDiscDistribution = new PoissonDiscDistribution(generator);
+		poissonDiscDistribution = new PoissonDiscDistribution(generator, radius);
 	}
 
 	@FXML
@@ -92,6 +96,7 @@ public class VoronoiController {
 	public void onRadiusChanged(double newValue) {
 		radius = newValue;
 		log.info("onRadiusChanged(): {}", radius);
+		createPointDistribution();
 		render();
 	}
 }

@@ -8,6 +8,16 @@ ifndef::imagesdir[:imagesdir: ../images/]
 | Release
 | Notes
 
+| 2019.3.0
+|
+
+.The point distribution demo
+image::point-distribution/location-dependent-radii.png[Point Distribution Demo]
+
+*New:*
+
+* Poisson Disk algorithm now supports location dependent radii.
+
 | 2019.2.0
 |
 
@@ -33,7 +43,7 @@ Mesh of Voronoi Diagram has holes
 |
 
 .The point distribution demo
-image::point-distribution-demo.png[Point Distribution Demo]
+image::point-distribution/demo.png[Point Distribution Demo]
 
 .The Voronoi demo
 image::voronoi-demo.png[Voronoi Demo]

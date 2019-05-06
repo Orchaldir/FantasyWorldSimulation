@@ -6,11 +6,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
+import jfws.util.math.generator.gradient.CircularGradient;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.distribution.GridWithNoiseDistribution;
 import jfws.util.math.geometry.distribution.PointDistribution;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
 import jfws.util.math.geometry.distribution.RandomPointDistribution;
+import jfws.util.math.interpolation.LinearInterpolator;
 import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PointDistributionController {
 
 	public static final Point2d SIZE = new Point2d(800, 600);
+	public static final Point2d CENTER = SIZE.multiply(0.5);
 
 	enum SelectedDistribution {
 		GRID_WITH_NOISE,
@@ -42,6 +45,7 @@ public class PointDistributionController {
 
 	private CanvasRenderer canvasRenderer;
 
+	private final GeneratorWithRandom generator;
 	private GridWithNoiseDistribution gridWithNoiseDistribution;
 	private PoissonDiscDistribution poissonDiscDistribution;
 	private RandomPointDistribution randomPointDistribution;
@@ -53,13 +57,18 @@ public class PointDistributionController {
 	private List<Point2d> points;
 
 	public PointDistributionController() {
-		log.info("VoronoiController()");
+		log.info("PointDistributionController()");
 
-		GeneratorWithRandom generator = new GeneratorWithRandom(42);
+		generator = new GeneratorWithRandom(42);
 
 		gridWithNoiseDistribution = new GridWithNoiseDistribution(generator);
-		poissonDiscDistribution = new PoissonDiscDistribution(generator);
+		createPoissonDiscDistribution();
 		randomPointDistribution = new RandomPointDistribution(generator);
+	}
+
+	public void createPoissonDiscDistribution() {
+		CircularGradient gradient = new CircularGradient(new LinearInterpolator(), CENTER, CENTER.getY(), radius*2, radius);
+		poissonDiscDistribution = new PoissonDiscDistribution(generator, gradient);
 	}
 
 	@FXML
@@ -138,6 +147,7 @@ public class PointDistributionController {
 	public void onRadiusChanged(double newValue) {
 		radius = newValue;
 		log.info("onRadiusChanged(): {}", radius);
+		createPoissonDiscDistribution();
 		updatePoints();
 		render();
 	}

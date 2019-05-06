@@ -59,8 +59,6 @@ public class PlateTectonicsController {
 	private CellMap2d<Integer> plateTectonicsMap;
 	private ToCellMapper<Integer> cellMapper;
 
-	private static final int MAX_POINTS = 10;
-
 	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> plateVoronoiDiagram = new ImageBasedVoronoiDiagram<>(RECTANGLE, 2);
 
 	public PlateTectonicsController() {
@@ -84,9 +82,9 @@ public class PlateTectonicsController {
 	private void createWorldMap() {
 		log.info("createWorldMap()");
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
-		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator);
+		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator, 100);
 
-		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, MAX_POINTS);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, 1000);
 		plateVoronoiDiagram.update(points);
 
 		log.info("createWorldMap(): finished");

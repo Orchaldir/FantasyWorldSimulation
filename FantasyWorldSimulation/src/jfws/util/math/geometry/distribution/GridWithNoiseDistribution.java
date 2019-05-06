@@ -52,7 +52,7 @@ public class GridWithNoiseDistribution extends AbstractPointDistribution {
 	}
 
 	public int calculateColumns(int maxPoints, int rows) {
-		return (int) Math.ceil(maxPoints / rows);
+		return (int) Math.ceil(maxPoints / (double)rows);
 	}
 
 	protected Point2d generatePolarPoint(Point2d point, double maxDistance) {
