@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -95,5 +96,9 @@ public class Point2d {
 		}
 
 		return new Point2d(sumX / numberOfPoints, sumY / numberOfPoints);
+	}
+
+	public static Point2d calculateCentroid(Point2d a, Point2d b) {
+		return calculateCentroid(List.of(a, b));
 	}
 }
