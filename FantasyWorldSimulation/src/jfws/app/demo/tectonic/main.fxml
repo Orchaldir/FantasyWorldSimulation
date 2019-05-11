@@ -24,10 +24,8 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
                   <ComboBox fx:id="viewComboBox" onAction="#onViewSelected" prefWidth="150.0" />
-                  <Label text="Width" />
-                  <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="2.0" max="10.0" min="2.0" minorTickCount="1" showTickLabels="true" snapToTicks="true" value="5.0" />
-                  <Label layoutX="164.0" layoutY="18.0" text="Height" />
-                  <Slider fx:id="heightSlider" blockIncrement="1.0" layoutX="201.0" layoutY="10.0" majorTickUnit="2.0" max="10.0" min="2.0" minorTickCount="1" showTickLabels="true" snapToTicks="true" value="5.0" />
+                  <Label text="Radius" />
+                  <Slider fx:id="radiusSlider" blockIncrement="1.0" majorTickUnit="50.0" max="200.0" min="50.0" minorTickCount="10" showTickLabels="true" snapToTicks="true" value="100.0" />
                </items></ToolBar>
          </top>
          <center>

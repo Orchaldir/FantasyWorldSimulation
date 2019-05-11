@@ -6,10 +6,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import jfws.feature.world.WorldCell;
-import jfws.util.map.ArrayCellMap2D;
-import jfws.util.map.CellMap2d;
-import jfws.util.map.ToCellMapper;
-import jfws.util.map.rendering.MapRenderer;
 import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
 import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
@@ -43,49 +39,44 @@ public class PlateTectonicsController {
 	private ComboBox<SelectedView> viewComboBox;
 
 	@FXML
-	private Slider widthSlider;
-
-	@FXML
-	private Slider heightSlider;
+	private Slider radiusSlider;
 
 	private SelectedView selectedView = SelectedView.PLATES;
 
 	private CanvasRenderer canvasRenderer;
 	private MeshRenderer meshRenderer;
-	private MapRenderer mapRenderer;
 
-	private int width = 7;
-	private int height = 5;
-	private CellMap2d<Integer> plateTectonicsMap;
-	private ToCellMapper<Integer> cellMapper;
+	private double plateRadius = 100.0;
+	private double worldCellRadius = 10.0;
 
 	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> plateVoronoiDiagram = new ImageBasedVoronoiDiagram<>(RECTANGLE, 2);
+	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> worldVoronoiDiagram = new ImageBasedVoronoiDiagram<>(RECTANGLE, 2);
 
 	public PlateTectonicsController() {
 		log.info("PlateTectonicsController()");
 
-		create();
-	}
-
-	private void create() {
 		createPlateTectonicsMap();
 		createWorldMap();
 	}
 
 	private void createPlateTectonicsMap() {
 		log.info("createPlateTectonicsMap()");
+		GeneratorWithRandom generator = new GeneratorWithRandom(42);
+		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator, plateRadius);
 
-		plateTectonicsMap = new ArrayCellMap2D<>(width, height, new Integer[width*height]);
-		cellMapper = ToCellMapper.fromRectangle(plateTectonicsMap, RECTANGLE);
+		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, 1000);
+		plateVoronoiDiagram.update(points);
+
+		log.info("createPlateTectonicsMap(): finished");
 	}
 
 	private void createWorldMap() {
 		log.info("createWorldMap()");
 		GeneratorWithRandom generator = new GeneratorWithRandom(42);
-		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator, 100);
+		PoissonDiscDistribution poissonDiscDistribution = new PoissonDiscDistribution(generator, worldCellRadius);
 
 		List<Point2d> points = poissonDiscDistribution.distributePoints(SIZE, 1000);
-		plateVoronoiDiagram.update(points);
+		worldVoronoiDiagram.update(points);
 
 		log.info("createWorldMap(): finished");
 	}
@@ -97,16 +88,11 @@ public class PlateTectonicsController {
 		viewComboBox.setItems(FXCollections.observableArrayList(SelectedView.values()));
 		viewComboBox.getSelectionModel().select(selectedView);
 
-		widthSlider.setValue(width);
-		widthSlider.valueProperty().addListener((
-				observable, oldValue, newValue) -> onWidthChanged((Double) newValue));
-
-		heightSlider.setValue(height);
-		heightSlider.valueProperty().addListener((
-				observable, oldValue, newValue) -> onHeightChanged((Double) newValue));
+		radiusSlider.setValue(plateRadius);
+		radiusSlider.valueProperty().addListener((
+				observable, oldValue, newValue) -> onPlateRadiusChanged((Double) newValue));
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
-		mapRenderer = new MapRenderer(canvasRenderer, 1.0, 0.0);
 		FaceRenderer faceRenderer = new FaceRenderer(canvasRenderer);
 		meshRenderer = new MeshRenderer(faceRenderer);
 
@@ -122,10 +108,10 @@ public class PlateTectonicsController {
 
 		switch (selectedView) {
 			case PLATES:
-				mapRenderer.render(cellMapper, colorSelector);
+				meshRenderer.renderFaces(plateVoronoiDiagram.getMesh(), colorSelector);
 				break;
 			case CELLS:
-				meshRenderer.renderFaces(plateVoronoiDiagram.getMesh(), colorSelector);
+				meshRenderer.renderFaces(worldVoronoiDiagram.getMesh(), colorSelector);
 				break;
 		}
 	}
@@ -138,18 +124,10 @@ public class PlateTectonicsController {
 	}
 
 	@FXML
-	public void onWidthChanged(double newValue) {
-		width = (int) newValue;
-		log.info("onWidthChanged(): {}", width);
-		create();
-		render();
-	}
-
-	@FXML
-	public void onHeightChanged(double newValue) {
-		height = (int) newValue;
-		log.info("onHeightChanged(): {}", height);
-		create();
+	public void onPlateRadiusChanged(double newValue) {
+		plateRadius = (int) newValue;
+		log.info("onPlateRadiusChanged(): {}", plateRadius);
+		createPlateTectonicsMap();
 		render();
 	}
 }
