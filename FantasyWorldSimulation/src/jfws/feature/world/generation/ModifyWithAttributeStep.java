@@ -3,7 +3,6 @@ package jfws.feature.world.generation;
 import jfws.feature.world.WorldCell;
 import jfws.util.map.CellMap2d;
 import jfws.util.map.ToCellMapper;
-import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.mesh.Face;
 import jfws.util.math.geometry.mesh.Mesh;
 import lombok.AllArgsConstructor;

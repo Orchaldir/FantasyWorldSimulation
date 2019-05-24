@@ -15,6 +15,7 @@
 * Smaller Cells
 ** Realms can slowly grow
 ** Changes to smaller areas can be tracked
+** Changes to sea level affect smaller areas
 * Faster map generation
 * Fixed Number of neighbors
 

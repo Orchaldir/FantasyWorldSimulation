@@ -21,7 +21,8 @@
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
-                  <ComboBox fx:id="featureComboBox" onAction="#onFeatureSelected" prefWidth="150.0" />
+                  <ComboBox fx:id="mapComboBox" onAction="#onMapSelected" prefWidth="150.0" />
+                  <ComboBox fx:id="featureComboBox" layoutX="10.0" layoutY="13.0" onAction="#onFeatureSelected" prefWidth="150.0" />
                </items></ToolBar>
          </top>
          <center>

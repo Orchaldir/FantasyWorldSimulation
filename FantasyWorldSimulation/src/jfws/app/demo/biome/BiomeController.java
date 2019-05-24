@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import jfws.feature.world.WorldCell;
@@ -13,6 +14,11 @@ import jfws.feature.world.attribute.temperature.TemperatureLevel;
 import jfws.feature.world.generation.AddGeneratorStep;
 import jfws.feature.world.generation.ModifyWithAttributeStep;
 import jfws.feature.world.attribute.elevation.ElevationColorSelector;
+import jfws.feature.world.generation.WorldGenerationStep;
+import jfws.util.map.ArrayCellMap2D;
+import jfws.util.map.CellMap2d;
+import jfws.util.map.ToCellMapper;
+import jfws.util.map.rendering.ImageRenderer;
 import jfws.util.math.generator.Sum;
 import jfws.util.math.generator.noise.Transformation;
 import jfws.util.math.generator.gradient.AbsoluteLinearGradient;
@@ -45,6 +51,11 @@ public class BiomeController {
 	public static final Point2d UP = new Point2d(0, 1);
 	public static final double MAX_ELEVATION = 175.0;
 
+	enum SelectedMapType {
+		GRID,
+		POLYGON
+	}
+
 	enum SelectedFeature {
 		ELEVATION,
 		TEMPERATURE,
@@ -58,6 +69,10 @@ public class BiomeController {
 	@FXML
 	private ComboBox<SelectedFeature> featureComboBox;
 
+	@FXML
+	private ComboBox<SelectedMapType> mapComboBox;
+
+	private SelectedMapType selectedMapType = SelectedMapType.GRID;
 	private SelectedFeature selectedFeature = SelectedFeature.ELEVATION;
 
 	private CanvasRenderer canvasRenderer;
@@ -71,6 +86,13 @@ public class BiomeController {
 	private static final double POISSON_DISK_RADIUS = 5.0;
 
 	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> voronoiDiagram = new ImageBasedVoronoiDiagram<>(Rectangle.fromSize(SIZE), 2);
+
+	private int cellMapWidth = 800;
+	private int cellMapHeight = 600;
+	private WorldCell[] cells;
+	private CellMap2d<WorldCell> cellMap;
+	private ToCellMapper<WorldCell> mapper;
+	private ImageRenderer imageRenderer = new ImageRenderer();
 
 	// biome data
 	private Point2d elevationCenter = BOTTOM;
@@ -99,16 +121,35 @@ public class BiomeController {
 	private void generateBiomeData() {
 		log.info("generateBiomeData(): Init cells");
 
-		Mesh<Void, Void, WorldCell> mesh = voronoiDiagram.getMesh();
+		Mesh<Void, Void, WorldCell> mesh = initVoronoiDiagram();
 
-		for (Face<Void, Void, WorldCell> face : mesh.getFaces()) {
-			face.setData(new WorldCell());
-		}
+		createCellMap();
 
 		generateElevation(mesh);
 		generateTemperature(mesh);
 		generateRainfall(mesh);
 		generateManaLevel(mesh);
+	}
+
+	private Mesh<Void, Void, WorldCell> initVoronoiDiagram() {
+		Mesh<Void, Void, WorldCell> mesh = voronoiDiagram.getMesh();
+
+		for (Face<Void, Void, WorldCell> face : mesh.getFaces()) {
+			face.setData(new WorldCell());
+		}
+		return mesh;
+	}
+
+	private void createCellMap() {
+		int numberOfCells = cellMapWidth * cellMapHeight;
+		cells = new WorldCell[numberOfCells];
+
+		for(int i = 0; i < numberOfCells; i++) {
+			cells[i] = new WorldCell();
+		}
+
+		cellMap = new ArrayCellMap2D<>(cellMapWidth, cellMapHeight, cells);
+		mapper = new ToCellMapper<>(cellMap, 1.0);
 	}
 
 	private void generateElevation(Mesh<Void, Void, WorldCell> mesh) {
@@ -120,7 +161,7 @@ public class BiomeController {
 		Sum elevationGenerator = new Sum(List.of(elevationNoise, circularGradient));
 		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationGenerator, ELEVATION);
 
-		elevationStep.generate(mesh);
+		generate(mesh, elevationStep);
 	}
 
 	private void generateTemperature(Mesh<Void, Void, WorldCell> mesh) {
@@ -132,8 +173,8 @@ public class BiomeController {
 		AddGeneratorStep temperatureStep = new AddGeneratorStep(temperatureGenerator, TEMPERATURE);
 		ModifyWithAttributeStep subtractElevationStep = new ModifyWithAttributeStep(ELEVATION, TEMPERATURE, 0.0, Double.MAX_VALUE, -0.3 / MAX_ELEVATION);
 
-		temperatureStep.generate(mesh);
-		subtractElevationStep.generate(mesh);
+		generate(mesh, temperatureStep);
+		generate(mesh, subtractElevationStep);
 	}
 
 	private void generateRainfall(Mesh<Void, Void, WorldCell> mesh) {
@@ -141,9 +182,9 @@ public class BiomeController {
 
 		SimplexNoise simplexNoise = new SimplexNoise();
 		Transformation elevationNoise = new Transformation(simplexNoise, 0.0, 1.0, 200, 300, 300);
-		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationNoise, RAINFALL);
+		AddGeneratorStep rainfallStep = new AddGeneratorStep(elevationNoise, RAINFALL);
 
-		elevationStep.generate(mesh);
+		generate(mesh, rainfallStep);
 	}
 
 	private void generateManaLevel(Mesh<Void, Void, WorldCell> mesh) {
@@ -151,9 +192,14 @@ public class BiomeController {
 
 		SimplexNoise simplexNoise = new SimplexNoise();
 		Transformation elevationNoise = new Transformation(simplexNoise, 0.0, 1.0, 1200, 1300, 300);
-		AddGeneratorStep elevationStep = new AddGeneratorStep(elevationNoise, MANA_LEVEL);
+		AddGeneratorStep manaStep = new AddGeneratorStep(elevationNoise, MANA_LEVEL);
 
-		elevationStep.generate(mesh);
+		generate(mesh, manaStep);
+	}
+
+	private void generate(Mesh<Void, Void, WorldCell> mesh, WorldGenerationStep step) {
+		step.generate(mesh);
+		step.generate(mapper);
 	}
 
 	@FXML
@@ -162,6 +208,9 @@ public class BiomeController {
 
 		featureComboBox.setItems(FXCollections.observableArrayList(SelectedFeature.values()));
 		featureComboBox.getSelectionModel().select(selectedFeature);
+
+		mapComboBox.setItems(FXCollections.observableArrayList(SelectedMapType.values()));
+		mapComboBox.getSelectionModel().select(selectedMapType);
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
 		FaceRenderer faceRenderer = new FaceRenderer(canvasRenderer);
@@ -176,7 +225,14 @@ public class BiomeController {
 		canvasRenderer.clear(0, 0, 900, 700);
 
 		ColorSelector colorSelector = getColorSelector();
-		meshRenderer.renderFaces(voronoiDiagram.getMesh(), colorSelector);
+
+		if(selectedMapType == SelectedMapType.GRID) {
+			WritableImage image = imageRenderer.render(cellMap, colorSelector);
+			mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0);
+		}
+		else {
+			meshRenderer.renderFaces(voronoiDiagram.getMesh(), colorSelector);
+		}
 	}
 
 	private ColorSelector getColorSelector() {
@@ -196,6 +252,13 @@ public class BiomeController {
 	public void onFeatureSelected() {
 		selectedFeature = featureComboBox.getSelectionModel().getSelectedItem();
 		log.info("onFeatureSelected(): {}", selectedFeature);
+		render();
+	}
+
+	@FXML
+	public void onMapSelected() {
+		selectedMapType = mapComboBox.getSelectionModel().getSelectedItem();
+		log.info("onMapSelected(): {}", selectedMapType);
 		render();
 	}
 
