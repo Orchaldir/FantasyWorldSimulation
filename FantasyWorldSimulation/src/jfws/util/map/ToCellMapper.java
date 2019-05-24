@@ -1,5 +1,6 @@
 package jfws.util.map;
 
+import jfws.util.math.geometry.Point2d;
 import jfws.util.math.geometry.Rectangle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -68,5 +69,9 @@ public class ToCellMapper<T> {
 
 	public double getCellOriginY(int y) {
 		return originY + resolutionY * y;
+	}
+
+	public Point2d getCellOrigin(int x, int y) {
+		return new Point2d(getCellOriginX(x), getCellOriginY(y));
 	}
 }

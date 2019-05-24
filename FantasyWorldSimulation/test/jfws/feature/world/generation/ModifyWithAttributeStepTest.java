@@ -52,7 +52,7 @@ class ModifyWithAttributeStepTest {
 		cell.setAttribute(SOURCE_INDEX, sourceValue);
 		cell.setAttribute(TARGET_INDEX, targetAtStart);
 
-		step.generateCell(face);
+		step.generateCell(face.getData());
 
 		assertThat(cell.getAttribute(SOURCE_INDEX), is(equalTo(sourceValue)));
 		assertThat(cell.getAttribute(TARGET_INDEX), is(equalTo(targetAfterwards)));

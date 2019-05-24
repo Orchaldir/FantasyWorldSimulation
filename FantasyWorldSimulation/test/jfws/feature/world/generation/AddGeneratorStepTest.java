@@ -50,7 +50,7 @@ class AddGeneratorStepTest {
 		when(face.getPointsInCCW()).thenReturn(List.of(CORNER0, CORNER1, CORNER2, CORNER3));
 		when(generator.generate(CENTER)).thenReturn(1.2);
 
-		addGeneratorStep.generateCell(face);
+		addGeneratorStep.generateCell(face.getData(), Point2d.calculateCentroid(face.getPointsInCCW()));
 
 		assertThat(cell.getAttribute(INDEX), is(equalTo(5.7)));
 
