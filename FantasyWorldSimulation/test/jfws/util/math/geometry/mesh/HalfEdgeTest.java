@@ -42,11 +42,16 @@ class HalfEdgeTest {
 		assertThat(edge.getEndVertex(), equalTo(endVertex));
 		assertThat(edge.getOppositeEdge(), equalTo(oppositeEdge));
 		assertThat(edge.getNextEdge(), equalTo(nextEdge));
+
+		verifyNoMoreInteractions(face);
+		verifyNoMoreInteractions(endVertex);
+		verifyNoMoreInteractions(nextEdge);
 	}
 
 	@Test
 	public void testGetter() {
 		assertEdge(edge, face, end, oppositeEdge, nextEdge);
+		assertEdge(oppositeEdge, oppositeFace, start, edge, previousOppositeEdge);
 	}
 
 	@Test

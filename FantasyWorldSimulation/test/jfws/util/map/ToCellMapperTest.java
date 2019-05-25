@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ToCellMapperTest extends SharedTestData {
+public class ToCellMapperTest extends SharedTestData {
 
 	// constructor
 
@@ -196,9 +196,17 @@ class ToCellMapperTest extends SharedTestData {
 	@Test
 	public void testGetCellOriginY(){
 		assertThat(MAPPER.getCellOriginY(0), is(closeTo(ORIGIN_Y, ERROR)));
-		assertThat(MAPPER.getCellOriginY(1), is(closeTo(ORIGIN_Y + RESOLUTION_Y, ERROR)));
 		assertThat(MAPPER.getCellOriginY(2), is(closeTo(ORIGIN_Y + RESOLUTION_Y * 2, ERROR)));
 		assertThat(MAPPER.getCellOriginY(3), is(closeTo(ORIGIN_Y + RESOLUTION_Y * 3, ERROR)));
+	}
+
+	// getCellOriginY()
+
+	@Test
+	public void testGetCellOrigin(){
+		Point2d cellOrigin = MAPPER.getCellOrigin(1, 2);
+		assertThat(cellOrigin.getX(), is(closeTo(ORIGIN_X + RESOLUTION_X, ERROR)));
+		assertThat(cellOrigin.getY(), is(closeTo(ORIGIN_Y + RESOLUTION_Y * 2, ERROR)));
 	}
 
 }

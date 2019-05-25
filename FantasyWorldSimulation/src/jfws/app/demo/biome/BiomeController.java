@@ -89,7 +89,6 @@ public class BiomeController {
 
 	private int cellMapWidth = 800;
 	private int cellMapHeight = 600;
-	private WorldCell[] cells;
 	private CellMap2d<WorldCell> cellMap;
 	private ToCellMapper<WorldCell> mapper;
 	private ImageRenderer imageRenderer = new ImageRenderer();
@@ -142,7 +141,7 @@ public class BiomeController {
 
 	private void createCellMap() {
 		int numberOfCells = cellMapWidth * cellMapHeight;
-		cells = new WorldCell[numberOfCells];
+		WorldCell[] cells = new WorldCell[numberOfCells];
 
 		for(int i = 0; i < numberOfCells; i++) {
 			cells[i] = new WorldCell();

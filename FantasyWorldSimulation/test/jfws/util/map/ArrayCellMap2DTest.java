@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayCellMap2DTest extends SharedTestData {
+public class ArrayCellMap2DTest extends SharedTestData {
 
 	@Nested
 	class TestGetters {

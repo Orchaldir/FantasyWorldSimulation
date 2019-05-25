@@ -106,13 +106,10 @@ public class PlateTectonicsController {
 
 		ColorSelector colorSelector = new RandomColorSelector(new GeneratorWithRandom(99));
 
-		switch (selectedView) {
-			case PLATES:
-				meshRenderer.renderFaces(plateVoronoiDiagram.getMesh(), colorSelector);
-				break;
-			case CELLS:
-				meshRenderer.renderFaces(worldVoronoiDiagram.getMesh(), colorSelector);
-				break;
+		if (selectedView == SelectedView.PLATES) {
+			meshRenderer.renderFaces(plateVoronoiDiagram.getMesh(), colorSelector);
+		} else if (selectedView == SelectedView.CELLS) {
+			meshRenderer.renderFaces(worldVoronoiDiagram.getMesh(), colorSelector);
 		}
 	}
 

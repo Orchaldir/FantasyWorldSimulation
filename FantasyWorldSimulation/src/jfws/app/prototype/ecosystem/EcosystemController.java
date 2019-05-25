@@ -35,7 +35,7 @@ public class EcosystemController {
 	private int step = 0;
 
 	@FXML
-	LineChart linechart;
+	private LineChart linechart;
 
 	@FXML
 	private Slider temperatureSlider;
