@@ -87,6 +87,7 @@ public class BiomeController {
 
 	private ImageBasedVoronoiDiagram<Void, Void, WorldCell> voronoiDiagram = new ImageBasedVoronoiDiagram<>(Rectangle.fromSize(SIZE), 2);
 
+	private int pixelsPerCell = 1;
 	private int cellMapWidth = 800;
 	private int cellMapHeight = 600;
 	private CellMap2d<WorldCell> cellMap;
@@ -140,6 +141,8 @@ public class BiomeController {
 	}
 
 	private void createCellMap() {
+		cellMapWidth = (int) (SIZE.getX() / (double)pixelsPerCell);
+		cellMapHeight = (int) (SIZE.getY() / (double)pixelsPerCell);
 		int numberOfCells = cellMapWidth * cellMapHeight;
 		WorldCell[] cells = new WorldCell[numberOfCells];
 
@@ -148,7 +151,7 @@ public class BiomeController {
 		}
 
 		cellMap = new ArrayCellMap2D<>(cellMapWidth, cellMapHeight, cells);
-		mapper = new ToCellMapper<>(cellMap, 1.0);
+		mapper = new ToCellMapper<>(cellMap, pixelsPerCell);
 	}
 
 	private void generateElevation(Mesh<Void, Void, WorldCell> mesh) {
@@ -227,7 +230,7 @@ public class BiomeController {
 
 		if(selectedMapType == SelectedMapType.GRID) {
 			WritableImage image = imageRenderer.render(cellMap, colorSelector);
-			mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0);
+			mapCanvas.getGraphicsContext2D().drawImage(image, 0, 0, SIZE.getX(), SIZE.getY());
 		}
 		else {
 			meshRenderer.renderFaces(voronoiDiagram.getMesh(), colorSelector);
