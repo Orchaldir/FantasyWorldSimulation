@@ -1,0 +1,102 @@
+= Economy
+
+== Resources
+
+* animal
+** sheep
+* clay
+* coal
+* grain
+* herbs
+* iron
+* stone
+* wood
+* wool
+
+== Products
+
+* alcohol
+** beer
+** wine
+* alchemical goods
+** e.g dyes, inks
+* armor
+* books
+* ceramic goods
+* cloth
+* food
+** baked goods
+** meat
+* herbal goods
+** e.g culinary herbs, dyes, medicine, teas, drugs, poisons
+* iron goods
+** pots, tools, utensils
+* leather goods
+** bags, armor, saddles
+* mechanical devices
+** e.g clocks, mills, sawmills, printing press, pumps
+* paper
+* ships
+** rowing ships
+** sailing ships
+* stone goods
+* textile goods
+* wagons
+* weapons
+* wooden goods
+
+== Resource Gatherers
+
+* ??? -> herbs
+* clay pit -> clay
+* farm -> grain
+* forest -> wood
+* herd (sheep) -> sheep + wool
+* mine (coal) -> coal
+* mine (iron) -> iron
+* quarry -> stone
+* vineyard -> wine
+
+== Craftsmen
+
+* alchemy
+** ??? -> alchemical goods
+* baking
+** grain -> baked goods
+* brewing
+** grain -> beer
+* butchering
+** animal -> meat & hide
+* carpentry
+** wood -> wooden goods
+* engineering
+** iron goods + wooden goods -> mechanical devices
+* herbalism
+** herbs -> herbal goods
+* leather working
+** hide -> leather goods
+** hide -> paper?
+* masonry
+** stone -> stone goods
+* paper making
+** wood -> paper
+* pottery
+** clay -> ceramic goods
+* printing
+** alchemical goods + paper -> books
+* shipbuilding
+** iron goods + wooden goods -> rowing ships
+** iron goods + textile goods + wooden goods -> sailing ships
+* smithing
+** fuel: coal
+** iron -> iron goods
+** iron + wood? -> iron weapons
+** iron + cloth? -> iron armor
+* tailoring
+** cloth -> textile goods
+* wagonmaking
+** wooden goods -> wagons
+** iron goods + wooden goods -> wagons
+** iron goods + textile goods + wooden goods -> covered wagons
+* weaving
+** wool -> cloth
