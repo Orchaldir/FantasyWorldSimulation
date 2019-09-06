@@ -30,4 +30,6 @@ public class ComponentUtil {
 		return sharedIds;
 	}
 
+	private ComponentUtil() {}
+
 }

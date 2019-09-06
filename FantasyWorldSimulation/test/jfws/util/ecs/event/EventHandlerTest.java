@@ -27,6 +27,8 @@ class EventHandlerTest {
 	@Test
 	public void testNoSubscribers() {
 		handler.publish(EVENT_0);
+
+		verifyZeroInteractions(subscriber0, subscriber1, subscriber2);
 	}
 
 	@Test
