@@ -20,7 +20,7 @@ class PoseTest {
 
 	@Test
 	public void testTwoAttributes() {
-		assertThat(POSE.toString(), is(equalTo("{x=1.100 y=2.220 orientation=90.5 deg}")));
+		assertThat(POSE.toString(), is(equalTo("Pose(x=1.100 y=2.220 orientation=90.5 deg)")));
 	}
 
 }

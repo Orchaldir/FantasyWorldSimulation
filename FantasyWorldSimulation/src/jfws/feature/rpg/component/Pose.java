@@ -13,7 +13,7 @@ public class Pose {
 
 	@Override
 	public String toString() {
-		return String.format("{x=%.3f y=%.3f orientation=%.1f deg}",
+		return String.format("Pose(x=%.3f y=%.3f orientation=%.1f deg)",
 				position.getX(), position.getY(), Math.toDegrees(orientation));
 	}
 }
