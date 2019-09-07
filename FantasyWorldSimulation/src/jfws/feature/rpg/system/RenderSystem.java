@@ -14,9 +14,12 @@ import java.util.Collection;
 public class RenderSystem {
 
 	private final ComponentStorage<Pose> poseStorage;
+	private double scale;
+	private double pointSize;
 
 	public void render(Renderer renderer) {
 		renderer.setColor(Color.RED);
+		renderer.setScale(scale);
 
 		Collection<Pose> poses = poseStorage.getAll();
 
@@ -24,7 +27,8 @@ public class RenderSystem {
 
 		for (Pose pose : poses) {
 			log.info("render(): {}", pose);
-			renderer.renderPoint(pose.position, 5.0);
+			pointSize = 0.5;
+			renderer.renderPoint(pose.position, pointSize);
 		}
 	}
 }

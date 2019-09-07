@@ -1,50 +1,14 @@
 package jfws.app.rpg.arena;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ComboBox;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import jfws.feature.rpg.component.Pose;
 import jfws.feature.rpg.system.RenderSystem;
-import jfws.feature.world.WorldCell;
-import jfws.feature.world.attribute.elevation.ElevationColorSelector;
-import jfws.feature.world.attribute.magic.ManaLevel;
-import jfws.feature.world.attribute.rainfall.RainfallLevel;
-import jfws.feature.world.attribute.temperature.TemperatureLevel;
-import jfws.feature.world.generation.AddGeneratorStep;
-import jfws.feature.world.generation.ModifyWithAttributeStep;
-import jfws.feature.world.generation.WorldGenerationStep;
 import jfws.util.ecs.component.ComponentMap;
 import jfws.util.ecs.component.ComponentStorage;
-import jfws.util.map.ArrayCellMap2D;
-import jfws.util.map.CellMap2d;
-import jfws.util.map.ToCellMapper;
-import jfws.util.map.rendering.ImageRenderer;
-import jfws.util.math.generator.Sum;
-import jfws.util.math.generator.gradient.AbsoluteLinearGradient;
-import jfws.util.math.generator.gradient.CircularGradient;
-import jfws.util.math.generator.noise.SimplexNoise;
-import jfws.util.math.generator.noise.Transformation;
 import jfws.util.math.geometry.Point2d;
-import jfws.util.math.geometry.Rectangle;
-import jfws.util.math.geometry.distribution.PoissonDiscDistribution;
-import jfws.util.math.geometry.mesh.Face;
-import jfws.util.math.geometry.mesh.Mesh;
-import jfws.util.math.geometry.mesh.renderer.FaceRenderer;
-import jfws.util.math.geometry.mesh.renderer.MeshRenderer;
-import jfws.util.math.geometry.voronoi.ImageBasedVoronoiDiagram;
-import jfws.util.math.interpolation.LinearInterpolator;
-import jfws.util.math.random.GeneratorWithRandom;
 import jfws.util.rendering.CanvasRenderer;
-import jfws.util.rendering.ColorSelector;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-
-import static jfws.feature.world.WorldCell.*;
 
 @Slf4j
 public class ArenaController {
@@ -80,10 +44,11 @@ public class ArenaController {
 		poseStorage = new ComponentMap<>();
 
 		// systems
-		renderSystem = new RenderSystem(poseStorage);
+		renderSystem = new RenderSystem(poseStorage, 50.0, 0.5);
 
 		// entities
-		poseStorage.add(0, new Pose(100, 200, 0.0));
+		poseStorage.add(0, new Pose(10.0, 2.0, 0.0));
+		poseStorage.add(1, new Pose(4.0, 5.0, 0.0));
 
 		render();
 	}
