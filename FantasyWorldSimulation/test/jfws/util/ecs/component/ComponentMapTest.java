@@ -3,6 +3,7 @@ package jfws.util.ecs.component;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,6 +52,15 @@ class ComponentMapTest {
 		componentMap.remove(ID0);
 
 		assertThat(componentMap.get(ID0), is(Optional.empty()));
+	}
+
+	@Test
+	public void testGetAll() {
+		componentMap.add(ID0, COMPONENT0);
+		componentMap.add(ID2, COMPONENT2);
+		componentMap.add(ID1, COMPONENT1);
+
+		assertThat(componentMap.getAll(), is(Set.of(COMPONENT0, COMPONENT1, COMPONENT2)));
 	}
 
 	@Test

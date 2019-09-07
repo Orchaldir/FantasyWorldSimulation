@@ -17,6 +17,11 @@ public class ComponentMap<T> implements ComponentStorage<T> {
 	}
 
 	@Override
+	public Collection<T> getAll() {
+		return new HashSet<>(map.values());
+	}
+
+	@Override
 	public Set<Integer> getIds() {
 		return map.keySet();
 	}
