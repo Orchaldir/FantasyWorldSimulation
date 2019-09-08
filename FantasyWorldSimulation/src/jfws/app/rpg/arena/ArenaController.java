@@ -17,10 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ArenaController {
 
 	public static final Point2d SIZE = new Point2d(800, 600);
-	public static final Point2d CENTER = SIZE.multiply(0.5);
-	public static final Point2d BOTTOM = new Point2d(CENTER.getX(), 0);
-	public static final Point2d UP = new Point2d(0, 1);
-	public static final double MAX_ELEVATION = 175.0;
 
 	@FXML
 	private Canvas mapCanvas;
