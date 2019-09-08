@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import jfws.feature.rpg.component.Pose;
 import jfws.feature.rpg.component.Statistics;
+import jfws.feature.rpg.rules.unit.Trait;
+import jfws.feature.rpg.rules.unit.TraitManager;
 import jfws.feature.rpg.system.RenderSystem;
 import jfws.util.ecs.component.ComponentMap;
 import jfws.util.ecs.component.ComponentStorage;
@@ -25,6 +27,9 @@ public class ArenaController {
 
 	private CanvasRenderer canvasRenderer;
 
+	// rules
+	private TraitManager traitManager;
+
 	// components
 	private ComponentStorage<Pose> poseStorage;
 	private ComponentStorage<Statistics> statisticsStorage;
@@ -41,6 +46,10 @@ public class ArenaController {
 		log.info("initialize()");
 
 		canvasRenderer = new CanvasRenderer(mapCanvas.getGraphicsContext2D());
+
+		// rules
+		traitManager = new TraitManager();
+		traitManager.add(new Trait("Toughness"));
 
 		// components
 		poseStorage = new ComponentMap<>();

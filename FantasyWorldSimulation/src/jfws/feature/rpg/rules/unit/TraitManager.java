@@ -1,8 +1,11 @@
 package jfws.feature.rpg.rules.unit;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class TraitManager {
 
 	private Map<String,Trait> traits = new HashMap<>();
@@ -11,6 +14,8 @@ public class TraitManager {
 		if (traits.put(trait.getName(), trait) != null) {
 			throw new IllegalArgumentException(String.format("Trait '%s' already exists!", trait.getName()));
 		}
+
+		log.info("Add trait '{}'.", trait.getName());
 	}
 
 	public Trait get(String name) {
