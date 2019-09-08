@@ -3,6 +3,7 @@ package jfws.app.rpg.arena;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import jfws.feature.rpg.component.Pose;
+import jfws.feature.rpg.component.Statistics;
 import jfws.feature.rpg.system.RenderSystem;
 import jfws.util.ecs.component.ComponentMap;
 import jfws.util.ecs.component.ComponentStorage;
@@ -26,6 +27,7 @@ public class ArenaController {
 
 	// components
 	private ComponentStorage<Pose> poseStorage;
+	private ComponentStorage<Statistics> statisticsStorage;
 
 	// systems
 	private RenderSystem renderSystem;
@@ -42,13 +44,17 @@ public class ArenaController {
 
 		// components
 		poseStorage = new ComponentMap<>();
+		statisticsStorage = new ComponentMap<>();
 
 		// systems
 		renderSystem = new RenderSystem(poseStorage, 50.0, 0.5);
 
 		// entities
 		poseStorage.add(0, new Pose(10.0, 2.0, 0.0));
+		statisticsStorage.add(0, new Statistics());
+
 		poseStorage.add(1, new Pose(4.0, 5.0, 0.0));
+		statisticsStorage.add(1, new Statistics());
 
 		render();
 	}
