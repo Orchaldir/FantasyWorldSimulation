@@ -1,9 +1,13 @@
 package jfws.feature.rpg.component;
 
 import jfws.feature.rpg.rules.unit.Trait;
+import jfws.util.ecs.component.ComponentStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
+import static jfws.feature.rpg.component.Statistics.DEFAULT_RANK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -18,6 +22,8 @@ class StatisticsTest {
 	private static final int RANK0 = 4;
 	private static final int RANK1 = -2;
 	private static final int RANK2 = 9;
+
+	public static final int ENTITY_ID = 42;
 
 	private Trait trait0;
 	private Trait trait1;
@@ -50,8 +56,27 @@ class StatisticsTest {
 	}
 
 	@Test
-	public void testGetDefault() {
-		assertThat(statistics.getRank(trait0), is(0));
+	public void testGetDefaultRank() {
+		assertThat(statistics.getRank(trait0), is(DEFAULT_RANK));
+	}
+
+	@Test
+	public void testGetRankFromStorage() {
+		ComponentStorage<Statistics> storage = mock(ComponentStorage.class);
+
+		when(storage.get(ENTITY_ID)).thenReturn(Optional.of(statistics));
+		statistics.setRank(trait0, RANK0);
+
+		assertThat(Statistics.getRank(storage, ENTITY_ID,  trait0), is(RANK0));
+	}
+
+	@Test
+	public void testGetDefaultRankFromStorage() {
+		ComponentStorage<Statistics> storage = mock(ComponentStorage.class);
+
+		when(storage.get(ENTITY_ID)).thenReturn(Optional.empty());
+
+		assertThat(Statistics.getRank(storage, ENTITY_ID,  trait0), is(DEFAULT_RANK));
 	}
 
 }
