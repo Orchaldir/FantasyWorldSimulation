@@ -12,6 +12,7 @@ import jfws.util.ecs.event.EventSubscriber;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -29,8 +30,7 @@ public class HealthSystem implements EventSubscriber<Hit> {
 		Optional<Health> health = healthStorage.get(event.targetId);
 
 		if(!health.isPresent()) {
-			log.warn("Entity '{}' has no health component!", event.targetId);
-			return;
+			throw new NoSuchElementException(String.format("Entity '%d' has no health component!", event.targetId));
 		}
 
 		int toughness = getToughnessRank(event.targetId);

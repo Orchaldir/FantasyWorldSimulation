@@ -13,10 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class HealthSystemTest {
@@ -50,6 +52,15 @@ class HealthSystemTest {
 		killedPublisher = mock(EventPublisher.class);
 
 		system = new HealthSystem(healthStorage, statisticsStorage, checker, TOUGHNESS_TRAIT, killedPublisher);
+	}
+
+	@Test
+	public void testNotHealthComponent() {
+		Hit event = new Hit(new Damage(DAMAGE), ATTACKER_ID, 4);
+
+		NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> system.update(event));
+
+		assertThat(exception.getMessage(), is("Entity '4' has no health component!"));
 	}
 
 	@Test
