@@ -29,7 +29,7 @@ public class HealthSystem implements EventSubscriber<Hit> {
 		Optional<Health> health = healthStorage.get(event.targetId);
 
 		if(!health.isPresent()) {
-			log.warn("Entity {} has no health component!", event.targetId);
+			log.warn("Entity '{}' has no health component!", event.targetId);
 			return;
 		}
 
@@ -49,15 +49,15 @@ public class HealthSystem implements EventSubscriber<Hit> {
 		int result = checker.check(modifiedToughness, damage);
 
 		if(result > 1) {
-			log.info("Entity {} is not hurt by {} damage.", event.targetId, damage);
+			log.info("Entity '{}' is not hurt by entity '{}' with '{}' damage.", event.targetId, event.attackerId, damage);
 		}
 		else if(result >= 0) {
-			log.info("Entity {} is hurt by {} damage.", event.targetId, damage);
+			log.info("Entity '{}' is hurt by entity '{}' with '{}' damage.", event.targetId, event.attackerId, damage);
 
 			health.increaseToughnessPenalty();
 		}
 		else {
-			log.info("Entity {} is killed by {} damage.", event.targetId, damage);
+			log.info("Entity '{}' is killed by entity '{}' with '{}' damage.", event.targetId, event.attackerId, damage);
 
 			Killed killed = new Killed(event.attackerId, event.targetId);
 			killedPublisher.publish(killed);

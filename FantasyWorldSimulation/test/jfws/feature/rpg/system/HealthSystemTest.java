@@ -11,6 +11,7 @@ import jfws.util.ecs.component.ComponentStorage;
 import jfws.util.ecs.event.EventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.Optional;
 
@@ -53,19 +54,66 @@ class HealthSystemTest {
 
 	@Test
 	public void testNotHurt() {
-		when(healthStorage.get(TARGET_ID)).thenReturn(Optional.of(health));
-		when(statisticsStorage.get(TARGET_ID)).thenReturn(Optional.of(statistics));
+		int penalty = 1;
+		setup(penalty, 2);
 
-		when(health.getToughnessPenalty()).thenReturn(0);
-		when(statistics.getRank(TOUGHNESS_TRAIT)).thenReturn(TOUGHNESS);
+		system.update(EVENT);
 
-		when(checker.check(TOUGHNESS, DAMAGE)).thenReturn(2);
+		verify(checker, times(1)).check(TOUGHNESS - penalty, DAMAGE);
+		verify(health, times(1)).getToughnessPenalty();
+		verifyNoMoreInteractions(health);
+		verifyZeroInteractions(killedPublisher);
+	}
+
+	@Test
+	public void testHurtBySuccess() {
+		testHurt(1);
+	}
+
+	@Test
+	public void testHurtByDraw() {
+		testHurt(0);
+	}
+
+	@Test
+	public void testKilled() {
+		setup(0, -1);
 
 		system.update(EVENT);
 
 		verify(health, times(1)).getToughnessPenalty();
 		verifyNoMoreInteractions(health);
+
+		ArgumentCaptor<Killed> captor = ArgumentCaptor.forClass(Killed.class);
+		verify(killedPublisher, times(1)).publish(captor.capture());
+		verifyNoMoreInteractions(killedPublisher);
+
+		Killed killedEvent = captor.getValue();
+		assertThat(killedEvent.killerId, is(ATTACKER_ID));
+		assertThat(killedEvent.targetId, is(TARGET_ID));
+	}
+
+	private void testHurt(int i) {
+		int penalty = 0;
+		setup(penalty, i);
+
+		system.update(EVENT);
+
+		verify(checker, times(1)).check(TOUGHNESS - penalty, DAMAGE);
+		verify(health, times(1)).getToughnessPenalty();
+		verify(health, times(1)).increaseToughnessPenalty();
+		verifyNoMoreInteractions(health);
 		verifyZeroInteractions(killedPublisher);
+	}
+
+	private void setup(int penalty, int checkResult) {
+		when(healthStorage.get(TARGET_ID)).thenReturn(Optional.of(health));
+		when(statisticsStorage.get(TARGET_ID)).thenReturn(Optional.of(statistics));
+
+		when(health.getToughnessPenalty()).thenReturn(penalty);
+		when(statistics.getRank(TOUGHNESS_TRAIT)).thenReturn(TOUGHNESS);
+
+		when(checker.check(TOUGHNESS - penalty, DAMAGE)).thenReturn(checkResult);
 	}
 
 }
