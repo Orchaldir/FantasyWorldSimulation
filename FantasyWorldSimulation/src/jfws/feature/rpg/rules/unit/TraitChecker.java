@@ -11,7 +11,9 @@ public class TraitChecker {
 	private final int sizeOfDegree;
 
 	public int check(int trait, int difficulty) {
-		final int random_modifier = generator.getInteger(dieSides) - generator.getInteger(dieSides);
+		final int positiveDie = generator.getInteger(dieSides);
+		final int negativeDie = generator.getInteger(dieSides);
+		final int random_modifier = positiveDie - negativeDie;
 		final int diff = trait - difficulty + random_modifier;
 
 		if(diff > 0) {

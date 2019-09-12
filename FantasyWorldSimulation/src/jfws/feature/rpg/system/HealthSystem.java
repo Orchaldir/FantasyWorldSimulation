@@ -43,10 +43,10 @@ public class HealthSystem implements EventSubscriber<Hit> {
 	}
 
 	private void handleHit(Hit event, Health health, int toughness) {
-		int modifiedToughness = toughness - health.getToughnessPenalty();
-		int damage = event.damage.rank;
+		final int modifiedToughness = toughness - health.getToughnessPenalty();
+		final int damage = event.damage.rank;
 
-		int result = checker.check(modifiedToughness, damage);
+		final int result = checker.check(modifiedToughness, damage);
 
 		if(result > 1) {
 			log.info("Entity '{}' is not hurt by entity '{}' with '{}' damage.", event.targetId, event.attackerId, damage);
