@@ -1,6 +1,6 @@
 package jfws.feature.rpg.event;
 
-import jfws.feature.rpg.rpg.Damage;
+import jfws.feature.rpg.rules.Damage;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

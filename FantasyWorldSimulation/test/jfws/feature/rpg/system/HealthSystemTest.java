@@ -4,7 +4,7 @@ import jfws.feature.rpg.component.Health;
 import jfws.feature.rpg.component.Statistics;
 import jfws.feature.rpg.event.Hit;
 import jfws.feature.rpg.event.Killed;
-import jfws.feature.rpg.rpg.Damage;
+import jfws.feature.rpg.rules.Damage;
 import jfws.feature.rpg.rules.unit.Trait;
 import jfws.feature.rpg.rules.unit.TraitChecker;
 import jfws.util.ecs.component.ComponentStorage;

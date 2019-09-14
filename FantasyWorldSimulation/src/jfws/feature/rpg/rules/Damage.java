@@ -1,4 +1,4 @@
-package jfws.feature.rpg.rpg;
+package jfws.feature.rpg.rules;
 
 import lombok.AllArgsConstructor;
 
