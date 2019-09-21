@@ -12,17 +12,17 @@ public class SelfSelector implements TargetSelector {
 	}
 
 	@Override
-	public boolean requiresToHitCheck() {
+	public boolean requiresTraitCheck() {
 		return false;
 	}
 
 	@Override
-	public int getToHitModifier(TargetSituation situation) {
+	public int getModifier(TargetSituation situation) {
 		return 0;
 	}
 
 	@Override
-	public Optional<Trait> getToHitTrait() {
+	public Optional<Trait> getTrait() {
 		return Optional.empty();
 	}
 

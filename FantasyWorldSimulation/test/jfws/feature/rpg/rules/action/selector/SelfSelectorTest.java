@@ -24,17 +24,17 @@ class SelfSelectorTest {
 	@Test
 	public void testTargetSelf() {
 		assertTrue(selector.canSelectEntity(TARGET_SELF));
-		assertFalse(selector.requiresToHitCheck());
-		assertThat(selector.getToHitModifier(TARGET_SELF), is(0));
-		assertThat(selector.getToHitTrait(), is(Optional.empty()));
+		assertFalse(selector.requiresTraitCheck());
+		assertThat(selector.getModifier(TARGET_SELF), is(0));
+		assertThat(selector.getTrait(), is(Optional.empty()));
 	}
 
 	@Test
 	public void testTargetOther() {
 		assertFalse(selector.canSelectEntity(TARGET_OTHER));
-		assertFalse(selector.requiresToHitCheck());
-		assertThat(selector.getToHitModifier(TARGET_OTHER), is(0));
-		assertThat(selector.getToHitTrait(), is(Optional.empty()));
+		assertFalse(selector.requiresTraitCheck());
+		assertThat(selector.getModifier(TARGET_OTHER), is(0));
+		assertThat(selector.getTrait(), is(Optional.empty()));
 	}
 
 }

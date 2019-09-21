@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MeleeSelectorTest {
 
 	private static final TargetSituation TARGET_SELF = new TargetSituation(0, 0, 0);
-	private static final TargetSituation TARGET_OTHER = new TargetSituation(0, 1, 0);
 
 	private static final int MODIFIER =  55;
 	private static final Optional<Trait> TRAIT = Optional.of(new Trait("test"));
@@ -43,9 +42,9 @@ class MeleeSelectorTest {
 		TargetSituation situation = new TargetSituation(3, 9, distance);
 
 		assertThat(selector.canSelectEntity(situation), is(canSelect));
-		assertTrue(selector.requiresToHitCheck());
-		assertThat(selector.getToHitModifier(situation), is(MODIFIER));
-		assertThat(selector.getToHitTrait(), is(TRAIT));
+		assertTrue(selector.requiresTraitCheck());
+		assertThat(selector.getModifier(situation), is(MODIFIER));
+		assertThat(selector.getTrait(), is(TRAIT));
 	}
 
 }

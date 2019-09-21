@@ -7,8 +7,8 @@ import java.util.Optional;
 public interface TargetSelector {
 
 	boolean canSelectEntity(TargetSituation situation);
-	boolean requiresToHitCheck();
-	int getToHitModifier(TargetSituation situation);
-	Optional<Trait> getToHitTrait();
+	boolean requiresTraitCheck();
+	int getModifier(TargetSituation situation);
+	Optional<Trait> getTrait();
 
 }
